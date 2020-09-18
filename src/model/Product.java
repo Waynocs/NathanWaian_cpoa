@@ -18,7 +18,7 @@ public class Product {
     }
     /**
      * Changes the name of the product
-     * @param name
+     * @param name the name of the product
      */
     public void setName(String name) {
         this.name = name;
