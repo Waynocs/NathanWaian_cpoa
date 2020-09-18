@@ -1,6 +1,8 @@
-/** public class Main {
+package src;
+
+public class Main {
     public static void main(String[] args) {
-        DAOFactory daos =
+     /*    DAOFactory daos =
         DAOFactory.getDAOFactory(Persistance.MYSQL);
         Promo dut2a = daos.getPromoDAO().getById(1);
         Etudiant e = new Etudiant ("Weber", "Pierre", dut2a);
@@ -8,8 +10,10 @@
         // A partir d'ici, travail avec les fichiers XML
         daos =
         DAOFactory.getDAOFactory(Persistance.ListeMemoire);
-        Promo uneAutre = daos.getPromoDAO().getById(4) ;
+        Promo uneAutre = daos.getPromoDAO().getById(4) ; 
+        */
+
     }
+    
 }
 
-**/
