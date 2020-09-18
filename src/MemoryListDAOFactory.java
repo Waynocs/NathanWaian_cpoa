@@ -1,4 +1,4 @@
-package src.view;
+/** package src.view;
 
 public class MemoryListDAOFactory {
 
@@ -14,3 +14,5 @@ return ListeMemoirePromoDAO.getInstance();
 
     
 }
+ 
+**/

@@ -1,4 +1,4 @@
-package src.view;
+/** package src.view;
 
 public class MySQLDAOFactory extends DAOFactory {
     
@@ -13,3 +13,5 @@ return MySQLPromoDAO.getInstance();
 
 
 }
+
+**/

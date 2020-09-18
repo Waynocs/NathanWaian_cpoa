@@ -1,4 +1,4 @@
-package dao.listememoire;
+/** package dao.listememoire;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,3 +93,4 @@ public class ListeMemoireCategorieDAO implements CategorieDAO {
 	}
 }
 
+**/
