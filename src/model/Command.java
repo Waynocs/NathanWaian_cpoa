@@ -50,20 +50,14 @@ public class Command {
         public double cost;
         public int quantity;
 
-        public Line(Product product, double cost, int quantity) throws Exception {
+        public Line(Product product, double cost, int quantity) {
             this.product = product;
             this.cost = cost;
             this.quantity = quantity;
 
-            
-            if(products.containsKey(product.getId())) {
-                throw new Exception("The product already exists on command with product id: " + product.getId());
-            } else {
-               
-                products.put(product.getId(), new Line(product, cost, quantity));
-            }
-
 
     }
+
+
 }
 }
