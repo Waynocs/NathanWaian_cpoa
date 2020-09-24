@@ -1,8 +1,12 @@
 package model;
 
 import java.util.*;
+
 import java.time.*;
 
+/**
+ * 
+ */
 public class Command {
 
     private int id;
@@ -40,29 +44,53 @@ public class Command {
         this.customer = customer;
     }
 
+    public void addProduct(Product p, int count) throws InvalidProductException {
+        if (count < 1)
+            throw new InvalidProductException("'count' must over 0");
+        else if (products.keySet().contains(p.getId()))
+            throw new InvalidProductException("The item " + p.getName() + " is already added");
+        else
+            products.put(p.getId(), new Line(p, count));
+    }
+
+    public void addProduct(Product p, int count, double cost) throws InvalidProductException {
+        if (count < 1)
+            throw new InvalidProductException("'count' must over 0");
+        else if (products.keySet().contains(p.getId()))
+            throw new InvalidProductException("The item " + p.getName() + " is already added");
+        else
+            products.put(p.getId(), new Line(p, count, cost));
+    }
+
     private LocalDate date;
     private Customer customer;
     private Map<Integer, Line> products;
 
     private class Line {
 
-        public int idProduct;
+        public Product product;
         public double cost;
         public int quantity;
 
-        public Line(int idProduct, double cost, int quantity) {
-            this.setIdProduct(idProduct);
+        public Line(Product product, int quantity, double cost) {
+            this.setProduct(product);
             this.setCost(cost);
             this.setQuantity(quantity);
         }
 
-        public int getIdProduct() {
-            return idProduct;
+        public Line(Product product, int quantity) {
+            this.setProduct(product);
+            this.setCost(product.getCost());
+            this.setQuantity(quantity);
         }
 
-        public void setIdProduct(int idProduct) {
-            if (idProduct > 0)
-                this.idProduct = idProduct;
+        public Product getProduct() {
+            return product;
+        }
+
+        public void setProduct(Product product) {
+            if (product != null)
+                this.product = product;
         }
 
         public double getCost() {
