@@ -1,6 +1,9 @@
 package dao;
 
 import model.Customer;
+
+import java.sql.SQLException;
+
 import dao.DAO;
 
 /**
@@ -8,5 +11,8 @@ import dao.DAO;
  * T se défini ici comme Customer
  */
 public interface CustomerDAO extends DAO<Customer> {
+    Customer getById(int id) throws SQLException;
+
+    Customer[] getAll() throws SQLException;
 
 }

@@ -1,6 +1,9 @@
 package dao;
 
 import model.Category;
+
+import java.sql.SQLException;
+
 import dao.DAO;
 
 /**
@@ -8,5 +11,8 @@ import dao.DAO;
  * T se défini ici comme Category
  */
 public interface CategoryDAO extends DAO<Category> {
+    Category getById(int id) throws SQLException;
+
+    Category[] getAll() throws SQLException;
 
 }

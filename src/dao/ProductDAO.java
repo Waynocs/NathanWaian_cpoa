@@ -1,6 +1,9 @@
 package dao;
 
 import model.Product;
+
+import java.sql.SQLException;
+
 import dao.DAO;
 
 /**
@@ -8,5 +11,8 @@ import dao.DAO;
  * T se défini ici comme Product
  */
 public interface ProductDAO extends DAO<Product> {
+    Product getById(int id) throws SQLException;
+
+    Product[] getAll() throws SQLException;
 
 }

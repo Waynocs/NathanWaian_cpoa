@@ -10,8 +10,4 @@ public interface DAO<T> {
     boolean update(T object) throws SQLException;
 
     boolean delete(T object) throws SQLException;
-
-    T getById(int id) throws SQLException;
-
-    T[] getAll() throws SQLException;
 }
