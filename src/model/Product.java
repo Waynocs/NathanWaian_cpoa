@@ -32,7 +32,7 @@ public class Product {
     /**
      * Constructor
      * 
-     * @param id          hthe id of the product
+     * @param id          the id of the product
      * @param name        the name of the product
      * @param cost        the cost of the product
      * @param description the description of the product
