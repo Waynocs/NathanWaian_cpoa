@@ -50,7 +50,6 @@ public class Command {
         public double cost;
         public int quantity;
 
-
         public Line(int idProduct, double cost, int quantity) {
             this.setIdProduct(idProduct);
             this.setCost(cost);
@@ -85,9 +84,6 @@ public class Command {
 
         }
 
-
     }
 
-
-}
 }
