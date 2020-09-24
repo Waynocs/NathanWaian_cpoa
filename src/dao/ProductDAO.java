@@ -1,4 +1,4 @@
-package dao.model;
+package dao;
 
 import model.Product;
 import dao.DAO;

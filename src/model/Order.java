@@ -7,7 +7,7 @@ import java.time.*;
 /**
  * 
  */
-public class Command {
+public class Order {
 
     private int id;
 
@@ -17,7 +17,7 @@ public class Command {
      * @param date
      * @param customer
      */
-    public Command(int id, LocalDate date, Customer customer) {
+    public Order(int id, LocalDate date, Customer customer) {
         this.id = id;
         this.date = date;
         this.customer = customer;

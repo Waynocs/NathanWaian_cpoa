@@ -1,6 +1,6 @@
 package dao.mySQL;
 
-import dao.model.CategoryDAO;
+import dao.CategoryDAO;
 
 import model.Category;
 import Request.*;
