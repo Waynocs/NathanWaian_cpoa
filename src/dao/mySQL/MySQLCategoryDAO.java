@@ -62,7 +62,7 @@ public class MySQLCategoryDAO implements CategoryDAO {
         return category;
     }
 
-    public ArrayList<Category> FindAll() throws SQLException {
+    public Category[] getAll() throws SQLException {
         ArrayList<Category> listeCategories = new ArrayList<Category>();
 
         Connection laConnexion = Connexion.creeConnexion();
@@ -78,7 +78,7 @@ public class MySQLCategoryDAO implements CategoryDAO {
             laConnexion.close();
         }
 
-        return listeCategories;
+        return listeCategories.toArray(new Category[0]);
     }
 
 }

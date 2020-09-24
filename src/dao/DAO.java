@@ -5,12 +5,13 @@ import java.sql.SQLException;
 //INTERFACE UTILISE UN OBJET DE TYPE T
 public interface DAO<T> {
 
-    public abstract boolean create(T object) throws SQLException;
+    boolean create(T object) throws SQLException;
 
-    public abstract boolean update(T object) throws SQLException;
+    boolean update(T object) throws SQLException;
 
-    public abstract boolean delete(T object) throws SQLException;
+    boolean delete(T object) throws SQLException;
 
-    public abstract T getById(int id) throws SQLException;
+    T getById(int id) throws SQLException;
 
+    T[] getAll() throws SQLException;
 }
