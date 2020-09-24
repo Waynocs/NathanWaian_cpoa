@@ -14,13 +14,6 @@ public class Connexion {
         String login = "root";
         String pwd = "";
 
-        /*
-         * String url =
-         * "jdbc:mysql://devbdd.iutmetz.univ-lorraine.fr:3306/serano1u_pullmoche"; url
-         * += "?serverTimezone=Europe/Paris"; String login = "serano1u_appli"; String
-         * pwd = "31904378";
-         */
-
         Connection myConnection = null;
         try {
             myConnection = DriverManager.getConnection(url, login, pwd);
