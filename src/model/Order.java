@@ -5,113 +5,70 @@ import java.util.*;
 import java.time.*;
 
 /**
- * 
+ * Defines an order made by a customer
  */
 public class Order {
 
     private int id;
+    private LocalDate date;
+    private int customer;
 
     /**
+     * Constructor.
      * 
-     * @param id
-     * @param date
-     * @param customer
+     * @param id         id of the order
+     * @param date       the date the order has been made
+     * @param customerID the customer who made the order
      */
-    public Order(int id, LocalDate date, Customer customer) {
+    public Order(int id, LocalDate date, int customerID) {
         this.id = id;
         this.date = date;
-        this.customer = customer;
-        this.products = new HashMap<Integer, Line>();
+        this.customer = customerID;
     }
 
+    /**
+     * Returns the date of the order
+     * 
+     * @return the date of the order
+     */
     public LocalDate getDate() {
         return this.date;
     }
 
+    /**
+     * Changes the date of the order
+     * 
+     * @param date the new date of the order
+     */
     public void setDate(LocalDate date) {
         this.date = date;
     }
 
-    public Customer getCustomer() {
+    /**
+     * Returns the customer who made the order
+     * 
+     * @return the customer who made the order
+     */
+    public int getCustomer() {
         return this.customer;
     }
 
+    /**
+     * Returns the id of the order
+     * 
+     * @return the id of the order
+     */
     public int getId() {
         return this.id;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public void addProduct(Product p, int count) throws InvalidProductException {
-        if (count < 1)
-            throw new InvalidProductException("'count' must over 0");
-        else if (products.keySet().contains(p.getId()))
-            throw new InvalidProductException("The item " + p.getName() + " is already added");
-        else
-            products.put(p.getId(), new Line(p, count));
-    }
-
-    public void addProduct(Product p, int count, double cost) throws InvalidProductException {
-        if (count < 1)
-            throw new InvalidProductException("'count' must over 0");
-        else if (products.keySet().contains(p.getId()))
-            throw new InvalidProductException("The item " + p.getName() + " is already added");
-        else
-            products.put(p.getId(), new Line(p, count, cost));
-    }
-
-    private LocalDate date;
-    private Customer customer;
-    private Map<Integer, Line> products;
-
-    private class Line {
-
-        public Product product;
-        public double cost;
-        public int quantity;
-
-        public Line(Product product, int quantity, double cost) {
-            this.setProduct(product);
-            this.setCost(cost);
-            this.setQuantity(quantity);
-        }
-
-        public Line(Product product, int quantity) {
-            this.setProduct(product);
-            this.setCost(product.getCost());
-            this.setQuantity(quantity);
-        }
-
-        public Product getProduct() {
-            return product;
-        }
-
-        public void setProduct(Product product) {
-            if (product != null)
-                this.product = product;
-        }
-
-        public double getCost() {
-            return cost;
-        }
-
-        public void setCost(double cost) {
-            if (cost > 0)
-                this.cost = cost;
-        }
-
-        public int getQuantity() {
-            return quantity;
-        }
-
-        public void setQuantity(int quantity) {
-            if (quantity > 0)
-                this.quantity = quantity;
-
-        }
-
+    /**
+     * Changes the customer who made the order
+     * 
+     * @param customer the new customer who made the order
+     */
+    public void setCustomer(int customerID) {
+        this.customer = customerID;
     }
 
 }
