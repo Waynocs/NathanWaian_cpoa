@@ -8,7 +8,7 @@ import java.time.*;
 public class Order {
 
     private int id;
-    private LocalDate date;
+    private LocalDateTime date;
     private int customer;
 
     /**
@@ -18,7 +18,7 @@ public class Order {
      * @param date       the date the order has been made
      * @param customerID the customer who made the order
      */
-    public Order(int id, LocalDate date, int customerID) {
+    public Order(int id, LocalDateTime date, int customerID) {
         this.id = id;
         this.date = date;
         this.customer = customerID;
@@ -29,7 +29,7 @@ public class Order {
      * 
      * @return the date of the order
      */
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return this.date;
     }
 
@@ -38,7 +38,7 @@ public class Order {
      * 
      * @param date the new date of the order
      */
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
