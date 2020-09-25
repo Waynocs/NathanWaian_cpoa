@@ -8,7 +8,7 @@ import java.sql.SQLException;
  */
 public class Connection {
 
-    private static Connection Instance;
+    private static Connection instance;
     private java.sql.Connection connection;
 
     private Connection() {
@@ -22,11 +22,11 @@ public class Connection {
      * @throws SQLException
      */
     public static java.sql.Connection getConnection() throws SQLException {
-        if (Instance == null)
-            Instance = new Connection();
-        if (Instance.connection.isClosed())
-            Instance.creeConnexion();
-        return Instance.connection;
+        if (instance == null)
+            instance = new Connection();
+        if (instance.connection.isClosed())
+            instance.creeConnexion();
+        return instance.connection;
     }
 
     private void creeConnexion() {
