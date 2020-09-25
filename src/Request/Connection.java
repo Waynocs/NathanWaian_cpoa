@@ -1,7 +1,10 @@
 package Request;
 
+import java.io.File;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
+import controller.INIReader;
 
 /**
  * Object used to manage an SQL connection
@@ -31,14 +34,11 @@ public class Connection {
 
     private void creeConnexion() {
         // Pour se connecter à un serveur local
-
-        String url = "jdbc:mysql://localhost/serano1u_pullmoche";
-        url += "?serverTimezone=Europe/Paris";
-        String login = "root";
-        String pwd = "";
-
+        var connectionInfo = INIReader.ReadFromFile(new File("ConnectionInfo.ini")).get("Connection");
+        System.out.println("Connecting to " + connectionInfo.get("uri"));
         try {
-            connection = DriverManager.getConnection(url, login, pwd);
+            connection = DriverManager.getConnection(connectionInfo.get("uri"), connectionInfo.get("login"),
+                    connectionInfo.get("pwd"));
         } catch (SQLException sqle) {
             System.out.println("Connexion error" + sqle.getMessage());
         }
