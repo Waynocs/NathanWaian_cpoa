@@ -6,7 +6,25 @@ import dao.DAOFactory;
 import dao.OrderDAO;
 import dao.OrderLineDAO;
 
+/**
+ * SQL factory, to save on an sql server
+ */
 public class MySQLDAOFactory extends DAOFactory {
+
+    private static MySQLDAOFactory Instance;
+
+    /**
+     * Returns the only instance of the factory
+     * 
+     * @return the only instance of the factory
+     */
+    public static MySQLDAOFactory getInstance() {
+        return Instance == null ? Instance = new MySQLDAOFactory() : Instance;
+    }
+
+    private MySQLDAOFactory() {
+
+    }
 
     @Override
     public CategoryDAO getCategoryDAO() {
@@ -15,26 +33,16 @@ public class MySQLDAOFactory extends DAOFactory {
 
     @Override
     public CustomerDAO getCustomerDAO() {
-        // TODO Auto-generated method stub
-        return null;
+        return MySQLCustomerDAO.getInstance();
     }
 
     @Override
     public OrderDAO getOrderDAO() {
-        // TODO Auto-generated method stub
-        return null;
+        return MySQLOrderDAO.getInstance();
     }
 
     @Override
     public OrderLineDAO getOrderLineDAO() {
-        // TODO Auto-generated method stub
-        return null;
+        return MySQLOrderLineDAO.getInstance();
     }
-
-    @Override
-    public void close() {
-        // TODO Auto-generated method stub
-
-    }
-
 }

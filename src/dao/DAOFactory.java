@@ -57,9 +57,4 @@ public abstract class DAOFactory {
      * @return the Order Line component of the factory
      */
     public abstract OrderLineDAO getOrderLineDAO();
-
-    /**
-     * Closes the factory
-     */
-    public abstract void close();
 }
