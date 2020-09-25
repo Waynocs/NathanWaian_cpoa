@@ -1,5 +1,7 @@
 package dao;
 
+import dao.mySQL.MySQLDAOFactory;
+
 /**
  * base DAO factory
  */
@@ -11,7 +13,11 @@ public abstract class DAOFactory {
         /**
          * The SQL mode will output a factory using an SQL database
          */
-        SQL
+        SQL,
+        /**
+         * The memory mode, only saved in the current running instance
+         */
+        MEMORY
     }
 
     /**
@@ -24,7 +30,9 @@ public abstract class DAOFactory {
     public static DAOFactory getFactory(Mode mode) {
         switch (mode) {
             case SQL:
-                return null;// temp
+                return MySQLDAOFactory.getInstance();
+            case MEMORY:
+                return null;// tmp
             default:
                 return null;
         }
