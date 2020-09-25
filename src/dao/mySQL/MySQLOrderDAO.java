@@ -31,49 +31,75 @@ public class MySQLOrderDAO implements OrderDAO {
         return instance;
     }
 
+    /**
+     * create a new order
+     * 
+     * @param id
+     * @param date
+     * @param customer
+     */
+
     @Override
     public boolean create(final Order object) throws SQLException {
 
         var statement = Request.Connection.getConnection()
-                .prepareStatement("INSERT INTO `Commande` (`date_commande`, `id_client`) VALUES ("
+                .prepareStatement("INSERT INTO `commande` (`date_commande`, `id_client`) VALUES ("
                         + object.getDate().format(formatter) + ", " + +object.getCustomer() + ");");
 
         return statement.executeUpdate() != 0;
 
     }
 
+    /**
+     * update an order
+     * 
+     * @param id
+     * @param date
+     * @param customer
+     */
+
     @Override
     public boolean update(final Order object) throws SQLException {
 
         var statement = Request.Connection.getConnection()
-                .prepareStatement("UPDATE `Commande` SET `date_commande`= " + object.getDate().format(formatter)
+                .prepareStatement("UPDATE `commande` SET `date_commande`= " + object.getDate().format(formatter)
                         + ",`id_client`=" + object.getCustomer() + " WHERE `id_commande` = " + object.getId());
 
         return statement.executeUpdate() != 0;
     }
 
+    /**
+     * delete an order
+     * 
+     * @param id
+     */
+
     @Override
     public boolean delete(final Order object) throws SQLException {
 
         var statement = Request.Connection.getConnection()
-                .prepareStatement("DELETE FROM `Commande` WHERE `id_commande` = " + object.getId());
+                .prepareStatement("DELETE FROM `commande` WHERE `id_commande` = " + object.getId());
 
         return statement.executeUpdate() != 0;
     }
 
     @Override
     public Order getById(final int id) throws SQLException {
-        var statement = Request.Connection.getConnection().createStatement();
-        var result = statement.executeQuery(
-                "SELECT `id_commande`, `date_commande`, `id_client` FROM `commande` WHERE `id_commande`=" + id);
-        return result.next()
-                ? new Order(result.getInt("id_commande"), result.getDate("date_commande").toLocalDate(),
-                        result.getInt("id_client"))
-                : null;
+        /*
+         * var statement = Request.Connection.getConnection().createStatement(); var
+         * result = statement.executeQuery(
+         * "SELECT `id_commande`, `date_commande`, `id_client` FROM `commande` WHERE `id_commande`="
+         * + id); return result.next() ? new Order(result.getInt("id_commande"),
+         * result.getDate("date_commande").toLocalDateTime(),
+         * result.getInt("id_client")) : null;
+         */
+
+        return null;
     }
 
     @Override
     public Order[] getAll() throws SQLException {
+
         /*
          * var statement = Request.Connection.getConnection().createStatement(); var
          * result = statement.executeQuery(
@@ -84,6 +110,7 @@ public class MySQLOrderDAO implements OrderDAO {
          * result.getInt("quantite"))); return list.toArray(new OrderLine[0]);
          */
         return null;
+
     }
 
 }
