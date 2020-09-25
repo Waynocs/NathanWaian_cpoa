@@ -8,7 +8,7 @@ public class Product {
     private String name;
     private double cost;
     private String description;
-    private Category category;
+    private int category;
     private String imagePath;
 
     /**
@@ -36,15 +36,15 @@ public class Product {
      * @param name        the name of the product
      * @param cost        the cost of the product
      * @param description the description of the product
-     * @param category    the category of the product
+     * @param categoryID  the category of the product
      * @param imagePath   the image file path of the product
      */
-    public Product(int id, String name, double cost, String description, Category category, String imagePath) {
+    public Product(int id, String name, double cost, String description, int categoryID, String imagePath) {
         this.id = id;
         this.name = name;
         this.cost = cost;
         this.description = description;
-        this.category = category;
+        this.category = categoryID;
         this.imagePath = imagePath;
     }
 
@@ -81,8 +81,17 @@ public class Product {
      * 
      * @return the category of the product
      */
-    public Category getCategory() {
+    public int getCategory() {
         return this.category;
+    }
+
+    /**
+     * Changes the category of this product
+     * 
+     * @param categoryID the new category of the product
+     */
+    public void setCategory(int categoryID) {
+        this.category = categoryID;
     }
 
     /**
