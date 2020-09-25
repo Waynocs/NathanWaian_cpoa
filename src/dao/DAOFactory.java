@@ -14,10 +14,6 @@ public abstract class DAOFactory {
         SQL
     }
 
-    private DAOFactory() {
-
-    }
-
     /**
      * Returns a factory depending of the mode used
      * 
