@@ -1,5 +1,8 @@
 package view;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Utilities {
@@ -59,5 +62,25 @@ public class Utilities {
             console.nextLine(); // free the buffer
         } while (minValue > input || input > maxValue);
         return input;
+    }
+
+    /**
+     * Parses a number from either the french locale of the english locale
+     * 
+     * @param value string to parse into a number
+     * @return number parsed from the value
+     */
+    public static Number parseNumber(String value) {
+        var frenchFormat = NumberFormat.getInstance(Locale.FRENCH);
+        var englishFormat = NumberFormat.getInstance(Locale.ENGLISH);
+        try {
+            return englishFormat.parse(value);
+        } catch (ParseException e1) {
+            try {
+                return frenchFormat.parse(value);
+            } catch (ParseException e2) {
+                return null;
+            }
+        }
     }
 }
