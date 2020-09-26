@@ -80,7 +80,10 @@ public class MySQLOrderDAO implements OrderDAO {
 
     @Override
     public Order getById(final int id) throws SQLException {
+<<<<<<< HEAD
 
+=======
+>>>>>>> f67daae1e0d713d3718398e1ab048fd3f5c78308
         var statement = Request.Connection.getConnection().createStatement();
         var result = statement.executeQuery(
                 "SELECT `id_commande`, `date_commande`, `id_client` FROM `commande` WHERE `id_commande`=" + id);
@@ -88,7 +91,10 @@ public class MySQLOrderDAO implements OrderDAO {
                 ? new Order(result.getInt("id_commande"), result.getTimestamp("date_commande").toLocalDateTime(),
                         result.getInt("id_client"))
                 : null;
+<<<<<<< HEAD
 
+=======
+>>>>>>> f67daae1e0d713d3718398e1ab048fd3f5c78308
     }
 
     @Override
