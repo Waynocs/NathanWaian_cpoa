@@ -1,18 +1,12 @@
 package dao.mySQL;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.sql.Timestamp;
 
 import dao.OrderDAO;
 import model.Order;
-import model.OrderLine;
-import model.Product;
-import Request.*;
 
 public class MySQLOrderDAO implements OrderDAO {
 
@@ -87,31 +81,27 @@ public class MySQLOrderDAO implements OrderDAO {
     @Override
     public Order getById(final int id) throws SQLException {
 
-        /*
-         * var statement = Request.Connection.getConnection().createStatement(); var
-         * result = statement.executeQuery(
-         * "SELECT `id_commande`, `date_commande`, `id_client` FROM `commande` WHERE `id_commande`="
-         * + id); return result.next() ? new Order(result.getInt("id_commande"),
-         * result.getDate("date_commande").toLocalDateTime(),
-         * result.getInt("id_client")) : null;
-         */
+        var statement = Request.Connection.getConnection().createStatement();
+        var result = statement.executeQuery(
+                "SELECT `id_commande`, `date_commande`, `id_client` FROM `commande` WHERE `id_commande`=" + id);
+        return result.next()
+                ? new Order(result.getInt("id_commande"), result.getTimestamp("date_commande").toLocalDateTime(),
+                        result.getInt("id_client"))
+                : null;
 
-        return null;
     }
 
     @Override
     public Order[] getAll() throws SQLException {
 
-        /*
-         * var statement = Request.Connection.getConnection().createStatement(); var
-         * result = statement.executeQuery(
-         * "SELECT `id_produit`, `id_commande`, `quantite`, `tarif_unitaire` FROM `Ligne_commande` WHERE"
-         * + "`id_produit`=" + product); var list = new LinkedList<OrderLine>(); while
-         * (result.next()) list.add(new OrderLine(result.getInt("id_commande"),
-         * result.getInt("id_produit"), result.getDouble("tarif_unitaire"),
-         * result.getInt("quantite"))); return list.toArray(new OrderLine[0]);
-         */
-        return null;
+        final var statement = Request.Connection.getConnection().createStatement();
+        final ResultSet result = statement
+                .executeQuery("SELECT `id_commande`, `date_commande`, `id_client` FROM `commande`");
+        var orderList = new LinkedList<Order>();
+        while (result.next())
+            orderList.add(new Order(result.getInt("id_commande"),
+                    result.getTimestamp("date_commande").toLocalDateTime(), result.getInt("id_client")));
+        return orderList.size() > 0 ? orderList.toArray(new Order[0]) : null;
 
     }
 

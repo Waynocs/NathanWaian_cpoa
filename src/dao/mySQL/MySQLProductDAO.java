@@ -1,6 +1,8 @@
 package dao.mySQL;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 
 import dao.ProductDAO;
 import model.Product;
@@ -92,7 +94,14 @@ public class MySQLProductDAO implements ProductDAO {
 
     @Override
     public Product[] getAll() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+
+        final var statement = Request.Connection.getConnection().createStatement();
+        final ResultSet result = statement.executeQuery(
+                "SELECT `id_produit`, `nom`, `description`, `tarif`, `visuel`, `id_categorie` FROM `produit`");
+        var productList = new LinkedList<Product>();
+        while (result.next())
+            productList.add(new Product(result.getInt("id_produit"), result.getString("nom"), result.getDouble("tarif"),
+                    result.getString("description"), result.getInt("id_categorie"), result.getString("visuel")));
+        return productList.size() > 0 ? productList.toArray(new Product[0]) : null;
     }
 }

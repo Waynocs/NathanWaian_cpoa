@@ -4,7 +4,9 @@ import dao.CategoryDAO;
 
 import model.Category;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 
 public class MySQLCategoryDAO implements CategoryDAO {
 
@@ -55,8 +57,23 @@ public class MySQLCategoryDAO implements CategoryDAO {
                 : null;
     }
 
+    /**
+     * show all category
+     * 
+     * @param id
+     * @param title
+     * @param visuel
+     */
+
     public Category[] getAll() throws SQLException {
-        return null;
+
+        final var statement = Request.Connection.getConnection().createStatement();
+        final ResultSet result = statement.executeQuery("SELECT `id_categorie`, `titre`, `visuel` FROM `categorie`");
+        var categoryList = new LinkedList<Category>();
+        while (result.next())
+            categoryList.add(
+                    new Category(result.getString("title"), result.getString("visuel"), result.getInt("id_categorie")));
+        return categoryList.size() > 0 ? categoryList.toArray(new Category[0]) : null;
 
     }
 }
