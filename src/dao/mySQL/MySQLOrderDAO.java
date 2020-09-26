@@ -67,7 +67,7 @@ public class MySQLOrderDAO implements OrderDAO {
         var result = statement.executeQuery(
                 "SELECT `id_commande`, `date_commande`, `id_client` FROM `commande` WHERE `id_commande`=" + id);
         return result.next()
-                ? new Order(result.getInt("id_commande"), result.getDate("date_commande").toLocalDate(),
+                ? new Order(result.getInt("id_commande"), result.getTimestamp("date_commande").toLocalDateTime(),
                         result.getInt("id_client"))
                 : null;
     }
