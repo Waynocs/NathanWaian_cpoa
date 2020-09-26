@@ -21,11 +21,12 @@ public abstract class DAOFactory {
     }
 
     /**
-     * Returns a factory depending of the mode used
+     * Returns a factory depending of the mode used, or null if the mode is
+     * undefined
      * 
      * @param mode the mode will affect the way the factory saves its changes or
      *             connects to the data
-     * @return
+     * @return a factory depending of the mode used
      */
     public static DAOFactory getFactory(Mode mode) {
         switch (mode) {
