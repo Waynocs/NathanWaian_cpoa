@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.sql.Timestamp;
 
 import dao.OrderDAO;
 import model.Order;
@@ -31,32 +32,54 @@ public class MySQLOrderDAO implements OrderDAO {
         return instance;
     }
 
+    /**
+     * create a new order
+     * 
+     * @param id
+     * @param date
+     * @param customer
+     */
+
     @Override
     public boolean create(final Order object) throws SQLException {
 
         var statement = Request.Connection.getConnection()
-                .prepareStatement("INSERT INTO `Commande` (`date_commande`, `id_client`) VALUES ("
+                .prepareStatement("INSERT INTO `commande` (`date_commande`, `id_client`) VALUES ("
                         + object.getDate().format(formatter) + ", " + +object.getCustomer() + ");");
 
         return statement.executeUpdate() != 0;
 
     }
 
+    /**
+     * update an order
+     * 
+     * @param id
+     * @param date
+     * @param customer
+     */
+
     @Override
     public boolean update(final Order object) throws SQLException {
 
         var statement = Request.Connection.getConnection()
-                .prepareStatement("UPDATE `Commande` SET `date_commande`= " + object.getDate().format(formatter)
+                .prepareStatement("UPDATE `commande` SET `date_commande`= " + object.getDate().format(formatter)
                         + ",`id_client`=" + object.getCustomer() + " WHERE `id_commande` = " + object.getId());
 
         return statement.executeUpdate() != 0;
     }
 
+    /**
+     * delete an order
+     * 
+     * @param id
+     */
+
     @Override
     public boolean delete(final Order object) throws SQLException {
 
         var statement = Request.Connection.getConnection()
-                .prepareStatement("DELETE FROM `Commande` WHERE `id_commande` = " + object.getId());
+                .prepareStatement("DELETE FROM `commande` WHERE `id_commande` = " + object.getId());
 
         return statement.executeUpdate() != 0;
     }
@@ -74,6 +97,7 @@ public class MySQLOrderDAO implements OrderDAO {
 
     @Override
     public Order[] getAll() throws SQLException {
+
         /*
          * var statement = Request.Connection.getConnection().createStatement(); var
          * result = statement.executeQuery(
@@ -84,6 +108,7 @@ public class MySQLOrderDAO implements OrderDAO {
          * result.getInt("quantite"))); return list.toArray(new OrderLine[0]);
          */
         return null;
+
     }
 
 }
