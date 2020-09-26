@@ -9,6 +9,15 @@ public class Utilities {
     private static Scanner consoleInput;
 
     /**
+     * Returns a long horizontal line after several new lines
+     * 
+     * @return a String used as a separator
+     */
+    public static String getSeparator() {
+        return "\n\n\n\n\n\n─────────────────────────────────────────────\n";
+    }
+
+    /**
      * Returns the one and only scanner that should be used to read the console
      * 
      * @return the one and only scanner that should be used to read the console
@@ -40,7 +49,7 @@ public class Utilities {
         int input = minValue - 1;
         var console = getConsoleInput();
         do {
-            System.out.println(message);
+            System.out.print(message + "\n>");
             if (console.hasNextInt()) {
                 input = console.nextInt();
                 if (input < minValue || maxValue < input)
