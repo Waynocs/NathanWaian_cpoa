@@ -106,7 +106,7 @@ public class Utilities {
         do {
             System.out.print(Utilities.getSeparator());
             String message = "Page " + (page + 1) + " out of " + pageCount + '\n';
-            for (int i = page * 9; i < Math.min((page + 1) * 9, list.length); i++)
+            for (int i = page * entryPerPage; i < Math.min((page + 1) * entryPerPage, list.length); i++)
                 message += formatter.apply(list[i]) + "\n";
             if (page == 0 && pageCount == 1) {
                 message += "1. Back";
