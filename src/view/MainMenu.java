@@ -26,7 +26,9 @@ public class MainMenu {
             input = Utilities.getUserSelection(
                     "1. Open categories\n2. Open products\n3. Open customers\n4. Open orders\n5. Exit", 5);
             switch (input) {
-
+                case 1:
+                    Categories.open(factory);
+                    break;
             }
         } while (input != 5);
     }
