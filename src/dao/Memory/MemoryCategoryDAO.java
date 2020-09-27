@@ -39,6 +39,14 @@ public class MemoryCategoryDAO implements dao.CategoryDAO {
         return instance == null ? instance = new MemoryCategoryDAO() : instance;
     }
 
+    /**
+     * create a new category
+     * 
+     * @param id
+     * @param name
+     * @param imagePath
+     */
+
     @Override
     public boolean create(Category object) throws SQLException {
         int id = -1;
@@ -49,6 +57,14 @@ public class MemoryCategoryDAO implements dao.CategoryDAO {
         return true;
     }
 
+    /**
+     * update a category
+     * 
+     * @param id
+     * @param name
+     * @param imagePath
+     */
+
     @Override
     public boolean update(Category object) throws SQLException {
         if (!memory.keySet().contains(object.getId()))
@@ -58,6 +74,12 @@ public class MemoryCategoryDAO implements dao.CategoryDAO {
             return true;
         }
     }
+
+    /**
+     * delete a category
+     * 
+     * @param id
+     */
 
     @Override
     public boolean delete(Category object) throws SQLException {
@@ -78,6 +100,14 @@ public class MemoryCategoryDAO implements dao.CategoryDAO {
             return new Category(element.name, element.imgPath, id);
         }
     }
+
+    /**
+     * show all category
+     * 
+     * @param id
+     * @param name
+     * @param imagePath
+     */
 
     @Override
     public Category[] getAll() throws SQLException {

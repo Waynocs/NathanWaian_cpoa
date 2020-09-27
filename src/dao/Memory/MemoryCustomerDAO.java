@@ -44,6 +44,20 @@ public class MemoryCustomerDAO implements dao.CustomerDAO {
         return instance == null ? instance = new MemoryCustomerDAO() : instance;
     }
 
+    /**
+     * create a new customer
+     * 
+     * @param name
+     * @param surname
+     * @param identifier
+     * @param pwd
+     * @param adressStreet
+     * @param adressNumber
+     * @param adressPostalCode
+     * @param adressCity
+     * @param adressCountry
+     */
+
     @Override
     public boolean create(final Customer object) throws SQLException {
         int id = -1;
@@ -57,6 +71,21 @@ public class MemoryCustomerDAO implements dao.CustomerDAO {
         return true;
     }
 
+    /**
+     * update a customer
+     * 
+     * @param id
+     * @param name
+     * @param surname
+     * @param identifier
+     * @param pwd
+     * @param adressStreet
+     * @param adressNumber
+     * @param adressPostalCode
+     * @param adressCity
+     * @param adressCountry
+     */
+
     @Override
     public boolean update(final Customer object) throws SQLException {
         if (!memory.keySet().contains(object.getId()))
@@ -69,6 +98,12 @@ public class MemoryCustomerDAO implements dao.CustomerDAO {
             return true;
         }
     }
+
+    /**
+     * delete a customer
+     * 
+     * @param id
+     */
 
     @Override
     public boolean delete(final Customer object) throws SQLException {
@@ -91,6 +126,20 @@ public class MemoryCustomerDAO implements dao.CustomerDAO {
                     element.addressCountry);
         }
     }
+
+    /**
+     * show all customer
+     * 
+     * @param name
+     * @param surname
+     * @param identifier
+     * @param pwd
+     * @param adressStreet
+     * @param adressNumber
+     * @param adressPostalCode
+     * @param adressCity
+     * @param adressCountry
+     */
 
     @Override
     public Customer[] getAll() throws SQLException {
