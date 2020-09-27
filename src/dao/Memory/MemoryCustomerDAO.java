@@ -46,15 +46,15 @@ public class MemoryCustomerDAO implements dao.CustomerDAO {
 
     @Override
     public boolean create(final Customer object) throws SQLException {
-        if (memory.keySet().contains(object.getId()))
-            return false;
-        else {
-            memory.put(object.getId(),
-                    new Data(object.getName(), object.getSurname(), object.getIdentifier(), object.getPwd(),
-                            object.getAddressNumber(), object.getAddressStreet(), object.getAddressPostalCode(),
-                            object.getAddressCity(), object.getAddressCountry()));
-            return true;
-        }
+        int id = -1;
+        for (var key : memory.keySet())
+            if (key > id)
+                id = key;
+        memory.put(id + 1,
+                new Data(object.getName(), object.getSurname(), object.getIdentifier(), object.getPwd(),
+                        object.getAddressNumber(), object.getAddressStreet(), object.getAddressPostalCode(),
+                        object.getAddressCity(), object.getAddressCountry()));
+        return true;
     }
 
     @Override

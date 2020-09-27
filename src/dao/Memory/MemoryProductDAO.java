@@ -42,12 +42,12 @@ public class MemoryProductDAO implements dao.ProductDAO {
 
     @Override
     public boolean create(Product object) throws SQLException {
-        if (memory.keySet().contains(object.getId()))
-            return false;
-        else {
-            memory.put(object.getId(), new Data(object.getName(), object.getImagePath(), object.getCost()));
-            return true;
-        }
+        int id = -1;
+        for (var key : memory.keySet())
+            if (key > id)
+                id = key;
+        memory.put(id + 1, new Data(object.getName(), object.getImagePath(), object.getCost()));
+        return true;
     }
 
     @Override
