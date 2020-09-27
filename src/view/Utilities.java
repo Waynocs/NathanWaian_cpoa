@@ -4,6 +4,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.function.Function;
 
 public class Utilities {
     private Utilities() {
@@ -82,5 +83,89 @@ public class Utilities {
                 return null;
             }
         }
+    }
+
+    /**
+     * Displays the given list in the console
+     * 
+     * @param <T>          type of the objects in the list
+     * @param list         list to display
+     * @param entryPerPage the amount of objects displayed per page
+     * @param formatter    the formatter used to convert the input type to another
+     *                     object which will use the toString() method
+     */
+    public static <T> void displayList(T[] list, int entryPerPage, Function<T, Object> formatter) {
+        int input;
+        int page = 0;
+        int pageCount = (int) Math.ceil(list.length / (double) entryPerPage);
+        if (pageCount == 0) {
+            System.out.print(Utilities.getSeparator());
+            input = Utilities.getUserSelection("No items\n1. Back", 1);
+            return;
+        }
+        do {
+            System.out.print(Utilities.getSeparator());
+            String message = "Page " + (page + 1) + " out of " + pageCount + '\n';
+            for (int i = page * 9; i < Math.min((page + 1) * 9, list.length); i++)
+                message += formatter.apply(list[i]) + "\n";
+            if (page == 0 && pageCount == 1) {
+                message += "1. Back";
+                input = Utilities.getUserSelection(message, 1);
+                input = 3;
+            } else if (page == 0) {
+                message += "1. --> Next\n2. Back";
+                input = Utilities.getUserSelection(message, 2);
+                if (input == 1)
+                    page++;
+                else
+                    input = 3;
+            } else if (page + 1 == pageCount) {
+                message += "1. <-- Previous\n2. Back";
+                input = Utilities.getUserSelection(message, 2);
+                if (input == 1)
+                    page--;
+                else
+                    input = 3;
+            } else {
+                message += "1. <-- Previous\n2. --> Next\n3. Back";
+                input = Utilities.getUserSelection(message, 3);
+                if (input == 1)
+                    page--;
+                else if (input == 2)
+                    page++;
+            }
+        } while (input != 3);
+    }
+
+    /**
+     * Displays the given list in the console, using 9 objects per page and the
+     * toString() method
+     * 
+     * @param list list to display
+     */
+    public static void displayList(Object[] list) {
+        displayList(list, 9, (obj) -> obj.toString());
+    }
+
+    /**
+     * Displays the given list in the console, using 9 objects per page
+     * 
+     * @param <T>       type of the objects in the list
+     * @param list      list to display
+     * @param formatter the formatter used to convert the input type to another
+     *                  object which will use the toString() method
+     */
+    public static <T> void displayList(T[] list, Function<T, Object> formatter) {
+        displayList(list, 9, formatter);
+    }
+
+    /**
+     * Displays the given list in the console, using the toString() method
+     * 
+     * @param list         list to display
+     * @param entryPerPage the amount of objects displayed per page
+     */
+    public static void displayList(Object[] list, int entryPerPage) {
+        displayList(list, entryPerPage, (obj) -> obj.toString());
     }
 }
