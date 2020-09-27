@@ -12,10 +12,14 @@ public class MemoryProductDAO implements dao.ProductDAO {
     private class Data {
         public String name;
         public String imgPath;
+        public double cost;
+        public String description;
+        public int category;
 
-        public Data(String n, String iP) {
+        public Data(String n, String iP, double cost) {
             name = n;
             imgPath = iP;
+
         }
     }
 
@@ -41,7 +45,7 @@ public class MemoryProductDAO implements dao.ProductDAO {
         if (memory.keySet().contains(object.getId()))
             return false;
         else {
-            memory.put(object.getId(), new Data(object.getName(), object.getImagePath()));
+            memory.put(object.getId(), new Data(object.getName(), object.getImagePath(), object.getCost()));
             return true;
         }
     }
@@ -51,7 +55,7 @@ public class MemoryProductDAO implements dao.ProductDAO {
         if (!memory.keySet().contains(object.getId()))
             return false;
         else {
-            memory.put(object.getId(), new Data(object.getName(), object.getImagePath()));
+            memory.put(object.getId(), new Data(object.getName(), object.getImagePath(), object.getCost()));
             return true;
         }
     }
@@ -68,22 +72,24 @@ public class MemoryProductDAO implements dao.ProductDAO {
 
     @Override
     public Product getById(int id) throws SQLException {
-        /*
-         * if (!memory.keySet().contains(id)) return null; else { var element =
-         * memory.get(id); return new Product(id, element.name, cost, element.imgPath,
-         * element.description, category);
-         */
-        return null;
+
+        if (!memory.keySet().contains(id)) {
+            return null;
+        } else {
+            var element = memory.get(id);
+            return new Product(id, element.name, element.cost, element.imgPath, element.category, element.description);
+        }
     }
 
     @Override
     public Product[] getAll() throws SQLException {
-        /*
-         * var list = new LinkedList<Product>(); for (var entry : memory.entrySet())
-         * list.add(new Product(entry.getKey().id, entry.getValue().name,
-         * cost.getKey())); return list.toArray(new Product[0]);
-         */
-        return null;
+
+        var list = new LinkedList<Product>();
+        for (var entry : memory.entrySet())
+            list.add(new Product(entry.getKey(), entry.getValue().imgPath, entry.getValue().cost,
+                    entry.getValue().description, entry.getValue().category, entry.getValue().name));
+        return list.toArray(new Product[0]);
+
     }
 
 }
