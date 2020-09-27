@@ -40,6 +40,15 @@ public class MemoryProductDAO implements dao.ProductDAO {
         return instance == null ? instance = new MemoryProductDAO() : instance;
     }
 
+    /**
+     * create a new product
+     * 
+     * @param id
+     * @param name
+     * @param imagePath
+     * @param cost
+     */
+
     @Override
     public boolean create(Product object) throws SQLException {
         if (memory.keySet().contains(object.getId()))
@@ -50,6 +59,15 @@ public class MemoryProductDAO implements dao.ProductDAO {
         }
     }
 
+    /**
+     * update a product
+     * 
+     * @param id
+     * @param name
+     * @param imagePath
+     * @param cost
+     */
+
     @Override
     public boolean update(Product object) throws SQLException {
         if (!memory.keySet().contains(object.getId()))
@@ -59,6 +77,12 @@ public class MemoryProductDAO implements dao.ProductDAO {
             return true;
         }
     }
+
+    /**
+     * delete a product
+     * 
+     * @param id
+     */
 
     @Override
     public boolean delete(Product object) throws SQLException {
@@ -80,6 +104,17 @@ public class MemoryProductDAO implements dao.ProductDAO {
             return new Product(id, element.name, element.cost, element.imgPath, element.category, element.description);
         }
     }
+
+    /**
+     * show all product
+     * 
+     * @param id
+     * @param name
+     * @param imagePath
+     * @param cost
+     * @param description
+     * @param category
+     */
 
     @Override
     public Product[] getAll() throws SQLException {
