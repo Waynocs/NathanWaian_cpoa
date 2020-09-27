@@ -37,14 +37,6 @@ public class MemoryOrderDAO implements dao.OrderDAO {
         return instance == null ? instance = new MemoryOrderDAO() : instance;
     }
 
-    /**
-     * create a new Order
-     * 
-     * @param id
-     * @param date
-     * @param customer
-     */
-
     @Override
     public boolean create(Order object) throws SQLException {
         int id = -1;
@@ -55,14 +47,6 @@ public class MemoryOrderDAO implements dao.OrderDAO {
         return true;
     }
 
-    /**
-     * update an Order
-     * 
-     * @param id
-     * @param date
-     * @param customer
-     */
-
     @Override
     public boolean update(Order object) throws SQLException {
         if (!memory.keySet().contains(object.getId()))
@@ -72,12 +56,6 @@ public class MemoryOrderDAO implements dao.OrderDAO {
             return true;
         }
     }
-
-    /**
-     * delete an order
-     * 
-     * @param id
-     */
 
     @Override
     public boolean delete(Order object) throws SQLException {
@@ -98,14 +76,6 @@ public class MemoryOrderDAO implements dao.OrderDAO {
             return new Order(id, element.date, element.customer);
         }
     }
-
-    /**
-     * show all order
-     * 
-     * @param id
-     * @param date
-     * @param customer
-     */
 
     @Override
     public Order[] getAll() throws SQLException {
