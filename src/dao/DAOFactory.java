@@ -62,6 +62,13 @@ public abstract class DAOFactory {
     public abstract OrderDAO getOrderDAO();
 
     /**
+     * Returns the Product component of the factory
+     * 
+     * @return the Product component of the factory
+     */
+    public abstract ProductDAO getProductDAO();
+
+    /**
      * Returns the Order Line component of the factory
      * 
      * @return the Order Line component of the factory

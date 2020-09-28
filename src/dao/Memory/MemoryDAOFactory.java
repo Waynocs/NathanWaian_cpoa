@@ -4,6 +4,7 @@ import dao.CategoryDAO;
 import dao.CustomerDAO;
 import dao.OrderDAO;
 import dao.OrderLineDAO;
+import dao.ProductDAO;
 
 public class MemoryDAOFactory extends dao.DAOFactory {
 
@@ -29,20 +30,22 @@ public class MemoryDAOFactory extends dao.DAOFactory {
 
     @Override
     public CustomerDAO getCustomerDAO() {
-        // TODO Auto-generated method stub
-        return null;
+        return MemoryCustomerDAO.getInstance();
     }
 
     @Override
     public OrderDAO getOrderDAO() {
-        // TODO Auto-generated method stub
-        return null;
+        return MemoryOrderDAO.getInstance();
     }
 
     @Override
     public OrderLineDAO getOrderLineDAO() {
-        // TODO Auto-generated method stub
-        return null;
+        return MemoryOrderLineDAO.getInstance();
+    }
+
+    @Override
+    public ProductDAO getProductDAO() {
+        return MemoryProductDAO.getInstance();
     }
 
 }
