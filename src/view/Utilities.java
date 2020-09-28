@@ -6,6 +6,9 @@ import java.util.Locale;
 import java.util.Scanner;
 import java.util.function.Function;
 
+/**
+ * Class used as a collection of utility methods
+ */
 public class Utilities {
     private Utilities() {
     }

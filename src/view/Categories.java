@@ -5,10 +5,18 @@ import java.sql.SQLException;
 import dao.DAOFactory;
 import model.Category;
 
+/**
+ * Part of the console interface where the user can change the categories
+ */
 public class Categories {
     private Categories() {
     }
 
+    /**
+     * Open the category options
+     * 
+     * @param factory factory used
+     */
     public static void open(DAOFactory factory) {
         int input;
         do {

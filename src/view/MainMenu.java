@@ -3,11 +3,17 @@ package view;
 import dao.DAOFactory;
 import dao.DAOFactory.Mode;
 
+/**
+ * Main menu of the console interface
+ */
 public class MainMenu {
 
     private MainMenu() {
     }
 
+    /**
+     * Starts the console interface, getting to the main menu
+     */
     public static void Start() {
         switch (Utilities.getUserSelection("Choose a mode :\n1. MySQL\n2. Saved in memory", 2)) {
             case 1:
