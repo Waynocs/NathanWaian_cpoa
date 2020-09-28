@@ -57,7 +57,7 @@ public class MemoryOrderLineDAO implements OrderLineDAO {
     }
 
     @Override
-    public boolean create(OrderLine object) throws SQLException {
+    public boolean create(OrderLine object) {
         if (memory.keySet().contains(new DoubleIntID(object.getOrder(), object.getProduct())))
             return false;
         memory.put(new DoubleIntID(object.getOrder(), object.getProduct()),
@@ -66,7 +66,7 @@ public class MemoryOrderLineDAO implements OrderLineDAO {
     }
 
     @Override
-    public boolean update(OrderLine object) throws SQLException {
+    public boolean update(OrderLine object) {
         if (!memory.keySet().contains(new DoubleIntID(object.getOrder(), object.getProduct())))
             return false;
         memory.put(new DoubleIntID(object.getOrder(), object.getProduct()),
@@ -75,7 +75,7 @@ public class MemoryOrderLineDAO implements OrderLineDAO {
     }
 
     @Override
-    public boolean delete(OrderLine object) throws SQLException {
+    public boolean delete(OrderLine object) {
         if (!memory.keySet().contains(new DoubleIntID(object.getOrder(), object.getProduct())))
             return false;
         memory.remove(new DoubleIntID(object.getOrder(), object.getProduct()));
@@ -83,14 +83,14 @@ public class MemoryOrderLineDAO implements OrderLineDAO {
     }
 
     @Override
-    public OrderLine getById(int order, int product) throws SQLException {
+    public OrderLine getById(int order, int product) {
         var id = new DoubleIntID(order, product);
         var data = memory.keySet().contains(id) ? memory.get(id) : null;
         return data == null ? null : new OrderLine(order, product, data.cost, data.quantity);
     }
 
     @Override
-    public OrderLine[] getAllFromOrder(int order) throws SQLException {
+    public OrderLine[] getAllFromOrder(int order) {
         var list = new LinkedList<OrderLine>();
         for (var entry : memory.entrySet())
             if (entry.getKey().id1 == order)
@@ -100,7 +100,7 @@ public class MemoryOrderLineDAO implements OrderLineDAO {
     }
 
     @Override
-    public OrderLine[] getAllFromProduct(int product) throws SQLException {
+    public OrderLine[] getAllFromProduct(int product) {
         var list = new LinkedList<OrderLine>();
         for (var entry : memory.entrySet())
             if (entry.getKey().id2 == product)

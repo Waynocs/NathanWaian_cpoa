@@ -14,16 +14,14 @@ public interface CustomerDAO extends DAO<Customer> {
      * 
      * @param id id of the customer
      * @return the customer found, or null for nothing
-     * @throws SQLException
      */
-    Customer getById(int id) throws SQLException;
+    Customer getById(int id);
 
     /**
      * Returns every customers
      * 
      * @return every customers
-     * @throws SQLException
      */
-    Customer[] getAll() throws SQLException;
+    Customer[] getAll();
 
 }

@@ -42,13 +42,13 @@ public class MemoryProductDAO implements dao.ProductDAO {
     }
 
     @Override
-    public boolean create(Product object) throws SQLException {
+    public boolean create(Product object) {
         memory.put(index++, new Data(object.getName(), object.getImagePath(), object.getCost()));
         return true;
     }
 
     @Override
-    public boolean update(Product object) throws SQLException {
+    public boolean update(Product object) {
         if (!memory.keySet().contains(object.getId()))
             return false;
         else {
@@ -58,7 +58,7 @@ public class MemoryProductDAO implements dao.ProductDAO {
     }
 
     @Override
-    public boolean delete(Product object) throws SQLException {
+    public boolean delete(Product object) {
         if (!memory.keySet().contains(object.getId()))
             return false;
         else {
@@ -68,7 +68,7 @@ public class MemoryProductDAO implements dao.ProductDAO {
     }
 
     @Override
-    public Product getById(int id) throws SQLException {
+    public Product getById(int id) {
 
         if (!memory.keySet().contains(id)) {
             return null;
@@ -79,7 +79,7 @@ public class MemoryProductDAO implements dao.ProductDAO {
     }
 
     @Override
-    public Product[] getAll() throws SQLException {
+    public Product[] getAll() {
 
         var list = new LinkedList<Product>();
         for (var entry : memory.entrySet())

@@ -40,16 +40,19 @@ public class MySQLCustomerDAO implements CustomerDAO {
      */
 
     @Override
-    public boolean create(final Customer object) throws SQLException {
-        final var statement = Request.Connection.getConnection().prepareStatement(
-                "INSERT INTO `client`(`id_client`, `nom`, `prenom`, `identifiant`, `mot_de_passe`, `adr_numero`, `adr_voie`, `adr_code_postal`, `adr_ville`, `adr_pays`) VALUES ("
-                        + object.getId() + ", " + object.getName() + ", " + object.getSurname() + ", "
-                        + object.getIdentifier() + ", " + object.getPwd() + ", " + object.getAddressNumber() + ", "
-                        + object.getAddressStreet() + ", " + object.getAddressPostalCode() + ", "
-                        + object.getAddressCity() + ", " + object.getAddressCountry());
+    public boolean create(final Customer object) {
+        try {
+            final var statement = Request.Connection.getConnection().prepareStatement(
+                    "INSERT INTO `client`(`id_client`, `nom`, `prenom`, `identifiant`, `mot_de_passe`, `adr_numero`, `adr_voie`, `adr_code_postal`, `adr_ville`, `adr_pays`) VALUES ("
+                            + object.getId() + ", " + object.getName() + ", " + object.getSurname() + ", "
+                            + object.getIdentifier() + ", " + object.getPwd() + ", " + object.getAddressNumber() + ", "
+                            + object.getAddressStreet() + ", " + object.getAddressPostalCode() + ", "
+                            + object.getAddressCity() + ", " + object.getAddressCountry());
 
-        return statement.executeUpdate() != 0;
-
+            return statement.executeUpdate() != 0;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     /**
@@ -68,17 +71,21 @@ public class MySQLCustomerDAO implements CustomerDAO {
      */
 
     @Override
-    public boolean update(final Customer object) throws SQLException {
-        final var statement = Request.Connection.getConnection()
-                .prepareStatement("UPDATE `client` SET `id_client`= " + object.getId() + ",`nom`= " + object.getName()
-                        + ",`prenom`= " + object.getSurname() + ",`identifiant`=" + object.getIdentifier()
-                        + "`mot_de_passe`= " + object.getPwd() + "`adr_numero`= " + object.getAddressNumber()
-                        + "`adr_voie`= " + object.getAddressStreet() + "`adr_code_postal`= "
-                        + object.getAddressPostalCode() + "`adr_ville`= " + object.getAddressCity() + "`adr_pays`= "
-                        + object.getAddressCountry() + " WHERE `id_client` = " + object.getId());
+    public boolean update(final Customer object) {
+        try {
+            final var statement = Request.Connection.getConnection()
+                    .prepareStatement("UPDATE `client` SET `id_client`= " + object.getId() + ",`nom`= "
+                            + object.getName() + ",`prenom`= " + object.getSurname() + ",`identifiant`="
+                            + object.getIdentifier() + "`mot_de_passe`= " + object.getPwd() + "`adr_numero`= "
+                            + object.getAddressNumber() + "`adr_voie`= " + object.getAddressStreet()
+                            + "`adr_code_postal`= " + object.getAddressPostalCode() + "`adr_ville`= "
+                            + object.getAddressCity() + "`adr_pays`= " + object.getAddressCountry()
+                            + " WHERE `id_client` = " + object.getId());
 
-        return statement.executeUpdate() != 0;
-
+            return statement.executeUpdate() != 0;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     /**
@@ -88,37 +95,49 @@ public class MySQLCustomerDAO implements CustomerDAO {
      */
 
     @Override
-    public boolean delete(final Customer object) throws SQLException {
-        final var statement = Request.Connection.getConnection()
-                .prepareStatement("DELETE FROM `client` WHERE `id_client` = " + object.getId());
+    public boolean delete(final Customer object) {
+        try {
+            final var statement = Request.Connection.getConnection()
+                    .prepareStatement("DELETE FROM `client` WHERE `id_client` = " + object.getId());
 
-        return statement.executeUpdate() != 0;
+            return statement.executeUpdate() != 0;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     @Override
-    public Customer getById(final int id) throws SQLException {
-        final var statement = Request.Connection.getConnection().createStatement();
-        final var result = statement.executeQuery(
-                "SELECT `id_client`, `nom`, `prenom`, `identifiant`, `mot_de_passe`, `adr_numero`, `adr_voie`, `adr_code_postal`, `adr_ville`, `adr_pays` FROM `client` WHERE `id_client`="
-                        + id);
-        return result.next() ? new Customer(result.getInt("id_client"), result.getString("nom"),
-                result.getString("prenom"), result.getString("identifiant"), result.getString("mot_de_passe"),
-                result.getString("adr_numero"), result.getString("adr_voie"), result.getString("adr_code_postal"),
-                result.getString("adr_ville"), result.getString("adr_pays")) : null;
-    }
-
-    @Override
-    public Customer[] getAll() throws SQLException {
-
-        final var statement = Request.Connection.getConnection().createStatement();
-        final ResultSet result = statement.executeQuery(
-                "SELECT `id_client`, `nom`, `prenom`, `identifiant`, `mot_de_passe`, `adr_numero`, `adr_voie`, `adr_code_postal`, `adr_ville`, `adr_pays` FROM `client`");
-        var customerList = new LinkedList<Customer>();
-        while (result.next())
-            customerList.add(new Customer(result.getInt("id_client"), result.getString("nom"),
+    public Customer getById(final int id) {
+        try {
+            final var statement = Request.Connection.getConnection().createStatement();
+            final var result = statement.executeQuery(
+                    "SELECT `id_client`, `nom`, `prenom`, `identifiant`, `mot_de_passe`, `adr_numero`, `adr_voie`, `adr_code_postal`, `adr_ville`, `adr_pays` FROM `client` WHERE `id_client`="
+                            + id);
+            return result.next() ? new Customer(result.getInt("id_client"), result.getString("nom"),
                     result.getString("prenom"), result.getString("identifiant"), result.getString("mot_de_passe"),
                     result.getString("adr_numero"), result.getString("adr_voie"), result.getString("adr_code_postal"),
-                    result.getString("adr_ville"), result.getString("adr_pays")));
-        return customerList.size() > 0 ? customerList.toArray(new Customer[0]) : null;
+                    result.getString("adr_ville"), result.getString("adr_pays")) : null;
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Customer[] getAll() {
+        try {
+            final var statement = Request.Connection.getConnection().createStatement();
+            final ResultSet result = statement.executeQuery(
+                    "SELECT `id_client`, `nom`, `prenom`, `identifiant`, `mot_de_passe`, `adr_numero`, `adr_voie`, `adr_code_postal`, `adr_ville`, `adr_pays` FROM `client`");
+            var customerList = new LinkedList<Customer>();
+            while (result.next())
+                customerList.add(new Customer(result.getInt("id_client"), result.getString("nom"),
+                        result.getString("prenom"), result.getString("identifiant"), result.getString("mot_de_passe"),
+                        result.getString("adr_numero"), result.getString("adr_voie"),
+                        result.getString("adr_code_postal"), result.getString("adr_ville"),
+                        result.getString("adr_pays")));
+            return customerList.toArray(new Customer[0]);
+        } catch (SQLException e) {
+            return new Customer[0];
+        }
     }
 }

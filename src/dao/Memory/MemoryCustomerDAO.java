@@ -46,7 +46,7 @@ public class MemoryCustomerDAO implements dao.CustomerDAO {
     }
 
     @Override
-    public boolean create(final Customer object) throws SQLException {
+    public boolean create(final Customer object) {
         memory.put(index++,
                 new Data(object.getName(), object.getSurname(), object.getIdentifier(), object.getPwd(),
                         object.getAddressNumber(), object.getAddressStreet(), object.getAddressPostalCode(),
@@ -55,7 +55,7 @@ public class MemoryCustomerDAO implements dao.CustomerDAO {
     }
 
     @Override
-    public boolean update(final Customer object) throws SQLException {
+    public boolean update(final Customer object) {
         if (!memory.keySet().contains(object.getId()))
             return false;
         else {
@@ -68,7 +68,7 @@ public class MemoryCustomerDAO implements dao.CustomerDAO {
     }
 
     @Override
-    public boolean delete(final Customer object) throws SQLException {
+    public boolean delete(final Customer object) {
         if (!memory.keySet().contains(object.getId()))
             return false;
         else {
@@ -78,7 +78,7 @@ public class MemoryCustomerDAO implements dao.CustomerDAO {
     }
 
     @Override
-    public Customer getById(final int id) throws SQLException {
+    public Customer getById(final int id) {
         if (!memory.keySet().contains(id))
             return null;
         else {
@@ -90,7 +90,7 @@ public class MemoryCustomerDAO implements dao.CustomerDAO {
     }
 
     @Override
-    public Customer[] getAll() throws SQLException {
+    public Customer[] getAll() {
         var list = new LinkedList<Customer>();
         for (var entry : memory.entrySet())
             list.add(new Customer(entry.getKey(), entry.getValue().name, entry.getValue().surname,

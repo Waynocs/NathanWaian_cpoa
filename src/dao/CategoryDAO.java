@@ -14,16 +14,14 @@ public interface CategoryDAO extends DAO<Category> {
      * 
      * @param id id of the category
      * @return the category found, or null for nothing
-     * @throws SQLException
      */
-    Category getById(int id) throws SQLException;
+    Category getById(int id);
 
     /**
      * Returns every categories
      * 
      * @return every categories
-     * @throws SQLException
      */
-    Category[] getAll() throws SQLException;
+    Category[] getAll();
 
 }

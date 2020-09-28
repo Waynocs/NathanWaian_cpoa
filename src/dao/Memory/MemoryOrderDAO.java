@@ -39,13 +39,13 @@ public class MemoryOrderDAO implements dao.OrderDAO {
     }
 
     @Override
-    public boolean create(Order object) throws SQLException {
+    public boolean create(Order object) {
         memory.put(index++, new Data(object.getDate(), object.getCustomer()));
         return true;
     }
 
     @Override
-    public boolean update(Order object) throws SQLException {
+    public boolean update(Order object) {
         if (!memory.keySet().contains(object.getId()))
             return false;
         else {
@@ -55,7 +55,7 @@ public class MemoryOrderDAO implements dao.OrderDAO {
     }
 
     @Override
-    public boolean delete(Order object) throws SQLException {
+    public boolean delete(Order object) {
         if (!memory.keySet().contains(object.getId()))
             return false;
         else {
@@ -65,7 +65,7 @@ public class MemoryOrderDAO implements dao.OrderDAO {
     }
 
     @Override
-    public Order getById(int id) throws SQLException {
+    public Order getById(int id) {
         if (!memory.keySet().contains(id))
             return null;
         else {
@@ -75,7 +75,7 @@ public class MemoryOrderDAO implements dao.OrderDAO {
     }
 
     @Override
-    public Order[] getAll() throws SQLException {
+    public Order[] getAll() {
         var list = new LinkedList<Order>();
         for (var entry : memory.entrySet())
             list.add(new Order(entry.getKey(), entry.getValue().date, entry.getValue().customer));

@@ -41,13 +41,13 @@ public class MemoryCategoryDAO implements dao.CategoryDAO {
     }
 
     @Override
-    public boolean create(Category object) throws SQLException {
+    public boolean create(Category object) {
         memory.put(index++, new Data(object.getName(), object.getImagePath()));
         return true;
     }
 
     @Override
-    public boolean update(Category object) throws SQLException {
+    public boolean update(Category object) {
         if (!memory.keySet().contains(object.getId()))
             return false;
         else {
@@ -57,7 +57,7 @@ public class MemoryCategoryDAO implements dao.CategoryDAO {
     }
 
     @Override
-    public boolean delete(Category object) throws SQLException {
+    public boolean delete(Category object) {
         if (!memory.keySet().contains(object.getId()))
             return false;
         else {
@@ -67,7 +67,7 @@ public class MemoryCategoryDAO implements dao.CategoryDAO {
     }
 
     @Override
-    public Category getById(int id) throws SQLException {
+    public Category getById(int id) {
         if (!memory.keySet().contains(id))
             return null;
         else {
@@ -77,7 +77,7 @@ public class MemoryCategoryDAO implements dao.CategoryDAO {
     }
 
     @Override
-    public Category[] getAll() throws SQLException {
+    public Category[] getAll() {
         var list = new LinkedList<Category>();
         for (var entry : memory.entrySet())
             list.add(new Category(entry.getValue().name, entry.getValue().imgPath, entry.getKey()));

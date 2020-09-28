@@ -26,35 +26,52 @@ public class MySQLCategoryDAO implements CategoryDAO {
     }
 
     // executer une requete SQL
-    public boolean create(Category object) throws SQLException {
-        var statement = Request.Connection.getConnection()
-                .prepareStatement("INSERT INTO `categorie`(`id_categorie`, `titre`, `visuel`) VALUES (" + object.getId()
-                        + ", " + object.getName() + ", " + object.getImagePath());
+    public boolean create(Category object) {
+        try {
+            var statement = Request.Connection.getConnection()
+                    .prepareStatement("INSERT INTO `categorie`(`id_categorie`, `titre`, `visuel`) VALUES ("
+                            + object.getId() + ", " + object.getName() + ", " + object.getImagePath());
 
-        return statement.executeUpdate() != 0;
+            return statement.executeUpdate() != 0;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
-    public boolean update(Category object) throws SQLException {
-        var statement = Request.Connection.getConnection().prepareStatement("UPDATE `categorie` SET `id_categorie`= "
-                + object.getId() + ",`titre`= " + object.getName() + ",`visuel`= " + object.getImagePath());
+    public boolean update(Category object) {
+        try {
+            var statement = Request.Connection.getConnection()
+                    .prepareStatement("UPDATE `categorie` SET `id_categorie`= " + object.getId() + ",`titre`= "
+                            + object.getName() + ",`visuel`= " + object.getImagePath());
 
-        return statement.executeUpdate() != 0;
+            return statement.executeUpdate() != 0;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
-    public boolean delete(Category object) throws SQLException {
-        var statement = Request.Connection.getConnection()
-                .prepareStatement("DELETE FROM `categorie` WHERE `id_categorie` = " + object.getId());
+    public boolean delete(Category object) {
+        try {
+            var statement = Request.Connection.getConnection()
+                    .prepareStatement("DELETE FROM `categorie` WHERE `id_categorie` = " + object.getId());
 
-        return statement.executeUpdate() != 0;
+            return statement.executeUpdate() != 0;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     // method pr recuperer depuis la bdd un item
-    public Category getById(int id) throws SQLException {
-        var statement = Request.Connection.getConnection().createStatement();
-        var result = statement.executeQuery("SELECT `id_categorie`, `titre`, `visuel`=" + id);
-        return result.next()
-                ? new Category(result.getString("title"), result.getString("visuel"), result.getInt("id_categorie"))
-                : null;
+    public Category getById(int id) {
+        try {
+            var statement = Request.Connection.getConnection().createStatement();
+            var result = statement.executeQuery("SELECT `id_categorie`, `titre`, `visuel`=" + id);
+            return result.next()
+                    ? new Category(result.getString("title"), result.getString("visuel"), result.getInt("id_categorie"))
+                    : null;
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
     /**
@@ -65,15 +82,18 @@ public class MySQLCategoryDAO implements CategoryDAO {
      * @param visuel
      */
 
-    public Category[] getAll() throws SQLException {
-
-        final var statement = Request.Connection.getConnection().createStatement();
-        final ResultSet result = statement.executeQuery("SELECT `id_categorie`, `titre`, `visuel` FROM `categorie`");
-        var categoryList = new LinkedList<Category>();
-        while (result.next())
-            categoryList.add(
-                    new Category(result.getString("title"), result.getString("visuel"), result.getInt("id_categorie")));
-        return categoryList.size() > 0 ? categoryList.toArray(new Category[0]) : null;
-
+    public Category[] getAll() {
+        try {
+            final var statement = Request.Connection.getConnection().createStatement();
+            final ResultSet result = statement
+                    .executeQuery("SELECT `id_categorie`, `titre`, `visuel` FROM `categorie`");
+            var categoryList = new LinkedList<Category>();
+            while (result.next())
+                categoryList.add(new Category(result.getString("title"), result.getString("visuel"),
+                        result.getInt("id_categorie")));
+            return categoryList.toArray(new Category[0]);
+        } catch (SQLException e) {
+            return new Category[0];
+        }
     }
 }

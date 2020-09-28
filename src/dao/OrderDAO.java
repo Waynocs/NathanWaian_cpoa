@@ -14,16 +14,14 @@ public interface OrderDAO extends DAO<Order> {
      * 
      * @param id id of the order
      * @return the order found, or null for nothing
-     * @throws SQLException
      */
-    Order getById(int id) throws SQLException;
+    Order getById(int id);
 
     /**
      * Returns every orders
      * 
      * @return every orders
-     * @throws SQLException
      */
-    Order[] getAll() throws SQLException;
+    Order[] getAll();
 
 }
