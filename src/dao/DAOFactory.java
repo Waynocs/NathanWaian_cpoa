@@ -1,5 +1,6 @@
 package dao;
 
+import dao.Memory.MemoryDAOFactory;
 import dao.mySQL.MySQLDAOFactory;
 
 /**
@@ -33,7 +34,7 @@ public abstract class DAOFactory {
             case SQL:
                 return MySQLDAOFactory.getInstance();
             case MEMORY:
-                return null;// tmp
+                return MemoryDAOFactory.getInstance();
             default:
                 return null;
         }
