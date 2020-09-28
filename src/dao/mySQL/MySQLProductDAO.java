@@ -7,33 +7,27 @@ import java.util.LinkedList;
 import dao.ProductDAO;
 import model.Product;
 
+/**
+ * Class used to manage products using the MySQLDAOFactory
+ */
 public class MySQLProductDAO implements ProductDAO {
 
-    // Instance of the class
     private static MySQLProductDAO instance;
 
-    // constructor
     private MySQLProductDAO() {
     }
 
-    // Insure to get only 1 instance
+    /**
+     * Returns the only instance of this class
+     * 
+     * @return the only instance of this class
+     */
     public static MySQLProductDAO getInstance() {
         if (instance == null)
             instance = new MySQLProductDAO();
 
         return instance;
     }
-
-    /**
-     * create a new product
-     * 
-     * @param id
-     * @param name
-     * @param description
-     * @param cost
-     * @param imagePath
-     * @param categoryID
-     */
 
     @Override
     public boolean create(Product object) {
@@ -49,16 +43,6 @@ public class MySQLProductDAO implements ProductDAO {
         }
     }
 
-    /**
-     * update a product
-     * 
-     * @param id
-     * @param name
-     * @param description
-     * @param cost
-     * @param imagePath
-     * @param categoryID
-     */
     @Override
     public boolean update(Product object) {
         try {
@@ -73,12 +57,6 @@ public class MySQLProductDAO implements ProductDAO {
             return false;
         }
     }
-
-    /**
-     * delete a product
-     * 
-     * @param id
-     */
 
     @Override
     public boolean delete(Product object) {

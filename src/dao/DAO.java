@@ -1,7 +1,5 @@
 package dao;
 
-import java.sql.SQLException;
-
 //INTERFACE UTILISE UN OBJET DE TYPE T
 public interface DAO<T> {
     /**

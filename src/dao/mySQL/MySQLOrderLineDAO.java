@@ -7,7 +7,7 @@ import dao.OrderLineDAO;
 import model.OrderLine;
 
 /**
- * OrderLineDAO with the SQL mode
+ * Class used to manage order lines using the MySQLDAOFactory
  */
 public class MySQLOrderLineDAO implements OrderLineDAO {
 

@@ -8,31 +8,28 @@ import java.util.*;
 import dao.OrderDAO;
 import model.Order;
 
+/**
+ * Class used to manage orders using the MySQLDAOFactory
+ */
 public class MySQLOrderDAO implements OrderDAO {
 
-    // Instance of the class
     private static MySQLOrderDAO instance;
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    // constructor
     private MySQLOrderDAO() {
     }
 
-    // Insure to get only 1 instance
+    /**
+     * Returns the only instance of this class
+     * 
+     * @return the only instance of this class
+     */
     public static MySQLOrderDAO getInstance() {
         if (instance == null)
             instance = new MySQLOrderDAO();
 
         return instance;
     }
-
-    /**
-     * create a new order
-     * 
-     * @param id
-     * @param date
-     * @param customer
-     */
 
     @Override
     public boolean create(final Order object) {
@@ -47,14 +44,6 @@ public class MySQLOrderDAO implements OrderDAO {
         }
     }
 
-    /**
-     * update an order
-     * 
-     * @param id
-     * @param date
-     * @param customer
-     */
-
     @Override
     public boolean update(final Order object) {
         try {
@@ -67,12 +56,6 @@ public class MySQLOrderDAO implements OrderDAO {
             return false;
         }
     }
-
-    /**
-     * delete an order
-     * 
-     * @param id
-     */
 
     @Override
     public boolean delete(final Order object) {

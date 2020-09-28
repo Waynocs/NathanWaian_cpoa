@@ -3,6 +3,7 @@ package controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -10,7 +11,13 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class used to parse an INI file or stream and extract its data
+ */
 public class INIReader {
+    /**
+     * Exception thrown when an error ocurred while parsing an INI file
+     */
     public class ReadException extends Exception {
         private static final long serialVersionUID = 1L;
 
@@ -22,18 +29,36 @@ public class INIReader {
     private INIReader() {
     }
 
+    /**
+     * Parse an INI formatted stream
+     * 
+     * @param stream INI formatted stream to parse
+     * @return the structure of the INI formatted stream
+     */
     public static Map<String, Map<String, String>> ReadFromStream(InputStream stream) {
         return ReadFromReader(new InputStreamReader(stream));
     }
 
+    /**
+     * Parse an INI file
+     * 
+     * @param file INI file to parse
+     * @return the structure of the file
+     */
     public static Map<String, Map<String, String>> ReadFromFile(File file) {
         try {
-            return ReadFromStream(new FileInputStream(file));
+            return ReadFromReader(new FileReader(file));
         } catch (FileNotFoundException e) {
             return null;
         }
     }
 
+    /**
+     * Parse an INI structure from a Reader
+     * 
+     * @param reader INI structure to parse
+     * @return the structure of the Reader
+     */
     public static Map<String, Map<String, String>> ReadFromReader(Reader reader) {
         var object = new HashMap<String, Map<String, String>>();
 

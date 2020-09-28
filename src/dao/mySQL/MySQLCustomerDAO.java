@@ -7,37 +7,27 @@ import java.util.LinkedList;
 import dao.CustomerDAO;
 import model.Customer;
 
+/**
+ * Class used to manage customers using the MySQLDAOFactory
+ */
 public class MySQLCustomerDAO implements CustomerDAO {
 
-    // Instance of the class
     private static MySQLCustomerDAO instance;
 
-    // constructor
     private MySQLCustomerDAO() {
     }
 
-    // Insure to get only 1 instance
+    /**
+     * Returns the only instance of this class
+     * 
+     * @return the only instance of this class
+     */
     public static MySQLCustomerDAO getInstance() {
         if (instance == null)
             instance = new MySQLCustomerDAO();
 
         return instance;
     }
-
-    /**
-     * create a new customer
-     * 
-     * @param id
-     * @param name
-     * @param surname
-     * @param identifier
-     * @param pwd
-     * @param adressNumber
-     * @param adressStreet
-     * @param adressPostalCode
-     * @param adressCity
-     * @param adressCountry
-     */
 
     @Override
     public boolean create(final Customer object) {
@@ -54,21 +44,6 @@ public class MySQLCustomerDAO implements CustomerDAO {
             return false;
         }
     }
-
-    /**
-     * update a customer
-     * 
-     * @param id
-     * @param name
-     * @param surname
-     * @param identifier
-     * @param pwd
-     * @param adressNumber
-     * @param adressStreet
-     * @param adressPostalCode
-     * @param adressCity
-     * @param adressCountry
-     */
 
     @Override
     public boolean update(final Customer object) {
@@ -87,12 +62,6 @@ public class MySQLCustomerDAO implements CustomerDAO {
             return false;
         }
     }
-
-    /**
-     * delete a customer
-     * 
-     * @param id
-     */
 
     @Override
     public boolean delete(final Customer object) {

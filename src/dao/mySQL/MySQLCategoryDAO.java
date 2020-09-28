@@ -8,16 +8,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 
+/**
+ * Class used to manage categories using the MySQLDAOFactory
+ */
 public class MySQLCategoryDAO implements CategoryDAO {
 
-    // Instance of the class
     private static MySQLCategoryDAO instance;
 
-    // constructor
     private MySQLCategoryDAO() {
     }
 
-    // Insure to get only 1 instance
+    /**
+     * Returns the only instance of this class
+     * 
+     * @return the only instance of this class
+     */
     public static MySQLCategoryDAO getInstance() {
         if (instance == null)
             instance = new MySQLCategoryDAO();
@@ -25,7 +30,7 @@ public class MySQLCategoryDAO implements CategoryDAO {
         return instance;
     }
 
-    // executer une requete SQL
+    @Override
     public boolean create(Category object) {
         try {
             var statement = Request.Connection.getConnection()
@@ -38,6 +43,7 @@ public class MySQLCategoryDAO implements CategoryDAO {
         }
     }
 
+    @Override
     public boolean update(Category object) {
         try {
             var statement = Request.Connection.getConnection()
@@ -50,6 +56,7 @@ public class MySQLCategoryDAO implements CategoryDAO {
         }
     }
 
+    @Override
     public boolean delete(Category object) {
         try {
             var statement = Request.Connection.getConnection()
@@ -61,7 +68,7 @@ public class MySQLCategoryDAO implements CategoryDAO {
         }
     }
 
-    // method pr recuperer depuis la bdd un item
+    @Override
     public Category getById(int id) {
         try {
             var statement = Request.Connection.getConnection().createStatement();
@@ -74,14 +81,7 @@ public class MySQLCategoryDAO implements CategoryDAO {
         }
     }
 
-    /**
-     * show all category
-     * 
-     * @param id
-     * @param title
-     * @param visuel
-     */
-
+    @Override
     public Category[] getAll() {
         try {
             final var statement = Request.Connection.getConnection().createStatement();

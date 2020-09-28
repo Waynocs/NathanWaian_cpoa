@@ -1,6 +1,5 @@
 package dao.Memory;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;

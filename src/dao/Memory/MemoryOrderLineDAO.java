@@ -1,11 +1,13 @@
 package dao.Memory;
 
-import java.sql.SQLException;
 import java.util.*;
 
 import dao.OrderLineDAO;
 import model.OrderLine;
 
+/**
+ * Class used to manage order lines using the MySQLDAOFactory
+ */
 public class MemoryOrderLineDAO implements OrderLineDAO {
 
     private class DoubleIntID {

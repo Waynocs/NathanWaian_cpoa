@@ -1,6 +1,5 @@
 package dao.Memory;
 
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -8,6 +7,9 @@ import java.util.Map;
 
 import model.Order;
 
+/**
+ * Class used to manage orders using the MySQLDAOFactory
+ */
 public class MemoryOrderDAO implements dao.OrderDAO {
     private static int index = 0;
 

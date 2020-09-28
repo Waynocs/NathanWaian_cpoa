@@ -1,12 +1,14 @@
 package dao.Memory;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
 import model.Product;
 
+/**
+ * Class used to manage products using the MySQLDAOFactory
+ */
 public class MemoryProductDAO implements dao.ProductDAO {
     private static int index = 0;
 
