@@ -8,6 +8,7 @@ import java.util.Map;
 import model.Customer;
 
 public class MemoryCustomerDAO implements dao.CustomerDAO {
+    private static int index = 0;
 
     private class Data {
         public String name;
@@ -46,11 +47,7 @@ public class MemoryCustomerDAO implements dao.CustomerDAO {
 
     @Override
     public boolean create(final Customer object) throws SQLException {
-        int id = -1;
-        for (var key : memory.keySet())
-            if (key > id)
-                id = key;
-        memory.put(id + 1,
+        memory.put(index++,
                 new Data(object.getName(), object.getSurname(), object.getIdentifier(), object.getPwd(),
                         object.getAddressNumber(), object.getAddressStreet(), object.getAddressPostalCode(),
                         object.getAddressCity(), object.getAddressCountry()));

@@ -9,6 +9,7 @@ import java.util.Map;
 import model.Order;
 
 public class MemoryOrderDAO implements dao.OrderDAO {
+    private static int index = 0;
 
     private class Data {
         public LocalDateTime date;
@@ -39,11 +40,7 @@ public class MemoryOrderDAO implements dao.OrderDAO {
 
     @Override
     public boolean create(Order object) throws SQLException {
-        int id = -1;
-        for (var key : memory.keySet())
-            if (key > id)
-                id = key;
-        memory.put(id + 1, new Data(object.getDate(), object.getCustomer()));
+        memory.put(index++, new Data(object.getDate(), object.getCustomer()));
         return true;
     }
 

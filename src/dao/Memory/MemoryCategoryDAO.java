@@ -11,6 +11,7 @@ import model.Category;
  * Class used to manage categories using the MemoryDAOFactory
  */
 public class MemoryCategoryDAO implements dao.CategoryDAO {
+    private static int index = 0;
 
     private class Data {
         public String name;
@@ -41,11 +42,7 @@ public class MemoryCategoryDAO implements dao.CategoryDAO {
 
     @Override
     public boolean create(Category object) throws SQLException {
-        int id = -1;
-        for (var key : memory.keySet())
-            if (key > id)
-                id = key;
-        memory.put(id + 1, new Data(object.getName(), object.getImagePath()));
+        memory.put(index++, new Data(object.getName(), object.getImagePath()));
         return true;
     }
 
