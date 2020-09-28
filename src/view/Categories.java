@@ -20,6 +20,9 @@ public class Categories {
                 case 1:
                     seeAll(factory);
                     break;
+                case 2:
+                    newItem(factory);
+                    break;
             }
         } while (input != 6);
 
@@ -33,6 +36,29 @@ public class Categories {
             System.out.println("[ERROR] " + e.getMessage());
             return;
         }
+
         Utilities.displayList(categories, (categ) -> categ.getId() + ":" + categ.getName());
+    }
+
+    private static void newItem(DAOFactory factory) {
+        var tmpItem = new Category("name", "file.jpg", 0);
+        int input;
+        do {
+            System.out.println(Utilities.getSeparator());
+            input = Utilities.getUserSelection("1. Edit name\n2. Edit image file\n3. Cancel\n4.Add", 4);
+            if (input == 1) {
+                System.out.print("Enter the new name :\n>");
+                tmpItem.setName(Utilities.getConsoleInput().nextLine());
+            } else if (input == 2) {
+                System.out.print("Enter the new image file :\n>");
+                tmpItem.setImagePath(Utilities.getConsoleInput().nextLine());
+            }
+        } while (input < 3);
+        if (input == 4)
+            try {
+                factory.getCategoryDAO().create(tmpItem);
+            } catch (SQLException e) {
+                System.out.println("[ERROR] " + e.getMessage());
+            }
     }
 }
