@@ -1,5 +1,6 @@
 package dao;
 
+import dao.Memory.MemoryDAOFactory;
 import dao.mySQL.MySQLDAOFactory;
 
 /**
@@ -21,18 +22,19 @@ public abstract class DAOFactory {
     }
 
     /**
-     * Returns a factory depending of the mode used
+     * Returns a factory depending of the mode used, or null if the mode is
+     * undefined
      * 
      * @param mode the mode will affect the way the factory saves its changes or
      *             connects to the data
-     * @return
+     * @return a factory depending of the mode used
      */
     public static DAOFactory getFactory(Mode mode) {
         switch (mode) {
             case SQL:
                 return MySQLDAOFactory.getInstance();
             case MEMORY:
-                return null;// tmp
+                return MemoryDAOFactory.getInstance();
             default:
                 return null;
         }
@@ -58,6 +60,13 @@ public abstract class DAOFactory {
      * @return the Order component of the factory
      */
     public abstract OrderDAO getOrderDAO();
+
+    /**
+     * Returns the Product component of the factory
+     * 
+     * @return the Product component of the factory
+     */
+    public abstract ProductDAO getProductDAO();
 
     /**
      * Returns the Order Line component of the factory

@@ -5,6 +5,7 @@ import dao.CustomerDAO;
 import dao.DAOFactory;
 import dao.OrderDAO;
 import dao.OrderLineDAO;
+import dao.ProductDAO;
 
 /**
  * SQL factory, to save on an sql server
@@ -44,5 +45,10 @@ public class MySQLDAOFactory extends DAOFactory {
     @Override
     public OrderLineDAO getOrderLineDAO() {
         return MySQLOrderLineDAO.getInstance();
+    }
+
+    @Override
+    public ProductDAO getProductDAO() {
+        return MySQLProductDAO.getInstance();
     }
 }
