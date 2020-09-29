@@ -2,7 +2,9 @@ package view;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.LinkedList;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.function.Function;
 
@@ -97,7 +99,7 @@ public class Utilities {
      * @param formatter    the formatter used to convert the input type to another
      *                     object which will use the toString() method
      */
-    public static <T> void displayList(T[] list, int entryPerPage, Function<T, Object> formatter) {
+    public static <T> void displayList(T[] list, int entryPerPage, Function<T, ?> formatter) {
         int input;
         int page = 0;
         int pageCount = (int) Math.ceil(list.length / (double) entryPerPage);
@@ -158,7 +160,7 @@ public class Utilities {
      * @param formatter the formatter used to convert the input type to another
      *                  object which will use the toString() method
      */
-    public static <T> void displayList(T[] list, Function<T, Object> formatter) {
+    public static <T> void displayList(T[] list, Function<T, ?> formatter) {
         displayList(list, 9, formatter);
     }
 
@@ -170,5 +172,38 @@ public class Utilities {
      */
     public static void displayList(Object[] list, int entryPerPage) {
         displayList(list, entryPerPage, (obj) -> obj.toString());
+    }
+
+    public static String mapToString(Map<? extends Object, ?> map) {
+        return mapToString(map, null, null);
+    }
+
+    public static <T, U> String mapToString(Map<T, U> map, Function<T, ?> keyFormatter, Function<U, ?> valueFormatter) {
+        var keys = new LinkedList<String>();
+        var values = new LinkedList<String>();
+        var builder = new StringBuilder();
+        if (keyFormatter != null)
+            map.keySet().forEach((k) -> keys.add(keyFormatter.apply(k).toString()));
+        else
+            map.keySet().forEach((k) -> keys.add(k.toString()));
+        if (valueFormatter != null)
+            map.values().forEach((v) -> values.add(valueFormatter.apply(v).toString()));
+        else
+            map.values().forEach((v) -> values.add(v.toString()));
+        var maxWidth = 0;
+        for (var string : keys)
+            if (maxWidth < string.length())
+                maxWidth = string.length();
+        var keyIt = keys.iterator();
+        var valueIt = values.iterator();
+        while (keyIt.hasNext()) {
+            var currKey = keyIt.next();
+            builder.append(currKey);
+            for (int i = 0; i < maxWidth - currKey.length(); i++)
+                builder.append(' ');
+            builder.append(" : ");
+            builder.append(valueIt.next() + "\n");
+        }
+        return builder.toString();
     }
 }
