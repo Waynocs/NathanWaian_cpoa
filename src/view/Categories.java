@@ -28,7 +28,7 @@ public class Categories {
                 case 1:
                     seeAll(factory);
                     break;
-                case 2:
+                case 3:
                     newItem(factory);
                     break;
             }
@@ -37,14 +37,7 @@ public class Categories {
     }
 
     private static void seeAll(DAOFactory factory) {
-        Category[] categories;
-        try {
-            categories = factory.getCategoryDAO().getAll();
-        } catch (SQLException e) {
-            System.out.println("[ERROR] " + e.getMessage());
-            return;
-        }
-
+        Category[] categories = factory.getCategoryDAO().getAll();
         Utilities.displayList(categories, (categ) -> categ.getId() + ":" + categ.getName());
     }
 
@@ -63,10 +56,6 @@ public class Categories {
             }
         } while (input < 3);
         if (input == 4)
-            try {
-                factory.getCategoryDAO().create(tmpItem);
-            } catch (SQLException e) {
-                System.out.println("[ERROR] " + e.getMessage());
-            }
+            factory.getCategoryDAO().create(tmpItem);
     }
 }
