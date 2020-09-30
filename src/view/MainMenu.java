@@ -35,6 +35,9 @@ public class MainMenu {
                 case 1:
                     Categories.open(factory);
                     break;
+                case 2:
+                    Products.open(factory);
+                    break;
                 case 3:
                     Customers.open(factory);
                     break;
