@@ -1,6 +1,5 @@
 package view;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,7 +55,7 @@ public class Categories {
         int input = -1;
         System.out.print(Utilities.getSeparator());
         do {
-            System.out.println("Enter the id of the category to display");
+            System.out.println("Enter the id of the category to delete");
             if (Utilities.getConsoleInput().hasNextInt()) {
                 input = Utilities.getConsoleInput().nextInt();
                 if (input < 0) {
@@ -115,7 +114,7 @@ public class Categories {
         int input = -1;
         System.out.print(Utilities.getSeparator());
         do {
-            System.out.println("Enter the id of the category to display");
+            System.out.println("Enter the id of the category to edit");
             if (Utilities.getConsoleInput().hasNextInt()) {
                 input = Utilities.getConsoleInput().nextInt();
                 if (input < 0) {
@@ -145,7 +144,7 @@ public class Categories {
         } while (input < 3);
         if (input == 4)
             if (!factory.getCategoryDAO().update(categ))
-                System.out.println("[ERROR] Unable to create the item");
+                System.out.println("[ERROR] Unable to edit the item");
     }
 
     private static void newItem(DAOFactory factory) {
