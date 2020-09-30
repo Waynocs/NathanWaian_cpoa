@@ -19,11 +19,14 @@ public class MemoryProductDAO implements dao.ProductDAO {
         public String description;
         public int category;
 
-        public Data(String n, String iP, double cost) {
-            name = n;
-            imgPath = iP;
-
+        public Data(String name, String imgPath, double cost, String description, int category) {
+            this.name = name;
+            this.imgPath = imgPath;
+            this.cost = cost;
+            this.description = description;
+            this.category = category;
         }
+
     }
 
     private static MemoryProductDAO instance;
@@ -45,7 +48,8 @@ public class MemoryProductDAO implements dao.ProductDAO {
 
     @Override
     public boolean create(Product object) {
-        memory.put(index++, new Data(object.getName(), object.getImagePath(), object.getCost()));
+        memory.put(index++, new Data(object.getName(), object.getImagePath(), object.getCost(), object.getDescription(),
+                object.getCategory()));
         return true;
     }
 
@@ -54,7 +58,8 @@ public class MemoryProductDAO implements dao.ProductDAO {
         if (!memory.keySet().contains(object.getId()))
             return false;
         else {
-            memory.put(object.getId(), new Data(object.getName(), object.getImagePath(), object.getCost()));
+            memory.put(object.getId(), new Data(object.getName(), object.getImagePath(), object.getCost(),
+                    object.getDescription(), object.getCategory()));
             return true;
         }
     }

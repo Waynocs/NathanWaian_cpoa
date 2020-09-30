@@ -18,7 +18,8 @@ public class MemoryOrderDAO implements dao.OrderDAO {
         public int customer;
 
         public Data(LocalDateTime date, int customer) {
-
+            this.date = date;
+            this.customer = customer;
         }
 
     }
