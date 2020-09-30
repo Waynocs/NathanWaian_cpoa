@@ -180,7 +180,8 @@ public class Customers {
     }
 
     private static void newItem(DAOFactory factory) {
-        var tmpItem = new Customer(0, "name", "surname", "identifier", "12345", "0", "street", "0", "city", "country");
+        var tmpItem = new Customer(0, "name", "surname", "identifier", "12345", "0", "street", "00000", "city",
+                "country");
         int input;
         do {
             System.out.println(Utilities.getSeparator());
