@@ -150,25 +150,25 @@ public class Customers {
                 custo.setSurname(Utilities.getConsoleInput().nextLine());
             } else if (input == 3) {
                 System.out.print("Enter the new identifier :\n>");
-                custo.setSurname(Utilities.getConsoleInput().nextLine());
+                custo.setIdentifier(Utilities.getConsoleInput().nextLine());
             } else if (input == 4) {
                 System.out.print("Enter the new password :\n>");
-                custo.setSurname(Utilities.getConsoleInput().nextLine());
+                custo.setPwd(Utilities.getConsoleInput().nextLine());
             } else if (input == 5) {
                 System.out.print("Enter the new address number :\n>");
-                custo.setSurname(Utilities.getConsoleInput().nextLine());
+                custo.setAddressNumber(Utilities.getConsoleInput().nextLine());
             } else if (input == 6) {
                 System.out.print("Enter the new address street :\n>");
-                custo.setSurname(Utilities.getConsoleInput().nextLine());
+                custo.setAddressStreet(Utilities.getConsoleInput().nextLine());
             } else if (input == 7) {
                 System.out.print("Enter the new postal code :\n>");
-                custo.setSurname(Utilities.getConsoleInput().nextLine());
+                custo.setAddressPostalCode(Utilities.getConsoleInput().nextLine());
             } else if (input == 8) {
                 System.out.print("Enter the new city :\n>");
-                custo.setSurname(Utilities.getConsoleInput().nextLine());
+                custo.setAddressCity(Utilities.getConsoleInput().nextLine());
             } else if (input == 9) {
                 System.out.print("Enter the new country :\n>");
-                custo.setSurname(Utilities.getConsoleInput().nextLine());
+                custo.setAddressCountry(Utilities.getConsoleInput().nextLine());
             } else if (input == 10) {
                 System.out.print("Enter the new surname :\n>");
                 custo.setSurname(Utilities.getConsoleInput().nextLine());
@@ -196,25 +196,25 @@ public class Customers {
                 tmpItem.setSurname(Utilities.getConsoleInput().nextLine());
             } else if (input == 3) {
                 System.out.print("Enter the new identifier :\n>");
-                tmpItem.setSurname(Utilities.getConsoleInput().nextLine());
+                tmpItem.setIdentifier(Utilities.getConsoleInput().nextLine());
             } else if (input == 4) {
                 System.out.print("Enter the new password :\n>");
-                tmpItem.setSurname(Utilities.getConsoleInput().nextLine());
+                tmpItem.setPwd(Utilities.getConsoleInput().nextLine());
             } else if (input == 5) {
                 System.out.print("Enter the new address number :\n>");
-                tmpItem.setSurname(Utilities.getConsoleInput().nextLine());
+                tmpItem.setAddressNumber(Utilities.getConsoleInput().nextLine());
             } else if (input == 6) {
                 System.out.print("Enter the new address street :\n>");
-                tmpItem.setSurname(Utilities.getConsoleInput().nextLine());
+                tmpItem.setAddressStreet(Utilities.getConsoleInput().nextLine());
             } else if (input == 7) {
                 System.out.print("Enter the new postal code :\n>");
-                tmpItem.setSurname(Utilities.getConsoleInput().nextLine());
+                tmpItem.setAddressPostalCode(Utilities.getConsoleInput().nextLine());
             } else if (input == 8) {
                 System.out.print("Enter the new city :\n>");
-                tmpItem.setSurname(Utilities.getConsoleInput().nextLine());
+                tmpItem.setAddressCity(Utilities.getConsoleInput().nextLine());
             } else if (input == 9) {
                 System.out.print("Enter the new country :\n>");
-                tmpItem.setSurname(Utilities.getConsoleInput().nextLine());
+                tmpItem.setAddressCountry(Utilities.getConsoleInput().nextLine());
             } else if (input == 10) {
                 System.out.print("Enter the new surname :\n>");
                 tmpItem.setSurname(Utilities.getConsoleInput().nextLine());
