@@ -63,6 +63,8 @@ public class MemoryOrderDAO implements dao.OrderDAO {
             return false;
         else {
             memory.remove(object.getId());
+            for (var line : MemoryOrderLineDAO.getInstance().getAllFromOrder(object.getId()))
+                MemoryOrderLineDAO.getInstance().delete(line);
             return true;
         }
     }
