@@ -23,10 +23,17 @@ public class MemoryCustomerDAO implements dao.CustomerDAO {
         public String addressCity;
         public String addressCountry;
 
-        public Data(final String n, final String surname, final String identifier, final String pwd,
-                final String adressNumber, final String adressStreet, final String adressPostalCode,
-                final String adressCity, final String adressCountry) {
-
+        public Data(String name, String surname, String identifier, String pwd, String addressNumber,
+                String addressStreet, String addressPostalCode, String addressCity, String addressCountry) {
+            this.name = name;
+            this.surname = surname;
+            this.identifier = identifier;
+            this.pwd = pwd;
+            this.addressNumber = addressNumber;
+            this.addressStreet = addressStreet;
+            this.addressPostalCode = addressPostalCode;
+            this.addressCity = addressCity;
+            this.addressCountry = addressCountry;
         }
     }
 

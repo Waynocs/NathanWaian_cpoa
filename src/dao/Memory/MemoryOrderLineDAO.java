@@ -34,11 +34,10 @@ public class MemoryOrderLineDAO implements OrderLineDAO {
         public double cost;
         public int quantity;
 
-        public Data(double c, int q) {
-            cost = c;
-            quantity = q;
+        public Data(double cost, int quantity) {
+            this.cost = cost;
+            this.quantity = quantity;
         }
-
     }
 
     private static MemoryOrderLineDAO instance;
