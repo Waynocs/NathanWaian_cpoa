@@ -48,8 +48,7 @@ public class Products {
 
     private static void seeAll(DAOFactory factory) {
         var products = factory.getProductDAO().getAll();
-        Utilities.displayList(products, (prod) -> prod.getId() + ":" + prod.getName() + " | " + prod.getDescription()
-                + " | " + prod.getCost() + " | " + prod.getImagePath() + " | " + prod.getCategory());
+        Utilities.displayList(products, (prod) -> prod.getId() + ":" + prod.getName());
     }
 
     private static void removeItem(DAOFactory factory) {
