@@ -7,7 +7,7 @@ import dao.DAOFactory;
 import model.Customer;
 
 /**
- * Part of the console interface where the user can change the categories
+ * Part of the console interface where the user can change the orders
  */
 public class Customers {
     private Customers() {
