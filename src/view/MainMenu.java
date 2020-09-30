@@ -38,6 +38,9 @@ public class MainMenu {
                 case 3:
                     Customers.open(factory);
                     break;
+                case 4:
+                    Orders.open(factory);
+                    break;
             }
         } while (input != 5);
     }
