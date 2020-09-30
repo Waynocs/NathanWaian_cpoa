@@ -169,9 +169,6 @@ public class Customers {
             } else if (input == 9) {
                 System.out.print("Enter the new country :\n>");
                 custo.setAddressCountry(Utilities.getConsoleInput().nextLine());
-            } else if (input == 10) {
-                System.out.print("Enter the new surname :\n>");
-                custo.setSurname(Utilities.getConsoleInput().nextLine());
             }
         } while (input < 10);
         if (input == 11)
@@ -215,9 +212,6 @@ public class Customers {
             } else if (input == 9) {
                 System.out.print("Enter the new country :\n>");
                 tmpItem.setAddressCountry(Utilities.getConsoleInput().nextLine());
-            } else if (input == 10) {
-                System.out.print("Enter the new surname :\n>");
-                tmpItem.setSurname(Utilities.getConsoleInput().nextLine());
             }
         } while (input < 10);
         if (input == 11)
