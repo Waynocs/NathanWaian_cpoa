@@ -63,6 +63,8 @@ public class MySQLOrderDAO implements OrderDAO {
             var statement = Request.Connection.getConnection()
                     .prepareStatement("DELETE FROM `commande` WHERE `id_commande` = " + object.getId());
 
+            for (var line : MySQLOrderLineDAO.getInstance().getAllFromOrder(object.getId()))
+                MySQLOrderLineDAO.getInstance().delete(line);
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
             return false;
