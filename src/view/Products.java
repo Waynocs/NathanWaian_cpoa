@@ -136,7 +136,7 @@ public class Products {
         do {
             System.out.println(Utilities.getSeparator());
             input = Utilities.getUserSelection(Utilities.mapToString(getMap(prod, false))
-                    + "────────────\n1. Edit name\n2. Edit description\n3. Edit cost\n4. Edit imagePath\n5. Edit Category\n6. Cancel\n7. Finish",
+                    + "────────────\n1. Edit name\n2. Edit description\n3. Edit cost\n4. Edit visual\n5. Edit Category\n6. Cancel\n7. Finish",
                     11);
             if (input == 1) {
                 System.out.print("Enter the new name :\n>");
@@ -166,7 +166,7 @@ public class Products {
         do {
             System.out.println(Utilities.getSeparator());
             input = Utilities.getUserSelection(Utilities.mapToString(getMap(tmpItem, false))
-                    + "────────────\n1. Edit name\n2. Edit description\n3. Edit cost\n4. Edit imagePath\n5. Edit category\n6. Cancel\n7. Add",
+                    + "────────────\n1. Edit name\n2. Edit description\n3. Edit cost\n4. Edit visual\n5. Edit category\n6. Cancel\n7. Add",
                     11);
             if (input == 1) {
                 System.out.print("Enter the new name :\n>");
