@@ -33,11 +33,11 @@ public class MySQLCustomerDAO implements CustomerDAO {
     public boolean create(final Customer object) {
         try {
             final var statement = Request.Connection.getConnection().prepareStatement(
-                    "INSERT INTO `client`(`nom`, `prenom`, `identifiant`, `mot_de_passe`, `adr_numero`, `adr_voie`, `adr_code_postal`, `adr_ville`, `adr_pays`) VALUES ("
-                            + object.getName() + ", " + object.getSurname() + ", " + object.getIdentifier() + ", "
-                            + object.getPwd() + ", " + object.getAddressNumber() + ", " + object.getAddressStreet()
-                            + ", " + object.getAddressPostalCode() + ", " + object.getAddressCity() + ", "
-                            + object.getAddressCountry());
+                    "INSERT INTO `client`(`nom`, `prenom`, `identifiant`, `mot_de_passe`, `adr_numero`, `adr_voie`, `adr_code_postal`, `adr_ville`, `adr_pays`) VALUES ('"
+                            + object.getName() + "', '" + object.getSurname() + "', '" + object.getIdentifier() + "', '"
+                            + object.getPwd() + "', '" + object.getAddressNumber() + "', '" + object.getAddressStreet()
+                            + "', '" + object.getAddressPostalCode() + "', '" + object.getAddressCity() + "', '"
+                            + object.getAddressCountry() + "')");
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
@@ -50,13 +50,12 @@ public class MySQLCustomerDAO implements CustomerDAO {
     public boolean update(final Customer object) {
         try {
             final var statement = Request.Connection.getConnection()
-                    .prepareStatement("UPDATE `client` SET `id_client`= " + object.getId() + ",`nom`= "
-                            + object.getName() + ",`prenom`= " + object.getSurname() + ",`identifiant`="
-                            + object.getIdentifier() + "`mot_de_passe`= " + object.getPwd() + "`adr_numero`= "
-                            + object.getAddressNumber() + "`adr_voie`= " + object.getAddressStreet()
-                            + "`adr_code_postal`= " + object.getAddressPostalCode() + "`adr_ville`= "
-                            + object.getAddressCity() + "`adr_pays`= " + object.getAddressCountry()
-                            + " WHERE `id_client` = " + object.getId());
+                    .prepareStatement("UPDATE `client` SET `nom`= '" + object.getName() + "',`prenom`= '"
+                            + object.getSurname() + "',`identifiant`='" + object.getIdentifier() + "`,'mot_de_passe`= '"
+                            + object.getPwd() + "`',adr_numero`= '" + object.getAddressNumber() + "',`adr_voie`= '"
+                            + object.getAddressStreet() + "',`adr_code_postal`= '" + object.getAddressPostalCode()
+                            + "',`adr_ville`= '" + object.getAddressCity() + "',`adr_pays`= '"
+                            + object.getAddressCountry() + "' WHERE `id_client` = " + object.getId());
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {

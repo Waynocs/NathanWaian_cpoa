@@ -35,8 +35,8 @@ public class MySQLOrderDAO implements OrderDAO {
     public boolean create(final Order object) {
         try {
             var statement = Request.Connection.getConnection()
-                    .prepareStatement("INSERT INTO `commande` (`date_commande`, `id_client`) VALUES ("
-                            + object.getDate().format(formatter) + ", " + +object.getCustomer() + ");");
+                    .prepareStatement("INSERT INTO `commande` (`date_commande`, `id_client`) VALUES ('"
+                            + object.getDate().format(formatter) + "', '" + +object.getCustomer() + "');");
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
@@ -49,8 +49,8 @@ public class MySQLOrderDAO implements OrderDAO {
     public boolean update(final Order object) {
         try {
             var statement = Request.Connection.getConnection()
-                    .prepareStatement("UPDATE `commande` SET `date_commande`= " + object.getDate().format(formatter)
-                            + ",`id_client`=" + object.getCustomer() + " WHERE `id_commande` = " + object.getId());
+                    .prepareStatement("UPDATE `commande` SET `date_commande`= '" + object.getDate().format(formatter)
+                            + "',`id_client`='" + object.getCustomer() + "' WHERE `id_commande` = " + object.getId());
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {

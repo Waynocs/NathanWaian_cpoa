@@ -48,8 +48,8 @@ public class MySQLCategoryDAO implements CategoryDAO {
     public boolean update(Category object) {
         try {
             var statement = Request.Connection.getConnection()
-                    .prepareStatement("UPDATE `categorie` SET `titre`= " + object.getName() + ",`visuel`= "
-                            + object.getImagePath() + " WHERE `id_categorie` = " + object.getId());
+                    .prepareStatement("UPDATE `categorie` SET `titre`= '" + object.getName() + "',`visuel`= '"
+                            + object.getImagePath() + "' WHERE `id_categorie` = " + object.getId());
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
