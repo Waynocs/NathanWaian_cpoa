@@ -81,7 +81,7 @@ public class MemoryProductDAO implements dao.ProductDAO {
             return null;
         } else {
             var element = memory.get(id);
-            return new Product(id, element.name, element.cost, element.imgPath, element.category, element.description);
+            return new Product(id, element.name, element.cost, element.description, element.category, element.imgPath);
         }
     }
 
@@ -90,8 +90,8 @@ public class MemoryProductDAO implements dao.ProductDAO {
 
         var list = new LinkedList<Product>();
         for (var entry : memory.entrySet())
-            list.add(new Product(entry.getKey(), entry.getValue().imgPath, entry.getValue().cost,
-                    entry.getValue().description, entry.getValue().category, entry.getValue().name));
+            list.add(new Product(entry.getKey(), entry.getValue().name, entry.getValue().cost,
+                    entry.getValue().description, entry.getValue().category, entry.getValue().imgPath));
         return list.toArray(new Product[0]);
 
     }
