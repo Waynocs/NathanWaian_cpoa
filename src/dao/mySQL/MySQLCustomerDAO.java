@@ -34,7 +34,7 @@ public class MySQLCustomerDAO implements CustomerDAO {
         try {
             final var statement = Request.Connection.getConnection().prepareStatement(
                     "INSERT INTO `client`(`nom`, `prenom`, `identifiant`, `mot_de_passe`, `adr_numero`, `adr_voie`, `adr_code_postal`, `adr_ville`, `adr_pays`) VALUES ('"
-                            + object.getName() + "', '" + object.getSurname() + "', '" + object.getIdentifier() + "', '"
+                            + object.getSurname() + "', '" + object.getName() + "', '" + object.getIdentifier() + "', '"
                             + object.getPwd() + "', '" + object.getAddressNumber() + "', '" + object.getAddressStreet()
                             + "', '" + object.getAddressPostalCode() + "', '" + object.getAddressCity() + "', '"
                             + object.getAddressCountry() + "')");
@@ -50,8 +50,8 @@ public class MySQLCustomerDAO implements CustomerDAO {
     public boolean update(final Customer object) {
         try {
             final var statement = Request.Connection.getConnection()
-                    .prepareStatement("UPDATE `client` SET `nom`= '" + object.getName() + "',`prenom`= '"
-                            + object.getSurname() + "',`identifiant`='" + object.getIdentifier() + "`,'mot_de_passe`= '"
+                    .prepareStatement("UPDATE `client` SET `nom`= '" + object.getSurname() + "',`prenom`= '"
+                            + object.getName() + "',`identifiant`='" + object.getIdentifier() + "`,'mot_de_passe`= '"
                             + object.getPwd() + "`',adr_numero`= '" + object.getAddressNumber() + "',`adr_voie`= '"
                             + object.getAddressStreet() + "',`adr_code_postal`= '" + object.getAddressPostalCode()
                             + "',`adr_ville`= '" + object.getAddressCity() + "',`adr_pays`= '"
@@ -84,8 +84,8 @@ public class MySQLCustomerDAO implements CustomerDAO {
             final var result = statement.executeQuery(
                     "SELECT `id_client`, `nom`, `prenom`, `identifiant`, `mot_de_passe`, `adr_numero`, `adr_voie`, `adr_code_postal`, `adr_ville`, `adr_pays` FROM `client` WHERE `id_client`="
                             + id);
-            return result.next() ? new Customer(result.getInt("id_client"), result.getString("nom"),
-                    result.getString("prenom"), result.getString("identifiant"), result.getString("mot_de_passe"),
+            return result.next() ? new Customer(result.getInt("id_client"), result.getString("prenom"),
+                    result.getString("nom"), result.getString("identifiant"), result.getString("mot_de_passe"),
                     result.getString("adr_numero"), result.getString("adr_voie"), result.getString("adr_code_postal"),
                     result.getString("adr_ville"), result.getString("adr_pays")) : null;
         } catch (SQLException e) {
@@ -102,8 +102,8 @@ public class MySQLCustomerDAO implements CustomerDAO {
                     "SELECT `id_client`, `nom`, `prenom`, `identifiant`, `mot_de_passe`, `adr_numero`, `adr_voie`, `adr_code_postal`, `adr_ville`, `adr_pays` FROM `client`");
             var customerList = new LinkedList<Customer>();
             while (result.next())
-                customerList.add(new Customer(result.getInt("id_client"), result.getString("nom"),
-                        result.getString("prenom"), result.getString("identifiant"), result.getString("mot_de_passe"),
+                customerList.add(new Customer(result.getInt("id_client"), result.getString("prenom"),
+                        result.getString("nom"), result.getString("identifiant"), result.getString("mot_de_passe"),
                         result.getString("adr_numero"), result.getString("adr_voie"),
                         result.getString("adr_code_postal"), result.getString("adr_ville"),
                         result.getString("adr_pays")));
