@@ -51,8 +51,8 @@ public class MySQLCustomerDAO implements CustomerDAO {
         try {
             final var statement = Request.Connection.getConnection()
                     .prepareStatement("UPDATE `client` SET `nom`= '" + object.getSurname() + "',`prenom`= '"
-                            + object.getName() + "',`identifiant`='" + object.getIdentifier() + "`,'mot_de_passe`= '"
-                            + object.getPwd() + "`',adr_numero`= '" + object.getAddressNumber() + "',`adr_voie`= '"
+                            + object.getName() + "',`identifiant`='" + object.getIdentifier() + "',`mot_de_passe`= '"
+                            + object.getPwd() + "',`adr_numero`= '" + object.getAddressNumber() + "',`adr_voie`= '"
                             + object.getAddressStreet() + "',`adr_code_postal`= '" + object.getAddressPostalCode()
                             + "',`adr_ville`= '" + object.getAddressCity() + "',`adr_pays`= '"
                             + object.getAddressCountry() + "' WHERE `id_client` = " + object.getId());
