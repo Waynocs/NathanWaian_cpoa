@@ -126,14 +126,16 @@ public class INIReader {
                                 comment = true;
                                 state = 2;
                                 currVal = currVal.trim();
-                                if (currVal.charAt(0) == '"' && currVal.charAt(currVal.length() - 1) == '"')
+                                if (currVal.length() > 0 && currVal.charAt(0) == '"'
+                                        && currVal.charAt(currVal.length() - 1) == '"')
                                     currVal = currVal.substring(1, currVal.length() - 1);
                                 values.put(currKey.trim(), currVal);
                                 currKey = "";
                             } else if (c == '\n') {
                                 state = 2;
                                 currVal = currVal.trim();
-                                if (currVal.charAt(0) == '"' && currVal.charAt(currVal.length() - 1) == '"')
+                                if (currVal.length() > 0 && currVal.charAt(0) == '"'
+                                        && currVal.charAt(currVal.length() - 1) == '"')
                                     currVal = currVal.substring(1, currVal.length() - 1);
                                 values.put(currKey.trim(), currVal);
                                 currKey = "";
@@ -148,7 +150,7 @@ public class INIReader {
             if (currSectionName != null && values != null) {
                 if (currVal != null) {
                     currVal = currVal.trim();
-                    if (currVal.charAt(0) == '"' && currVal.charAt(currVal.length() - 1) == '"')
+                    if (currVal.length() > 0 && currVal.charAt(0) == '"' && currVal.charAt(currVal.length() - 1) == '"')
                         currVal = currVal.substring(1, currVal.length() - 1);
                     values.put(currKey.trim(), currVal);
                 }
