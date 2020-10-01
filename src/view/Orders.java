@@ -5,6 +5,8 @@ import java.util.Map;
 
 import dao.DAOFactory;
 import model.Order;
+import model.OrderLine;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -98,10 +100,66 @@ public class Orders {
             System.out.println("This order doesn't exist.");
             return;
         }
-        System.out.println(Utilities.getSeparator());
-        System.out.print(Utilities.mapToString(getMap(ord, true)));
-        System.out.println("\n>>>Press Enter to go back to menu---");
-        Utilities.getConsoleInput().nextLine();
+        do {
+            System.out.println(Utilities.getSeparator());
+            input = Utilities.getUserSelection(
+                    Utilities.mapToString(getMap(ord, true)) + "────────────\n1. See products\n2. Back", 2);
+            if (input == 1) {
+                Utilities.displayList(factory.getOrderLineDAO().getAllFromOrder(ord.getId()),
+                        (line) -> line.getQuantity() + "*"
+                                + factory.getProductDAO().getById(line.getProduct()).getName() + " : "
+                                + (line.getQuantity() * line.getCost()) + "€");
+            }
+        } while (input != 2);
+    }
+
+    private static void editProducts(Order order, DAOFactory factory) {
+        int input;
+        var lines = factory.getOrderLineDAO().getAllFromOrder(order.getId());
+        do {
+            for (int i = 0; i < lines.length; i++)
+                System.out.println(i + ". " + factory.getProductDAO().getById(lines[i].getProduct()).getName());
+            input = Utilities.getUserSelection("────────────\n1. Add product\n2. Remove product\n3. Finish", 3);
+            if (input == 1) {
+                if (Utilities.getUserSelection("Display products before ?\n1. Yes\n2. No", 2) == 1)
+                    Utilities.displayList(factory.getProductDAO().getAll(), (p) -> p.getId() + ":" + p.getName());
+                System.out.print("Enter the id of the product :\n>");
+                if (Utilities.getConsoleInput().hasNextInt()) {
+                    int id = Utilities.getConsoleInput().nextInt();
+                    System.out.print("Enter the cost of the product (negative number to use the base price) :\n>");
+                    if (Utilities.getConsoleInput().hasNextDouble()) {
+                        double cost = Utilities.getConsoleInput().nextDouble();
+                        System.out.print("Enter the quantity :\n>");
+                        if (Utilities.getConsoleInput().hasNextInt()) {
+                            int quantity = Utilities.getConsoleInput().nextInt();
+                            if (quantity <= 0)
+                                System.out.println("[ERROR] Please enter a positive number");
+                            else {
+                                boolean error = false;
+                                if (cost < 0) {
+                                    var prod = factory.getProductDAO().getById(id);
+                                    if (prod == null) {
+                                        error = true;
+                                        System.out.println("[ERROR] Please enter a valid product");
+                                    } else
+                                        cost = prod.getCost();
+                                }
+                                if (!error)
+                                    if (!factory.getOrderLineDAO()
+                                            .create(new OrderLine(order.getId(), id, cost, quantity)))
+                                        System.out.println("[ERROR] Unable to add this line in the order");
+                            }
+                        } else
+                            System.out.println(("[ERROR] Please enter a number"));
+                    }
+                } else
+                    System.out.println(("[ERROR] Please enter a number"));
+
+            } else if (input == 2)
+                factory.getOrderLineDAO()
+                        .delete(lines[Utilities.getUserSelection("Which product to remove ?", lines.length) - 1]);
+        } while (input != 3);
+
     }
 
     private static Map<Object, Object> getMap(Order order, boolean useID) {
@@ -137,7 +195,7 @@ public class Orders {
         do {
             System.out.println(Utilities.getSeparator());
             input = Utilities.getUserSelection(Utilities.mapToString(getMap(ord, false))
-                    + "────────────\n1. Edit customer ID\n2. Edit date\n3. Cancel\n4. Finish", 4);
+                    + "────────────\n1. Edit customer ID\n2. Edit date\n3. Manage products\n4. Cancel\n5. Finish", 5);
             if (input == 1) {
                 Utilities.displayList(factory.getCustomerDAO().getAll(),
                         (c) -> c.getId() + ":" + c.getName() + " " + c.getSurname());
@@ -164,9 +222,11 @@ public class Orders {
                 } catch (DateTimeParseException e) {
                     System.out.println("[ERROR] " + e.getMessage());
                 }
+            } else if (input == 3) {
+                editProducts(ord, factory);
             }
-        } while (input < 3);
-        if (input == 4)
+        } while (input < 4);
+        if (input == 5)
             if (!factory.getOrderDAO().update(ord))
                 System.out.println("[ERROR] Unable to edit the item");
     }
