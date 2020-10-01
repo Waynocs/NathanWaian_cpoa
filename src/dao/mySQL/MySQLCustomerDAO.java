@@ -41,6 +41,7 @@ public class MySQLCustomerDAO implements CustomerDAO {
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -59,6 +60,7 @@ public class MySQLCustomerDAO implements CustomerDAO {
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -71,6 +73,7 @@ public class MySQLCustomerDAO implements CustomerDAO {
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -87,6 +90,7 @@ public class MySQLCustomerDAO implements CustomerDAO {
                     result.getString("adr_numero"), result.getString("adr_voie"), result.getString("adr_code_postal"),
                     result.getString("adr_ville"), result.getString("adr_pays")) : null;
         } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -106,6 +110,7 @@ public class MySQLCustomerDAO implements CustomerDAO {
                         result.getString("adr_pays")));
             return customerList.toArray(new Customer[0]);
         } catch (SQLException e) {
+            e.printStackTrace();
             return new Customer[0];
         }
     }

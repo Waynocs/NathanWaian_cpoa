@@ -39,6 +39,7 @@ public class MySQLCategoryDAO implements CategoryDAO {
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -52,6 +53,7 @@ public class MySQLCategoryDAO implements CategoryDAO {
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -64,6 +66,7 @@ public class MySQLCategoryDAO implements CategoryDAO {
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -77,6 +80,7 @@ public class MySQLCategoryDAO implements CategoryDAO {
                     ? new Category(result.getString("title"), result.getString("visuel"), result.getInt("id_categorie"))
                     : null;
         } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -93,6 +97,7 @@ public class MySQLCategoryDAO implements CategoryDAO {
                         result.getInt("id_categorie")));
             return categoryList.toArray(new Category[0]);
         } catch (SQLException e) {
+            e.printStackTrace();
             return new Category[0];
         }
     }

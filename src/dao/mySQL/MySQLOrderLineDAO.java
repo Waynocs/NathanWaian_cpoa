@@ -37,6 +37,7 @@ public class MySQLOrderLineDAO implements OrderLineDAO {
                             + object.getOrder() + ", " + +object.getProduct() + ", " + +object.getQuantity() + ", "
                             + +object.getCost() + ")") != 0;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -49,6 +50,7 @@ public class MySQLOrderLineDAO implements OrderLineDAO {
                     + ",`tarif_unitaire`=" + object.getCost() + " WHERE `id_produit`=" + object.getProduct()
                     + " AND `id_commande`=" + object.getOrder()) != 0;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -60,6 +62,7 @@ public class MySQLOrderLineDAO implements OrderLineDAO {
             return statement.executeUpdate("DELETE FROM `Ligne_commande` WHERE `id_produit`=" + object.getProduct()
                     + " AND `id_commande`=" + object.getOrder()) != 0;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -76,6 +79,7 @@ public class MySQLOrderLineDAO implements OrderLineDAO {
                             result.getDouble("tarif_unitaire"), result.getInt("quantite"))
                     : null;
         } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -93,6 +97,7 @@ public class MySQLOrderLineDAO implements OrderLineDAO {
                         result.getDouble("tarif_unitaire"), result.getInt("quantite")));
             return list.toArray(new OrderLine[0]);
         } catch (SQLException e) {
+            e.printStackTrace();
             return new OrderLine[0];
         }
     }
@@ -110,6 +115,7 @@ public class MySQLOrderLineDAO implements OrderLineDAO {
                         result.getDouble("tarif_unitaire"), result.getInt("quantite")));
             return list.toArray(new OrderLine[0]);
         } catch (SQLException e) {
+            e.printStackTrace();
             return new OrderLine[0];
         }
     }

@@ -40,6 +40,7 @@ public class MySQLOrderDAO implements OrderDAO {
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -53,6 +54,7 @@ public class MySQLOrderDAO implements OrderDAO {
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -67,6 +69,7 @@ public class MySQLOrderDAO implements OrderDAO {
                 MySQLOrderLineDAO.getInstance().delete(line);
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -82,6 +85,7 @@ public class MySQLOrderDAO implements OrderDAO {
                             result.getInt("id_client"))
                     : null;
         } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -98,6 +102,7 @@ public class MySQLOrderDAO implements OrderDAO {
                         result.getTimestamp("date_commande").toLocalDateTime(), result.getInt("id_client")));
             return orderList.size() > 0 ? orderList.toArray(new Order[0]) : null;
         } catch (SQLException e) {
+            e.printStackTrace();
             return new Order[0];
         }
     }

@@ -39,6 +39,7 @@ public class MySQLProductDAO implements ProductDAO {
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -54,6 +55,7 @@ public class MySQLProductDAO implements ProductDAO {
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -66,6 +68,7 @@ public class MySQLProductDAO implements ProductDAO {
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -82,6 +85,7 @@ public class MySQLProductDAO implements ProductDAO {
                             result.getString("description"), result.getInt("id_categorie"), result.getString("visuel"))
                     : null;
         } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -99,6 +103,7 @@ public class MySQLProductDAO implements ProductDAO {
                         result.getString("visuel")));
             return productList.size() > 0 ? productList.toArray(new Product[0]) : null;
         } catch (SQLException e) {
+            e.printStackTrace();
             return new Product[0];
         }
     }
