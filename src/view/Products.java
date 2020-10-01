@@ -154,8 +154,8 @@ public class Products {
                 System.out.print("Enter the new address number :\n>");
                 prod.setCategory(Utilities.getConsoleInput().nextInt());
             }
-        } while (input < 5);
-        if (input == 6)
+        } while (input < 6);
+        if (input == 7)
             if (!factory.getProductDAO().update(prod))
                 System.out.println("[ERROR] Unable to edit the item");
     }

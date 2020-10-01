@@ -78,7 +78,7 @@ public class MySQLProductDAO implements ProductDAO {
         try {
             var statement = Request.Connection.getConnection().createStatement();
             var result = statement.executeQuery(
-                    "SELECT `id_produit`, `nom`, `description`, `tarif`, `visuel`, `id_categorie` WHERE `id_produit`="
+                    "SELECT `id_produit`, `nom`, `description`, `tarif`, `visuel`, `id_categorie` FROM `produit` WHERE `id_produit`="
                             + id);
             return result.next()
                     ? new Product(result.getInt("id_produit"), result.getString("nom"), result.getDouble("tarif"),
