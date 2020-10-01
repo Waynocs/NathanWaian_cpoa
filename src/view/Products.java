@@ -185,8 +185,8 @@ public class Products {
                 tmpItem.setCategory(Utilities.getConsoleInput().nextInt());
             }
 
-        } while (input < 5);
-        if (input == 6)
+        } while (input < 6);
+        if (input == 7)
             if (!factory.getProductDAO().create(tmpItem))
                 System.out.println("[ERROR] Unable to create the item");
 
