@@ -33,11 +33,11 @@ public class MySQLCustomerDAO implements CustomerDAO {
     public boolean create(final Customer object) {
         try {
             final var statement = Request.Connection.getConnection().prepareStatement(
-                    "INSERT INTO `client`(`id_client`, `nom`, `prenom`, `identifiant`, `mot_de_passe`, `adr_numero`, `adr_voie`, `adr_code_postal`, `adr_ville`, `adr_pays`) VALUES ("
-                            + object.getId() + ", " + object.getName() + ", " + object.getSurname() + ", "
-                            + object.getIdentifier() + ", " + object.getPwd() + ", " + object.getAddressNumber() + ", "
-                            + object.getAddressStreet() + ", " + object.getAddressPostalCode() + ", "
-                            + object.getAddressCity() + ", " + object.getAddressCountry());
+                    "INSERT INTO `client`(`nom`, `prenom`, `identifiant`, `mot_de_passe`, `adr_numero`, `adr_voie`, `adr_code_postal`, `adr_ville`, `adr_pays`) VALUES ("
+                            + object.getName() + ", " + object.getSurname() + ", " + object.getIdentifier() + ", "
+                            + object.getPwd() + ", " + object.getAddressNumber() + ", " + object.getAddressStreet()
+                            + ", " + object.getAddressPostalCode() + ", " + object.getAddressCity() + ", "
+                            + object.getAddressCountry());
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {

@@ -33,9 +33,9 @@ public class MySQLProductDAO implements ProductDAO {
     public boolean create(Product object) {
         try {
             var statement = Request.Connection.getConnection().prepareStatement(
-                    "INSERT INTO `produit` (`id_produit`, `nom`, `description`, `tarif`, `visuel`, `id_categorie`) VALUES ("
-                            + object.getId() + ", " + object.getName() + ", " + object.getDescription() + ", "
-                            + object.getCost() + ", " + object.getImagePath() + ", " + object.getCategory());
+                    "INSERT INTO `produit` (`nom`, `description`, `tarif`, `visuel`, `id_categorie`) VALUES ("
+                            + object.getName() + ", " + object.getDescription() + ", " + object.getCost() + ", "
+                            + object.getImagePath() + ", " + object.getCategory());
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
