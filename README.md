@@ -7,5 +7,3 @@ uri="jdbc:mysql://localhost/table?serverTimezone=UTC"
 login=root
 pwd=password
 ```
-
-To use the database, import the `database.sql` file on a MySQL server.
