@@ -1,12 +1,3 @@
--- phpMyAdmin SQL Dump
--- version 4.4.15.10
--- https://www.phpmyadmin.net
---
--- Client :  devbdd.iutmetz.univ-lorraine.fr
--- Généré le :  Ven 02 Octobre 2020 à 08:15
--- Version du serveur :  10.3.24-MariaDB
--- Version de PHP :  7.1.33
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
@@ -17,7 +8,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données :  `serano1u_ToutDur`
+-- Base de données :  `database`
 --
 
 -- --------------------------------------------------------
