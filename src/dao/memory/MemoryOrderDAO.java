@@ -42,9 +42,9 @@ public class MemoryOrderDAO implements dao.OrderDAO {
     }
 
     @Override
-    public boolean create(Order object) {
+    public Order create(Order object) {
         memory.put(index++, new Data(object.getDate(), object.getCustomer()));
-        return true;
+        return getById(index - 1);
     }
 
     @Override

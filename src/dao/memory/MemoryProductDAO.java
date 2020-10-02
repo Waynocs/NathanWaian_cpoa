@@ -47,10 +47,10 @@ public class MemoryProductDAO implements dao.ProductDAO {
     }
 
     @Override
-    public boolean create(Product object) {
+    public Product create(Product object) {
         memory.put(index++, new Data(object.getName(), object.getImagePath(), object.getCost(), object.getDescription(),
                 object.getCategory()));
-        return true;
+        return getById(index - 1);
     }
 
     @Override

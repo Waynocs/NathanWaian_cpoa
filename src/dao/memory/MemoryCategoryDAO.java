@@ -40,9 +40,9 @@ public class MemoryCategoryDAO implements dao.CategoryDAO {
     }
 
     @Override
-    public boolean create(Category object) {
+    public Category create(Category object) {
         memory.put(index++, new Data(object.getName(), object.getImagePath()));
-        return true;
+        return getById(index - 1);
     }
 
     @Override

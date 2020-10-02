@@ -55,12 +55,12 @@ public class MemoryCustomerDAO implements dao.CustomerDAO {
     }
 
     @Override
-    public boolean create(final Customer object) {
+    public Customer create(final Customer object) {
         memory.put(index++,
                 new Data(object.getName(), object.getSurname(), object.getIdentifier(), object.getPwd(),
                         object.getAddressNumber(), object.getAddressStreet(), object.getAddressPostalCode(),
                         object.getAddressCity(), object.getAddressCountry()));
-        return true;
+        return getById(index - 1);
     }
 
     @Override

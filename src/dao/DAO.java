@@ -6,9 +6,9 @@ public interface DAO<T> {
      * Creates a new element
      * 
      * @param object element to create
-     * @return true if successful
+     * @return the given object, or null if it failed
      */
-    boolean create(T object);
+    T create(T object);
 
     /**
      * Updates an element

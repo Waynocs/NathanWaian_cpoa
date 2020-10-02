@@ -2,6 +2,7 @@ package dao.mySQL;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 
 import dao.ProductDAO;
@@ -31,17 +32,24 @@ public class MySQLProductDAO implements ProductDAO {
     }
 
     @Override
-    public boolean create(Product object) {
+    public Product create(Product object) {
         try {
             var statement = Connection.getConnection().prepareStatement(
                     "INSERT INTO `produit` (`nom`, `description`, `tarif`, `visuel`, `id_categorie`) VALUES ('"
                             + object.getName() + "', '" + object.getDescription() + "', " + object.getCost() + ", '"
-                            + object.getImagePath() + "', " + object.getCategory() + ")");
-
-            return statement.executeUpdate() != 0;
+                            + object.getImagePath() + "', " + object.getCategory() + ")",
+                    Statement.RETURN_GENERATED_KEYS);
+            var result = statement.executeUpdate();
+            if (result == 0)
+                return null;
+            else {
+                var keys = statement.getGeneratedKeys();
+                keys.next();
+                return getById((int) keys.getLong(1));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 

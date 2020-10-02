@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 
+import java.sql.Statement;
+
 import dao.CustomerDAO;
 import model.Customer;
 import request.Connection;
@@ -31,19 +33,26 @@ public class MySQLCustomerDAO implements CustomerDAO {
     }
 
     @Override
-    public boolean create(final Customer object) {
+    public Customer create(final Customer object) {
         try {
             final var statement = Connection.getConnection().prepareStatement(
                     "INSERT INTO `client`(`nom`, `prenom`, `identifiant`, `mot_de_passe`, `adr_numero`, `adr_voie`, `adr_code_postal`, `adr_ville`, `adr_pays`) VALUES ('"
                             + object.getSurname() + "', '" + object.getName() + "', '" + object.getIdentifier() + "', '"
                             + object.getPwd() + "', '" + object.getAddressNumber() + "', '" + object.getAddressStreet()
                             + "', '" + object.getAddressPostalCode() + "', '" + object.getAddressCity() + "', '"
-                            + object.getAddressCountry() + "')");
-
-            return statement.executeUpdate() != 0;
+                            + object.getAddressCountry() + "')",
+                    Statement.RETURN_GENERATED_KEYS);
+            var result = statement.executeUpdate();
+            if (result == 0)
+                return null;
+            else {
+                var keys = statement.getGeneratedKeys();
+                keys.next();
+                return getById((int) keys.getLong(1));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 

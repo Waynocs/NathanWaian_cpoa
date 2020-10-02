@@ -58,12 +58,12 @@ public class MemoryOrderLineDAO implements OrderLineDAO {
     }
 
     @Override
-    public boolean create(OrderLine object) {
+    public OrderLine create(OrderLine object) {
         if (memory.keySet().contains(new DoubleIntID(object.getOrder(), object.getProduct())))
-            return false;
+            return null;
         memory.put(new DoubleIntID(object.getOrder(), object.getProduct()),
                 new Data(object.getCost(), object.getQuantity()));
-        return true;
+        return getById(object.getOrder(), object.getProduct());
     }
 
     @Override

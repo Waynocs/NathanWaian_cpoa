@@ -2,6 +2,7 @@ package dao.mySQL;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -33,16 +34,23 @@ public class MySQLOrderDAO implements OrderDAO {
     }
 
     @Override
-    public boolean create(final Order object) {
+    public Order create(final Order object) {
         try {
-            var statement = Connection.getConnection()
-                    .prepareStatement("INSERT INTO `commande` (`date_commande`, `id_client`) VALUES ('"
-                            + object.getDate().format(formatter) + "', '" + +object.getCustomer() + "');");
-
-            return statement.executeUpdate() != 0;
+            var statement = Connection.getConnection().prepareStatement(
+                    "INSERT INTO `commande` (`date_commande`, `id_client`) VALUES ('"
+                            + object.getDate().format(formatter) + "', '" + +object.getCustomer() + "');",
+                    Statement.RETURN_GENERATED_KEYS);
+            var result = statement.executeUpdate();
+            if (result == 0)
+                return null;
+            else {
+                var keys = statement.getGeneratedKeys();
+                keys.next();
+                return getById((int) keys.getLong(1));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 

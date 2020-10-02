@@ -30,16 +30,17 @@ public class MySQLOrderLineDAO implements OrderLineDAO {
     }
 
     @Override
-    public boolean create(OrderLine object) {
+    public OrderLine create(OrderLine object) {
         try {
             var statement = Connection.getConnection().createStatement();
-            return statement.executeUpdate(
+            statement.executeUpdate(
                     "INSERT INTO `ligne_commande`(`id_commande`, `id_produit`, `quantite`, `tarif_unitaire`) VALUES ("
                             + object.getOrder() + ", " + +object.getProduct() + ", " + +object.getQuantity() + ", "
-                            + +object.getCost() + ")") != 0;
+                            + +object.getCost() + ")");
+            return object;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 

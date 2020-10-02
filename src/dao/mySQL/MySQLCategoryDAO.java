@@ -7,6 +7,7 @@ import request.Connection;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 
 /**
@@ -32,16 +33,22 @@ public class MySQLCategoryDAO implements CategoryDAO {
     }
 
     @Override
-    public boolean create(Category object) {
+    public Category create(Category object) {
         try {
             var statement = Connection.getConnection()
                     .prepareStatement("INSERT INTO `categorie`(`titre`, `visuel`) VALUES ('" + object.getName() + "', '"
-                            + object.getImagePath() + "')");
-
-            return statement.executeUpdate() != 0;
+                            + object.getImagePath() + "')", Statement.RETURN_GENERATED_KEYS);
+            var result = statement.executeUpdate();
+            if (result == 0)
+                return null;
+            else {
+                var keys = statement.getGeneratedKeys();
+                keys.next();
+                return getById((int) keys.getLong(1));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 
