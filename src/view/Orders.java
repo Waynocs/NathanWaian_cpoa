@@ -145,8 +145,8 @@ public class Orders {
                                         cost = prod.getCost();
                                 }
                                 if (!error)
-                                    if (!factory.getOrderLineDAO()
-                                            .create(new OrderLine(order.getId(), id, cost, quantity)))
+                                    if (factory.getOrderLineDAO()
+                                            .create(new OrderLine(order.getId(), id, cost, quantity)) != null)
                                         System.out.println("[ERROR] Unable to add this line in the order");
                             }
                         } else
@@ -267,7 +267,7 @@ public class Orders {
             }
         } while (input < 3);
         if (input == 4)
-            if (!factory.getOrderDAO().create(tmpItem))
+            if (factory.getOrderDAO().create(tmpItem) != null)
                 System.out.println("[ERROR] Unable to create the item");
     }
 }

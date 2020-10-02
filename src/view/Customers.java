@@ -215,7 +215,7 @@ public class Customers {
             }
         } while (input < 10);
         if (input == 11)
-            if (!factory.getCustomerDAO().create(tmpItem))
+            if (factory.getCustomerDAO().create(tmpItem) != null)
                 System.out.println("[ERROR] Unable to create the item");
 
     }

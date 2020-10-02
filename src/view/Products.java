@@ -187,7 +187,7 @@ public class Products {
 
         } while (input < 6);
         if (input == 7)
-            if (!factory.getProductDAO().create(tmpItem))
+            if (factory.getProductDAO().create(tmpItem) != null)
                 System.out.println("[ERROR] Unable to create the item");
 
     }
