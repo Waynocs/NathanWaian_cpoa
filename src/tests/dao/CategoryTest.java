@@ -4,9 +4,19 @@ import dao.DAOFactory;
 import model.Category;
 import tests.dao.CategoryTest;
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public abstract class CategoryTest {
+
+    @BeforeEach
+    public void before() {
+        var DAO = getFactory().getCategoryDAO();
+        for (var order : DAO.getAll())
+            DAO.delete(order);
+    }
+
     @Test
     public void testCreate() {
         var res = getFactory().getCategoryDAO().create(new Category("test", "test.png", -1));
