@@ -4,19 +4,29 @@ import dao.DAOFactory;
 import model.Product;
 import tests.dao.ProductTest;
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public abstract class ProductTest {
+
+    @BeforeEach
+    public void before() {
+        var DAO = getFactory().getProductDAO();
+        for (var order : DAO.getAll())
+            DAO.delete(order);
+    }
+
     @Test
     public void testCreate() {
-        var res = getFactory().getProductDAO()
+        var product1 = getFactory().getProductDAO()
                 .create(new Product(-1, "test", 45, "voici une description", 1, "test.png"));
-        assertNotNull(res, "object added");
-        var res2 = getFactory().getProductDAO()
+        assertNotNull(product1, "object added");
+        var product2 = getFactory().getProductDAO()
                 .create(new Product(-1, "test", 45, "voici une description", 1, "test.png"));
-        assertTrue(res.getId() != -1, "different ids for different ");
-        getFactory().getProductDAO().delete(res);
-        getFactory().getProductDAO().delete(res2);
+        assertTrue(product1.getId() != product2.getId(), "different ids for different Products");
+        getFactory().getProductDAO().delete(product1);
+        getFactory().getProductDAO().delete(product2);
     }
 
     @Test
@@ -50,8 +60,8 @@ public abstract class ProductTest {
                 .create(new Product(0, "test", 45, "voici une description", 1, "test.png"));
         assertNotNull(getFactory().getProductDAO().getById(res.getId()), "get deleted");
         getFactory().getProductDAO().delete(res);
-        assertNull(getFactory().getProductDAO().getById(res.getId()), "d");
-        assertNull(getFactory().getProductDAO().getById(res.getId() + 1));
+        assertNull(getFactory().getProductDAO().getById(res.getId()), "get deleted");
+        assertNull(getFactory().getProductDAO().getById(res.getId() + 1), "get non existing");
 
     }
 
@@ -64,6 +74,7 @@ public abstract class ProductTest {
         getFactory().getProductDAO().delete(res);
     }
 
+    @Test
     public void testIntegrity() {
         var res = getFactory().getProductDAO()
                 .create(new Product(0, "test", 45, "voici une description", 1, "test.png"));
