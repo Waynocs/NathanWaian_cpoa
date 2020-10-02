@@ -1,4 +1,4 @@
-package Request;
+package request;
 
 import java.io.File;
 import java.sql.DriverManager;

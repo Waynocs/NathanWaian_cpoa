@@ -1,4 +1,4 @@
-package dao.Memory;
+package dao.memory;
 
 import java.util.*;
 
@@ -109,5 +109,4 @@ public class MemoryOrderLineDAO implements OrderLineDAO {
                         entry.getValue().quantity));
         return list.toArray(new OrderLine[0]);
     }
-
 }

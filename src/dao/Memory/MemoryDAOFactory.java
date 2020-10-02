@@ -1,4 +1,4 @@
-package dao.Memory;
+package dao.memory;
 
 import dao.CategoryDAO;
 import dao.CustomerDAO;

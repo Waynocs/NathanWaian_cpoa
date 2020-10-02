@@ -6,6 +6,7 @@ import java.util.LinkedList;
 
 import dao.ProductDAO;
 import model.Product;
+import request.Connection;
 
 /**
  * Class used to manage products using the MySQLDAOFactory
@@ -32,7 +33,7 @@ public class MySQLProductDAO implements ProductDAO {
     @Override
     public boolean create(Product object) {
         try {
-            var statement = Request.Connection.getConnection().prepareStatement(
+            var statement = Connection.getConnection().prepareStatement(
                     "INSERT INTO `produit` (`nom`, `description`, `tarif`, `visuel`, `id_categorie`) VALUES ('"
                             + object.getName() + "', '" + object.getDescription() + "', " + object.getCost() + ", '"
                             + object.getImagePath() + "', " + object.getCategory() + ")");
@@ -47,7 +48,7 @@ public class MySQLProductDAO implements ProductDAO {
     @Override
     public boolean update(Product object) {
         try {
-            var statement = Request.Connection.getConnection()
+            var statement = Connection.getConnection()
                     .prepareStatement("UPDATE `produit` SET `nom`= '" + object.getName() + "',`description`= '"
                             + object.getDescription() + "',`tarif`= " + object.getCost() + ",`visuel`= '"
                             + object.getImagePath() + "',`id_categorie`= " + object.getCategory()
@@ -63,7 +64,7 @@ public class MySQLProductDAO implements ProductDAO {
     @Override
     public boolean delete(Product object) {
         try {
-            var statement = Request.Connection.getConnection()
+            var statement = Connection.getConnection()
                     .prepareStatement("DELETE FROM `produit` WHERE `id_produit` = " + object.getId());
 
             return statement.executeUpdate() != 0;
@@ -76,7 +77,7 @@ public class MySQLProductDAO implements ProductDAO {
     @Override
     public Product getById(int id) {
         try {
-            var statement = Request.Connection.getConnection().createStatement();
+            var statement = Connection.getConnection().createStatement();
             var result = statement.executeQuery(
                     "SELECT `id_produit`, `nom`, `description`, `tarif`, `visuel`, `id_categorie` FROM `produit` WHERE `id_produit`="
                             + id);
@@ -93,7 +94,7 @@ public class MySQLProductDAO implements ProductDAO {
     @Override
     public Product[] getAll() {
         try {
-            final var statement = Request.Connection.getConnection().createStatement();
+            final var statement = Connection.getConnection().createStatement();
             final ResultSet result = statement.executeQuery(
                     "SELECT `id_produit`, `nom`, `description`, `tarif`, `visuel`, `id_categorie` FROM `produit`");
             var productList = new LinkedList<Product>();

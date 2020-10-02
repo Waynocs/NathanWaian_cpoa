@@ -6,6 +6,7 @@ import java.util.LinkedList;
 
 import dao.CustomerDAO;
 import model.Customer;
+import request.Connection;
 
 /**
  * Class used to manage customers using the MySQLDAOFactory
@@ -32,7 +33,7 @@ public class MySQLCustomerDAO implements CustomerDAO {
     @Override
     public boolean create(final Customer object) {
         try {
-            final var statement = Request.Connection.getConnection().prepareStatement(
+            final var statement = Connection.getConnection().prepareStatement(
                     "INSERT INTO `client`(`nom`, `prenom`, `identifiant`, `mot_de_passe`, `adr_numero`, `adr_voie`, `adr_code_postal`, `adr_ville`, `adr_pays`) VALUES ('"
                             + object.getSurname() + "', '" + object.getName() + "', '" + object.getIdentifier() + "', '"
                             + object.getPwd() + "', '" + object.getAddressNumber() + "', '" + object.getAddressStreet()
@@ -49,7 +50,7 @@ public class MySQLCustomerDAO implements CustomerDAO {
     @Override
     public boolean update(final Customer object) {
         try {
-            final var statement = Request.Connection.getConnection()
+            final var statement = Connection.getConnection()
                     .prepareStatement("UPDATE `client` SET `nom`= '" + object.getSurname() + "',`prenom`= '"
                             + object.getName() + "',`identifiant`='" + object.getIdentifier() + "',`mot_de_passe`= '"
                             + object.getPwd() + "',`adr_numero`= '" + object.getAddressNumber() + "',`adr_voie`= '"
@@ -67,7 +68,7 @@ public class MySQLCustomerDAO implements CustomerDAO {
     @Override
     public boolean delete(final Customer object) {
         try {
-            final var statement = Request.Connection.getConnection()
+            final var statement = Connection.getConnection()
                     .prepareStatement("DELETE FROM `client` WHERE `id_client` = " + object.getId());
 
             return statement.executeUpdate() != 0;
@@ -80,7 +81,7 @@ public class MySQLCustomerDAO implements CustomerDAO {
     @Override
     public Customer getById(final int id) {
         try {
-            final var statement = Request.Connection.getConnection().createStatement();
+            final var statement = Connection.getConnection().createStatement();
             final var result = statement.executeQuery(
                     "SELECT `id_client`, `nom`, `prenom`, `identifiant`, `mot_de_passe`, `adr_numero`, `adr_voie`, `adr_code_postal`, `adr_ville`, `adr_pays` FROM `client` WHERE `id_client`="
                             + id);
@@ -97,7 +98,7 @@ public class MySQLCustomerDAO implements CustomerDAO {
     @Override
     public Customer[] getAll() {
         try {
-            final var statement = Request.Connection.getConnection().createStatement();
+            final var statement = Connection.getConnection().createStatement();
             final ResultSet result = statement.executeQuery(
                     "SELECT `id_client`, `nom`, `prenom`, `identifiant`, `mot_de_passe`, `adr_numero`, `adr_voie`, `adr_code_postal`, `adr_ville`, `adr_pays` FROM `client`");
             var customerList = new LinkedList<Customer>();

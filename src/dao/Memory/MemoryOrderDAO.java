@@ -1,4 +1,4 @@
-package dao.Memory;
+package dao.memory;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;

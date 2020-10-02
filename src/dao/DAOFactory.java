@@ -1,6 +1,6 @@
 package dao;
 
-import dao.Memory.MemoryDAOFactory;
+import dao.memory.MemoryDAOFactory;
 import dao.mySQL.MySQLDAOFactory;
 
 /**

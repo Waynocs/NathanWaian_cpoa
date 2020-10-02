@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import dao.OrderLineDAO;
 import model.OrderLine;
+import request.Connection;
 
 /**
  * Class used to manage order lines using the MySQLDAOFactory
@@ -31,7 +32,7 @@ public class MySQLOrderLineDAO implements OrderLineDAO {
     @Override
     public boolean create(OrderLine object) {
         try {
-            var statement = Request.Connection.getConnection().createStatement();
+            var statement = Connection.getConnection().createStatement();
             return statement.executeUpdate(
                     "INSERT INTO `ligne_commande`(`id_commande`, `id_produit`, `quantite`, `tarif_unitaire`) VALUES ("
                             + object.getOrder() + ", " + +object.getProduct() + ", " + +object.getQuantity() + ", "
@@ -45,7 +46,7 @@ public class MySQLOrderLineDAO implements OrderLineDAO {
     @Override
     public boolean update(OrderLine object) {
         try {
-            var statement = Request.Connection.getConnection().createStatement();
+            var statement = Connection.getConnection().createStatement();
             return statement.executeUpdate("UPDATE `ligne_commande` SET `quantite`=" + object.getQuantity()
                     + ",`tarif_unitaire`=" + object.getCost() + " WHERE `id_produit`=" + object.getProduct()
                     + " AND `id_commande`=" + object.getOrder()) != 0;
@@ -58,7 +59,7 @@ public class MySQLOrderLineDAO implements OrderLineDAO {
     @Override
     public boolean delete(OrderLine object) {
         try {
-            var statement = Request.Connection.getConnection().createStatement();
+            var statement = Connection.getConnection().createStatement();
             return statement.executeUpdate("DELETE FROM `ligne_commande` WHERE `id_produit`=" + object.getProduct()
                     + " AND `id_commande`=" + object.getOrder()) != 0;
         } catch (SQLException e) {
@@ -70,7 +71,7 @@ public class MySQLOrderLineDAO implements OrderLineDAO {
     @Override
     public OrderLine getById(int order, int product) {
         try {
-            var statement = Request.Connection.getConnection().createStatement();
+            var statement = Connection.getConnection().createStatement();
             var result = statement.executeQuery(
                     "SELECT `id_produit`, `id_commande`, `quantite`, `tarif_unitaire` FROM `ligne_commande` WHERE"
                             + "`id_produit`=" + product + " AND `id_commande`=" + order);
@@ -87,7 +88,7 @@ public class MySQLOrderLineDAO implements OrderLineDAO {
     @Override
     public OrderLine[] getAllFromOrder(int order) {
         try {
-            var statement = Request.Connection.getConnection().createStatement();
+            var statement = Connection.getConnection().createStatement();
             var result = statement.executeQuery(
                     "SELECT `id_produit`, `id_commande`, `quantite`, `tarif_unitaire` FROM `ligne_commande` WHERE"
                             + "`id_commande`=" + order);
@@ -105,7 +106,7 @@ public class MySQLOrderLineDAO implements OrderLineDAO {
     @Override
     public OrderLine[] getAllFromProduct(int product) {
         try {
-            var statement = Request.Connection.getConnection().createStatement();
+            var statement = Connection.getConnection().createStatement();
             var result = statement.executeQuery(
                     "SELECT `id_produit`, `id_commande`, `quantite`, `tarif_unitaire` FROM `ligne_commande` WHERE"
                             + "`id_produit`=" + product);

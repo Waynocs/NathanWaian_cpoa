@@ -3,6 +3,7 @@ package dao.mySQL;
 import dao.CategoryDAO;
 
 import model.Category;
+import request.Connection;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,7 +34,7 @@ public class MySQLCategoryDAO implements CategoryDAO {
     @Override
     public boolean create(Category object) {
         try {
-            var statement = Request.Connection.getConnection()
+            var statement = Connection.getConnection()
                     .prepareStatement("INSERT INTO `categorie`(`titre`, `visuel`) VALUES ('" + object.getName() + "', '"
                             + object.getImagePath() + "')");
 
@@ -47,7 +48,7 @@ public class MySQLCategoryDAO implements CategoryDAO {
     @Override
     public boolean update(Category object) {
         try {
-            var statement = Request.Connection.getConnection()
+            var statement = Connection.getConnection()
                     .prepareStatement("UPDATE `categorie` SET `titre`= '" + object.getName() + "',`visuel`= '"
                             + object.getImagePath() + "' WHERE `id_categorie` = " + object.getId());
 
@@ -61,7 +62,7 @@ public class MySQLCategoryDAO implements CategoryDAO {
     @Override
     public boolean delete(Category object) {
         try {
-            var statement = Request.Connection.getConnection()
+            var statement = Connection.getConnection()
                     .prepareStatement("DELETE FROM `categorie` WHERE `id_categorie` = " + object.getId());
 
             return statement.executeUpdate() != 0;
@@ -74,7 +75,7 @@ public class MySQLCategoryDAO implements CategoryDAO {
     @Override
     public Category getById(int id) {
         try {
-            var statement = Request.Connection.getConnection().createStatement();
+            var statement = Connection.getConnection().createStatement();
             var result = statement.executeQuery(
                     "SELECT `id_categorie`, `titre`, `visuel` FROM `categorie` WHERE `id_categorie`=" + id);
             return result.next()
@@ -89,7 +90,7 @@ public class MySQLCategoryDAO implements CategoryDAO {
     @Override
     public Category[] getAll() {
         try {
-            final var statement = Request.Connection.getConnection().createStatement();
+            final var statement = Connection.getConnection().createStatement();
             final ResultSet result = statement
                     .executeQuery("SELECT `id_categorie`, `titre`, `visuel` FROM `categorie`");
             var categoryList = new LinkedList<Category>();

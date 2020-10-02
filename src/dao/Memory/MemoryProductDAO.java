@@ -1,4 +1,4 @@
-package dao.Memory;
+package dao.memory;
 
 import java.util.HashMap;
 import java.util.LinkedList;
