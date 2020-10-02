@@ -109,4 +109,13 @@ public class MemoryOrderLineDAO implements OrderLineDAO {
                         entry.getValue().quantity));
         return list.toArray(new OrderLine[0]);
     }
+
+    @Override
+    public OrderLine[] getAll() {
+        var list = new LinkedList<OrderLine>();
+        for (var entry : memory.entrySet())
+            list.add(new OrderLine(entry.getKey().id1, entry.getKey().id2, entry.getValue().cost,
+                    entry.getValue().quantity));
+        return list.toArray(new OrderLine[0]);
+    }
 }

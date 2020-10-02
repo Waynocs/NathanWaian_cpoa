@@ -32,4 +32,11 @@ public interface OrderLineDAO extends DAO<OrderLine> {
      */
     OrderLine[] getAllFromProduct(int product);
 
+    /**
+     * Finds all lines
+     * 
+     * @return all the lines
+     */
+    OrderLine[] getAll();
+
 }

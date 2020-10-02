@@ -121,4 +121,21 @@ public class MySQLOrderLineDAO implements OrderLineDAO {
             return new OrderLine[0];
         }
     }
+
+    @Override
+    public OrderLine[] getAll() {
+        try {
+            var statement = Connection.getConnection().createStatement();
+            var result = statement.executeQuery(
+                    "SELECT `id_produit`, `id_commande`, `quantite`, `tarif_unitaire` FROM `ligne_commande`");
+            var list = new LinkedList<OrderLine>();
+            while (result.next())
+                list.add(new OrderLine(result.getInt("id_commande"), result.getInt("id_produit"),
+                        result.getDouble("tarif_unitaire"), result.getInt("quantite")));
+            return list.toArray(new OrderLine[0]);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new OrderLine[0];
+        }
+    }
 }
