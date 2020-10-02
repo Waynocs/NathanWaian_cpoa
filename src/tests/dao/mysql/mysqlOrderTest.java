@@ -1,7 +1,5 @@
 package tests.dao.mysql;
 
-import org.junit.jupiter.api.BeforeEach;
-
 import dao.DAOFactory;
 import dao.DAOFactory.Mode;
 import tests.dao.OrderTest;
