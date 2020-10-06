@@ -28,6 +28,11 @@ public class MemoryOrderLineDAO implements OrderLineDAO {
             else
                 return false;
         }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(id1, id2);
+        }
     }
 
     private class Data {
@@ -59,8 +64,10 @@ public class MemoryOrderLineDAO implements OrderLineDAO {
 
     @Override
     public OrderLine create(OrderLine object) {
-        if (memory.keySet().contains(new DoubleIntID(object.getOrder(), object.getProduct())))
+        if (memory.containsKey(new DoubleIntID(object.getOrder(), object.getProduct())))
             return null;
+        System.out.println(memory.size());
+        System.out.println(memory.containsKey(new DoubleIntID(object.getOrder(), object.getProduct())));
         memory.put(new DoubleIntID(object.getOrder(), object.getProduct()),
                 new Data(object.getCost(), object.getQuantity()));
         return getById(object.getOrder(), object.getProduct());
@@ -68,7 +75,7 @@ public class MemoryOrderLineDAO implements OrderLineDAO {
 
     @Override
     public boolean update(OrderLine object) {
-        if (!memory.keySet().contains(new DoubleIntID(object.getOrder(), object.getProduct())))
+        if (!memory.containsKey(new DoubleIntID(object.getOrder(), object.getProduct())))
             return false;
         memory.put(new DoubleIntID(object.getOrder(), object.getProduct()),
                 new Data(object.getCost(), object.getQuantity()));
@@ -77,7 +84,7 @@ public class MemoryOrderLineDAO implements OrderLineDAO {
 
     @Override
     public boolean delete(OrderLine object) {
-        if (!memory.keySet().contains(new DoubleIntID(object.getOrder(), object.getProduct())))
+        if (!memory.containsKey(new DoubleIntID(object.getOrder(), object.getProduct())))
             return false;
         memory.remove(new DoubleIntID(object.getOrder(), object.getProduct()));
         return true;
@@ -86,7 +93,7 @@ public class MemoryOrderLineDAO implements OrderLineDAO {
     @Override
     public OrderLine getById(int order, int product) {
         var id = new DoubleIntID(order, product);
-        var data = memory.keySet().contains(id) ? memory.get(id) : null;
+        var data = memory.get(id);
         return data == null ? null : new OrderLine(order, product, data.cost, data.quantity);
     }
 
