@@ -1,9 +1,27 @@
 package model;
 
+import java.util.Objects;
+
 /**
  * A line for a product in an order
  */
 public class OrderLine {
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof OrderLine)) {
+            return false;
+        }
+        OrderLine orderLine = (OrderLine) o;
+        return order == orderLine.order && product == orderLine.product;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(order, product);
+    }
 
     /**
      * Returns the order for this line

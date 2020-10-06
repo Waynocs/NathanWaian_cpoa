@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 /**
  * Defines a category
  */
@@ -7,6 +9,22 @@ public class Category {
     private String name;
     private String imagePath;
     private int id;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Category)) {
+            return false;
+        }
+        Category category = (Category) o;
+        return id == category.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 
     /**
      * Constructor

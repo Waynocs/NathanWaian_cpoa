@@ -1,9 +1,17 @@
 package model;
 
+import java.util.Objects;
+
 /**
  * Defines a product
  */
 public class Product {
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+
     private int id;
     private String name;
     private double cost;

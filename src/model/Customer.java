@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 /**
  * Defines a customer
  */
@@ -14,6 +16,22 @@ public class Customer {
     private String addressPostalCode;
     private String addressCity;
     private String addressCountry;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Customer)) {
+            return false;
+        }
+        Customer customer = (Customer) o;
+        return id == customer.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 
     /**
      * Returns the identifier of the customer

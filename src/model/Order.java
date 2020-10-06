@@ -1,6 +1,7 @@
 package model;
 
 import java.time.*;
+import java.util.Objects;
 
 /**
  * Defines an order made by a customer
@@ -58,6 +59,22 @@ public class Order {
      */
     public int getId() {
         return this.id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Order)) {
+            return false;
+        }
+        Order order = (Order) o;
+        return id == order.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 
     /**
