@@ -31,7 +31,7 @@ public abstract class CustomerTest {
 
     @Test
     public void testUpdate() {
-        var res = getFactory().getCustomerDAO().create(new Customer(-1, "name", "surname", "identifier", "pwd",
+        var res = getFactory().getCustomerDAO().create(new Customer(0, "name", "surname", "identifier", "pwd",
                 "addressNumber", "addressStreet", "addressPostalCode", "addressCity", "addressCountry"));
         res.setName("new name");
         res.setSurname("new surname");
@@ -39,7 +39,7 @@ public abstract class CustomerTest {
         res.setPwd("new pwd");
         res.setAddressNumber("new addressNumber");
         res.setAddressStreet("new addressStreet");
-        res.setAddressPostalCode("new addresspostalCode");
+        res.setAddressPostalCode("new addressPostalCode");
         res.setAddressCity("new addressCity");
         res.setAddressCountry("new addressCountry");
         getFactory().getCustomerDAO().update(res);
@@ -48,7 +48,7 @@ public abstract class CustomerTest {
         assertTrue(updated.getSurname().equals("new surname"), "surname");
         assertTrue(updated.getIdentifier().equals("new identifier"), "identifier");
         assertTrue(updated.getPwd().equals("new pwd"), "pwd");
-        assertTrue(updated.getAddressNumber().equals("new addressNumber"), "adressNumber");
+        assertTrue(updated.getAddressNumber().equals("new addressNumber"), "addressNumber");
         assertTrue(updated.getAddressStreet().equals("new addressStreet"), "addressStreet");
         assertTrue(updated.getAddressPostalCode().equals("new addressPostalCode"), "addressPostalCode");
         assertTrue(updated.getAddressCity().equals("new addressCity"), "addressCity");
