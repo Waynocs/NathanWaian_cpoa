@@ -34,13 +34,16 @@ public abstract class ProductTest {
         var res = getFactory().getProductDAO()
                 .create(new Product(0, "test", 45, "voici une description", 1, "test.png"));
         res.setName("new name");
-        res.setImagePath("new image path");
+        res.setCost(30.5);
         res.setDescription("new description");
-        res.setCost(2);
         res.setCategory(2);
+        res.setImagePath("new path");
         getFactory().getProductDAO().update(res);
         var updated = getFactory().getProductDAO().getById(res.getId());
         assertTrue(updated.getName().equals("new name"), "name");
+        assertTrue(updated.getCost() == 30.5, "cost");
+        assertTrue(updated.getDescription().equals("new description"), "description");
+        assertTrue(updated.getCategory() == 2, "category");
         assertTrue(updated.getImagePath().equals("new path"), "image path");
         getFactory().getProductDAO().delete(res);
 
