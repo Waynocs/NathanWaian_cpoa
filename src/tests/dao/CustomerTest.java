@@ -37,8 +37,8 @@ public abstract class CustomerTest {
         res.setSurname("new surname");
         res.setIdentifier("new identifier");
         res.setPwd("new pwd");
-        res.setAddressNumber("new addressStreet");
-        res.setAddressStreet("new addressNumber");
+        res.setAddressNumber("new addressNumber");
+        res.setAddressStreet("new addressStreet");
         res.setAddressPostalCode("new addressPostalCode");
         res.setAddressCity("new addressCity");
         res.setAddressCountry("new addressCountry");
@@ -48,7 +48,6 @@ public abstract class CustomerTest {
         assertTrue(updated.getSurname().equals("new surname"), "surname");
         assertTrue(updated.getIdentifier().equals("new identifier"), "identifier");
         assertTrue(updated.getPwd().equals("new pwd"), "pwd");
-        System.out.println(updated.getAddressNumber());
         assertTrue(updated.getAddressNumber().equals("new addressNumber"), "addressNumber");
         assertTrue(updated.getAddressStreet().equals("new addressStreet"), "addressStreet");
         assertTrue(updated.getAddressPostalCode().equals("new addressPostalCode"), "addressPostalCode");
