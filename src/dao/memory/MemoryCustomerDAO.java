@@ -93,7 +93,7 @@ public class MemoryCustomerDAO implements dao.CustomerDAO {
         else {
             var element = memory.get(id);
             return new Customer(id, element.name, element.surname, element.identifier, element.pwd,
-                    element.addressStreet, element.addressNumber, element.addressPostalCode, element.addressCity,
+                    element.addressNumber, element.addressStreet, element.addressPostalCode, element.addressCity,
                     element.addressCountry);
         }
     }
