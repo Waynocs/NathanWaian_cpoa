@@ -66,8 +66,6 @@ public class MemoryOrderLineDAO implements OrderLineDAO {
     public OrderLine create(OrderLine object) {
         if (memory.containsKey(new DoubleIntID(object.getOrder(), object.getProduct())))
             return null;
-        System.out.println(memory.size());
-        System.out.println(memory.containsKey(new DoubleIntID(object.getOrder(), object.getProduct())));
         memory.put(new DoubleIntID(object.getOrder(), object.getProduct()),
                 new Data(object.getCost(), object.getQuantity()));
         return getById(object.getOrder(), object.getProduct());
