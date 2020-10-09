@@ -14,7 +14,7 @@ public class MainMenu {
     /**
      * Starts the console interface, getting to the main menu
      */
-    public static void Start() {
+    public static void start() {
         switch (Utilities.getUserSelection("Choose a mode :\n1. MySQL\n2. Saved in memory", 2)) {
             case 1:
                 menu(DAOFactory.getFactory(Mode.SQL));

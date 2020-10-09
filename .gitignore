@@ -352,3 +352,4 @@ MigrationBackup/
 # connection informations to the sql database
 ConnectionInfo.ini
 .vscode/
+lib/
