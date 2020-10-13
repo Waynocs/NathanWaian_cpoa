@@ -59,7 +59,10 @@
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField alignment="CENTER" maxWidth="-Infinity" prefWidth="50.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                  <TextField fx:id="editTarif" alignment="CENTER" maxWidth="-Infinity" prefWidth="50.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                  <Label fx:id="lblNom" text="Label" GridPane.columnIndex="3" />
+                  <Label fx:id="lblDesc" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <Label fx:id="lblTarif" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                </children>
             </GridPane>
             <FlowPane alignment="CENTER" columnHalignment="CENTER" orientation="VERTICAL" prefHeight="150.0">
