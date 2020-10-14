@@ -64,7 +64,9 @@ public class AjoutProduitController implements Initializable {
             Product prod = new Product(1, name, cost, desc, cboxCateg.getSelectionModel().getSelectedItem().getId(),
                     "null");
             if (Factory.getProductDAO().create(prod) != null) {
-                lblAffichage.setText("Produit créé !");
+                lblAffichage
+                        .setText(prod.getName() + " (" + Factory.getCategoryDAO().getById(prod.getCategory()).getName()
+                                + ") : " + prod.getCost() + "€");
                 lblAffichage.setTextFill(Color.web("#000000"));
             } else {
                 lblAffichage.setText("Erreur lors de la création");
