@@ -1,5 +1,8 @@
 import java.net.URL;
 
+import application.AjoutProduitController;
+import dao.DAOFactory;
+import dao.DAOFactory.Mode;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -31,10 +34,22 @@ public class Main extends Application {
         }
     }
 
+    public static void launchUI(String[] args) {
+        switch (Utilities.getUserSelection("Choose a mode :\n1. MySQL\n2. Saved in memory", 2)) {
+            case 1:
+                AjoutProduitController.Factory = DAOFactory.getFactory(Mode.SQL);
+                break;
+            case 2:
+                AjoutProduitController.Factory = DAOFactory.getFactory(Mode.MEMORY);
+                break;
+        }
+        launch(args);
+    }
+
     public static void main(String[] args) {
         if (Utilities.getUserSelection("Use the UI ?\n1. Yes\n2. No", 2) == 2)
             MainMenu.start();
         else
-            launch(args);
+            launchUI(args);
     }
 }

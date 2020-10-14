@@ -17,15 +17,9 @@ import model.Category;
 import model.Product;
 
 public class AjoutProduitController implements Initializable {
-
+    public static DAOFactory Factory;
     @FXML
     private Label lblAffichage;
-    @FXML
-    private Label lblNom;
-    @FXML
-    private Label lblDesc;
-    @FXML
-    private Label lblTarif;
     @FXML
     private ChoiceBox<Category> cboxCateg;
     @FXML
@@ -48,49 +42,46 @@ public class AjoutProduitController implements Initializable {
         }
 
         if (name.isEmpty()) {
-            String errorName = "Nom non saisie ou non valide";
-            this.lblNom.setText(errorName);
-            this.lblNom.setTextFill(Color.web("#FF0000"));
+            lblAffichage.setText("Nom non saisi ou non valide");
+            lblAffichage.setTextFill(Color.web("#FF0000"));
             verif = false;
-        } else {
-            this.lblNom.setText(" ");
-        }
-        if (desc.isEmpty()) {
-            String errorDesc = "Description non saisie";
-            this.lblDesc.setText(errorDesc);
-            this.lblDesc.setTextFill(Color.web("#FF0000"));
+        } else if (desc.isEmpty()) {
+            lblAffichage.setText("Description non saisie");
+            lblAffichage.setTextFill(Color.web("#FF0000"));
             verif = false;
-        } else {
-            this.lblDesc.setText(" ");
-        }
-        if (cost <= 0) {
-            String errorCost = "Tarif non saisie ou non valide";
-            this.lblTarif.setText(errorCost);
-            this.lblTarif.setTextFill(Color.web("#FF0000"));
+        } else if (cost <= 0) {
+            lblAffichage.setText("Tarif non saisi ou non valide");
+            lblAffichage.setTextFill(Color.web("#FF0000"));
             verif = false;
-        } else {
-            this.lblTarif.setText(" ");
-        }
+        } else if (cboxCateg.getSelectionModel().getSelectedIndex() == -1) {
+            lblAffichage.setText("Catégorie non saisie");
+            lblAffichage.setTextFill(Color.web("#FF0000"));
+            verif = false;
+        } else
+            lblAffichage.setText("");
         if (verif == true) {
 
             Product prod = new Product(1, name, cost, desc, cboxCateg.getSelectionModel().getSelectedItem().getId(),
                     "null");
-            this.lblAffichage.setText(prod.toString());
+            if (Factory.getProductDAO().create(prod) != null) {
+                lblAffichage.setText("Produit créé !");
+                lblAffichage.setTextFill(Color.web("#000000"));
+            } else {
+                lblAffichage.setText("Erreur lors de la création");
+                lblAffichage.setTextFill(Color.web("#FF0000"));
+            }
 
         }
 
     }
 
     public void initializeLabel() {
-        this.lblNom.setText("");
-        this.lblDesc.setText("");
-        this.lblTarif.setText("");
+        lblAffichage.setText("");
     }
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        var factory = DAOFactory.getFactory(Mode.MEMORY);
-        cboxCateg.setItems(FXCollections.observableArrayList(factory.getCategoryDAO().getAll()));
+        cboxCateg.setItems(FXCollections.observableArrayList(Factory.getCategoryDAO().getAll()));
         initializeLabel();
 
     }
