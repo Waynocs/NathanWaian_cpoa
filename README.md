@@ -7,3 +7,9 @@ uri="jdbc:mysql://localhost/table?serverTimezone=UTC"
 login=root
 pwd=password
 ```
+
+---
+
+### participation :
+~50% Waïan
+~50% Nathan
