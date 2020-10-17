@@ -26,7 +26,7 @@
                         <MenuItem mnemonicParsing="false" text="Mémoire" />
                     </items>
                   </Menu>
-                  <MenuItem mnemonicParsing="false" text="Fermer">
+                  <MenuItem mnemonicParsing="false" onAction="#close" text="Fermer">
                      <accelerator>
                         <KeyCodeCombination alt="DOWN" code="F4" control="UP" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
@@ -57,9 +57,29 @@
                         </ImageView>
                      </graphic>
                   </Menu>
-              <MenuItem mnemonicParsing="false" text="Delete" />
+                  <Menu mnemonicParsing="false" text="Voir">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Catégories" />
+                        <MenuItem mnemonicParsing="false" text="Produits" />
+                        <MenuItem mnemonicParsing="false" text="Clients" />
+                        <MenuItem mnemonicParsing="false" text="Commandes" />
+                    </items>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@assets/icons/all.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Menu>
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Aide">
+              <items>
+                <MenuItem mnemonicParsing="false" text="A propos" />
+                  <MenuItem mnemonicParsing="false" text="License" />
+              </items>
+            </Menu>
         </menus>
       </MenuBar>
    </top>

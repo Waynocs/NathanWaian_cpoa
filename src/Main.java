@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import view.MainMenu;
 import view.Utilities;
@@ -19,6 +20,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
             {
+                MainWindowController.window = primaryStage;
                 URL fxmlURL = getClass().getResource("./MainWindow.fxml");
                 FXMLLoader fxmlLoader = new FXMLLoader(fxmlURL);
                 Node root = fxmlLoader.load();
@@ -31,7 +33,7 @@ public class Main extends Application {
                 primaryStage.setTitle("Business Pro Euro Simulator Deluxe Edition");
                 primaryStage.setWidth(1000);
                 primaryStage.setHeight(700);
-
+                primaryStage.getIcons().add(new Image("assets/icons/icon.png"));
                 primaryStage.show();
             }
         } catch (Exception e) {

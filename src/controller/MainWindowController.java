@@ -8,8 +8,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
+import javafx.stage.Stage;
 
 public class MainWindowController implements Initializable {
+    public static Stage window;
 
     public static final Image detailImage = new Image("assets/icons/detail.png");
     public static final Image removeImage = new Image("assets/icons/remove.png");
@@ -24,6 +26,10 @@ public class MainWindowController implements Initializable {
 
     public static TabPane getMainTabPane() {
         return tabInstance;
+    }
+
+    public void close() {
+        window.close();
     }
 
     public static DAOFactory factory;
