@@ -182,7 +182,8 @@ public class ProductsController implements Initializable {
                         button.setGraphic(iv);
                         alignmentProperty().set(Pos.BASELINE_CENTER);
                         button.setOnAction((ActionEvent event) -> {
-                            if (MainWindowController.factory.getProductDAO().delete(table.getItems().get(getIndex()))) {
+                            if (!MainWindowController.factory.getProductDAO()
+                                    .delete(table.getItems().get(getIndex()))) {
                                 var alert = new Alert(AlertType.ERROR, "Un erreur est survenue");
                                 alert.setTitle("Erreur suppression");
                                 alert.showAndWait();

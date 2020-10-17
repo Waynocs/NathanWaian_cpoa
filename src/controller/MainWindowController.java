@@ -16,6 +16,11 @@ public class MainWindowController implements Initializable {
     @FXML
     public TabPane mainTabPane;
     private static TabPane tabInstance;
+    private static MainWindowController mainInstance;
+
+    public static MainWindowController getInstance() {
+        return mainInstance;
+    }
 
     public static TabPane getMainTabPane() {
         return tabInstance;
@@ -26,54 +31,56 @@ public class MainWindowController implements Initializable {
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         tabInstance = mainTabPane;
-        mainTabPane.getTabs().add(ProductsController.createControl());
-    }
-
-    public static void addCategory() {
 
     }
 
-    public static void addCustomer() {
+    public void addCategory() {
 
     }
 
-    public static void addProduct() {
+    public void addCustomer() {
 
     }
 
-    public static void addOrder() {
+    public void addProduct() {
 
     }
 
-    public static void seeCategories() {
+    public void addOrder() {
 
     }
 
-    public static void seeCustomers() {
+    public void seeCategories() {
 
     }
 
-    public static void seeProducts() {
+    public void seeCustomers() {
 
     }
 
-    public static void seeOrders() {
+    public void seeProducts() {
+        var tab = ProductsController.createControl();
+        mainTabPane.getTabs().add(tab);
+        mainTabPane.getSelectionModel().select(tab);
+    }
+
+    public void seeOrders() {
 
     }
 
-    public static void detailCategory(Integer id) {
+    public void detailCategory(Integer id) {
 
     }
 
-    public static void detailCustomer(Integer id) {
+    public void detailCustomer(Integer id) {
 
     }
 
-    public static void detailProduct(Integer id) {
+    public void detailProduct(Integer id) {
 
     }
 
-    public static void detailOrder(Integer id) {
+    public void detailOrder(Integer id) {
 
     }
 }
