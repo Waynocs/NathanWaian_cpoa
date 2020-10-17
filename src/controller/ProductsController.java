@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Tab;
@@ -20,6 +21,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.image.ImageView;
 import javafx.util.Callback;
@@ -180,7 +182,12 @@ public class ProductsController implements Initializable {
                         button.setGraphic(iv);
                         alignmentProperty().set(Pos.BASELINE_CENTER);
                         button.setOnAction((ActionEvent event) -> {
-                            // TODO remove a product
+                            if (MainWindowController.factory.getProductDAO().delete(table.getItems().get(getIndex()))) {
+                                var alert = new Alert(AlertType.ERROR, "Un erreur est survenue");
+                                alert.setTitle("Erreur suppression");
+                                alert.showAndWait();
+                            } else
+                                refresh();
                         });
                     }
 
@@ -198,6 +205,11 @@ public class ProductsController implements Initializable {
         });
         items = FXCollections.observableList(new ArrayList<Product>());
         table.setItems(items);
+        items.addAll(MainWindowController.factory.getProductDAO().getAll());
+    }
+
+    public void refresh() {
+        items.clear();
         items.addAll(MainWindowController.factory.getProductDAO().getAll());
     }
 

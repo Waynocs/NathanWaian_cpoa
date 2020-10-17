@@ -19,7 +19,7 @@
                <top>
                   <FlowPane rowValignment="BOTTOM" BorderPane.alignment="CENTER">
                      <children>
-                        <Button mnemonicParsing="false" text="Actualiser">
+                        <Button mnemonicParsing="false" onAction="#refresh" text="Actualiser">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
                                  <image>
