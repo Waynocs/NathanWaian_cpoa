@@ -1,43 +1,49 @@
 package controller;
 
 import java.io.IOException;
-import java.lang.invoke.ClassSpecializer.Factory;
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.*;
 
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableCell;
-import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.TreeTableView;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.image.ImageView;
 import javafx.util.Callback;
 import model.Product;
 
 public class ProductsController implements Initializable {
     @FXML
-    public TreeTableView<Product> table;
+    public TableView<Product> table;
     @FXML
-    public TreeTableColumn<Product, Void> category;
+    public TableColumn<Product, String> category;
     @FXML
-    public TreeTableColumn<Product, Integer> id;
+    public TableColumn<Product, String> id;
     @FXML
-    public TreeTableColumn<Product, String> name;
+    public TableColumn<Product, String> name;
     @FXML
-    public TreeTableColumn<Product, String> description;
+    public TableColumn<Product, String> description;
     @FXML
-    public TreeTableColumn<Product, String> price;
+    public TableColumn<Product, String> price;
     @FXML
-    public TreeTableColumn<Product, String> image;
+    public TableColumn<Product, String> image;
     @FXML
-    public TreeTableColumn<Product, Void> detail;
+    public TableColumn<Product, Void> detail;
     @FXML
-    public TreeTableColumn<Product, Void> remove;
+    public TableColumn<Product, Void> remove;
 
     public static Tab createControl() {
         try {
@@ -53,24 +59,26 @@ public class ProductsController implements Initializable {
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
 
-        table.setRoot(new TreeItem<Product>());
-        category.setCellFactory(new Callback<TreeTableColumn<Product, Void>, TreeTableCell<Product, Void>>() {
+        category.setCellFactory(new Callback<TableColumn<Product, String>, TableCell<Product, String>>() {
             @Override
-            public TreeTableCell<Product, Void> call(TreeTableColumn<Product, Void> arg0) {
-                return new TreeTableCell<Product, Void>() {
+            public TableCell<Product, String> call(TableColumn<Product, String> arg0) {
+                return new TableCell<Product, String>() {
 
-                    private Hyperlink link = new Hyperlink(MainWindowController.factory.getCategoryDAO()
-                            .getById(getTreeTableView().getRoot().getValue().getCategory()).getName());
+                    private Hyperlink link = new Hyperlink();
 
                     {
-                        link.setOnAction((ActionEvent event) -> {
 
-                        });
+                        {
+                            link.setOnAction((ActionEvent event) -> {
+                                // TODO open a category detail tab
+                            });
+                        }
                     }
 
                     @Override
-                    public void updateItem(Void item, boolean empty) {
+                    public void updateItem(String item, boolean empty) {
                         super.updateItem(item, empty);
+                        link.setText(item);
                         if (empty) {
                             setGraphic(null);
                         } else {
@@ -80,6 +88,118 @@ public class ProductsController implements Initializable {
                 };
             };
         });
+        category.setCellValueFactory(
+                new Callback<TableColumn.CellDataFeatures<Product, String>, ObservableValue<String>>() {
 
+                    @Override
+                    public ObservableValue<String> call(CellDataFeatures<Product, String> arg0) {
+                        return new ReadOnlyStringWrapper(MainWindowController.factory.getCategoryDAO()
+                                .getById(arg0.getValue().getId()).getName());
+                    }
+                });
+        price.setCellValueFactory(
+                new Callback<TableColumn.CellDataFeatures<Product, String>, ObservableValue<String>>() {
+
+                    @Override
+                    public ObservableValue<String> call(CellDataFeatures<Product, String> arg0) {
+                        return new ReadOnlyStringWrapper(arg0.getValue().getCost() + "€");
+                    }
+                });
+        id.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Product, String>, ObservableValue<String>>() {
+
+            @Override
+            public ObservableValue<String> call(CellDataFeatures<Product, String> arg0) {
+                return new ReadOnlyStringWrapper(Integer.toString(arg0.getValue().getId()));
+            }
+        });
+        name.setCellValueFactory(
+                new Callback<TableColumn.CellDataFeatures<Product, String>, ObservableValue<String>>() {
+
+                    @Override
+                    public ObservableValue<String> call(CellDataFeatures<Product, String> arg0) {
+                        return new ReadOnlyStringWrapper(arg0.getValue().getName());
+                    }
+                });
+        description.setCellValueFactory(
+                new Callback<TableColumn.CellDataFeatures<Product, String>, ObservableValue<String>>() {
+
+                    @Override
+                    public ObservableValue<String> call(CellDataFeatures<Product, String> arg0) {
+                        return new ReadOnlyStringWrapper(arg0.getValue().getDescription());
+                    }
+                });
+        image.setCellValueFactory(
+                new Callback<TableColumn.CellDataFeatures<Product, String>, ObservableValue<String>>() {
+
+                    @Override
+                    public ObservableValue<String> call(CellDataFeatures<Product, String> arg0) {
+                        return new ReadOnlyStringWrapper(arg0.getValue().getImagePath());
+                    }
+                });
+        detail.setCellFactory(new Callback<TableColumn<Product, Void>, TableCell<Product, Void>>() {
+            @Override
+            public TableCell<Product, Void> call(TableColumn<Product, Void> arg0) {
+                return new TableCell<Product, Void>() {
+
+                    private Button button = new Button();
+                    {
+                        var iv = new ImageView();
+                        iv.setSmooth(false);
+                        iv.setPreserveRatio(false);
+                        iv.setImage(MainWindowController.detailImage);
+                        button.setGraphic(iv);
+                        alignmentProperty().set(Pos.BASELINE_CENTER);
+                        button.setOnAction((ActionEvent event) -> {
+                            // TODO open a product detail tab
+                        });
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(button);
+                        }
+                    }
+                };
+            };
+        });
+        remove.setCellFactory(new Callback<TableColumn<Product, Void>, TableCell<Product, Void>>() {
+            @Override
+            public TableCell<Product, Void> call(TableColumn<Product, Void> arg0) {
+                return new TableCell<Product, Void>() {
+
+                    private Button button = new Button();
+                    {
+                        var iv = new ImageView();
+                        iv.setSmooth(false);
+                        iv.setPreserveRatio(false);
+                        iv.setImage(MainWindowController.removeImage);
+                        button.setGraphic(iv);
+                        alignmentProperty().set(Pos.BASELINE_CENTER);
+                        button.setOnAction((ActionEvent event) -> {
+                            // TODO remove a product
+                        });
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(button);
+                        }
+                    }
+                };
+            };
+        });
+        items = FXCollections.observableList(new ArrayList<Product>());
+        table.setItems(items);
+        items.addAll(MainWindowController.factory.getProductDAO().getAll());
     }
+
+    private ObservableList<Product> items;
 }

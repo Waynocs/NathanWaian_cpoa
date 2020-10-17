@@ -4,14 +4,14 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TreeTableColumn?>
-<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="785.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="controller.ProductsController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="785.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProductsController">
    <tabs>
       <Tab text="Produits">
         <content>
@@ -35,18 +35,18 @@
                   </FlowPane>
                </top>
                <center>
-                  <TreeTableView fx:id="table" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                    <columns>
-                      <TreeTableColumn fx:id="category" prefWidth="105.0" text="Catégorie" />
-                      <TreeTableColumn fx:id="id" prefWidth="48.0" text="Id" />
-                        <TreeTableColumn fx:id="name" prefWidth="105.0" text="Nom" />
-                        <TreeTableColumn fx:id="description" prefWidth="195.0" text="Description" />
-                        <TreeTableColumn fx:id="price" prefWidth="76.0" text="Prix" />
-                        <TreeTableColumn fx:id="image" prefWidth="126.0" text="Visuel" />
-                        <TreeTableColumn fx:id="detail" prefWidth="53.0" text="Détail" />
-                        <TreeTableColumn fx:id="remove" prefWidth="68.0" text="Supprimer" />
-                    </columns>
-                  </TreeTableView>
+                  <TableView fx:id="table" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <columns>
+                        <TableColumn fx:id="category" prefWidth="75.0" text="Catégorie" />
+                        <TableColumn fx:id="id" prefWidth="46.0" text="Id" />
+                        <TableColumn fx:id="name" prefWidth="83.0" text="Nom" />
+                        <TableColumn fx:id="description" prefWidth="204.0" text="Description" />
+                        <TableColumn fx:id="price" prefWidth="70.0" text="Prix" />
+                        <TableColumn fx:id="image" prefWidth="109.0" text="Visuel" />
+                        <TableColumn fx:id="detail" prefWidth="49.0" text="Détail" />
+                        <TableColumn fx:id="remove" prefWidth="73.0" text="Supprimer" />
+                     </columns>
+                  </TableView>
                </center>
             </BorderPane>
         </content>

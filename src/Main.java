@@ -29,6 +29,8 @@ public class Main extends Application {
                  */
                 primaryStage.setScene(scene);
                 primaryStage.setTitle("Business Pro Euro Simulator Deluxe Edition");
+                primaryStage.setWidth(1000);
+                primaryStage.setHeight(700);
                 primaryStage.show();
             }
         } catch (Exception e) {

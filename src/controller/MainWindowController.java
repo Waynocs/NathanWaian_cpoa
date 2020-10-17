@@ -7,9 +7,12 @@ import dao.DAOFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TabPane;
+import javafx.scene.image.Image;
 
 public class MainWindowController implements Initializable {
 
+    public static final Image detailImage = new Image("assets/icons/detail.png");
+    public static final Image removeImage = new Image("assets/icons/remove.png");
     @FXML
     public TabPane mainTabPane;
     private static TabPane tabInstance;
