@@ -1,6 +1,7 @@
 import java.net.URL;
 
 import application.AjoutProduitController;
+import controller.MainWindowController;
 import dao.DAOFactory;
 import dao.DAOFactory.Mode;
 import javafx.application.Application;
@@ -10,23 +11,24 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import view.MainMenu;
 import view.Utilities;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 
 public class Main extends Application {
+
     @Override
     public void start(Stage primaryStage) {
         try {
             {
-                URL fxmlURL = getClass().getResource("./testt.fxml");
+                URL fxmlURL = getClass().getResource("./MainWindow.fxml");
                 FXMLLoader fxmlLoader = new FXMLLoader(fxmlURL);
                 Node root = fxmlLoader.load();
-                Scene scene = new Scene((AnchorPane) root, 600, 400);
+                Scene scene = new Scene((BorderPane) root);
                 /*
                  * scene.getStylesheets().add(getClass().getResource("application.cs
                  * s").toExternalForm());
                  */
                 primaryStage.setScene(scene);
-                primaryStage.setTitle("Ma première fenêtre JavaFX");
+                primaryStage.setTitle("Business Pro Euro Simulator Deluxe Edition");
                 primaryStage.show();
             }
         } catch (Exception e) {
@@ -37,10 +39,10 @@ public class Main extends Application {
     public static void launchUI(String[] args) {
         switch (Utilities.getUserSelection("Choose a mode :\n1. MySQL\n2. Saved in memory", 2)) {
             case 1:
-                AjoutProduitController.Factory = DAOFactory.getFactory(Mode.SQL);
+                MainWindowController.factory = DAOFactory.getFactory(Mode.SQL);
                 break;
             case 2:
-                AjoutProduitController.Factory = DAOFactory.getFactory(Mode.MEMORY);
+                MainWindowController.factory = DAOFactory.getFactory(Mode.MEMORY);
                 break;
         }
         launch(args);
