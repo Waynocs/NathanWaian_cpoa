@@ -2,9 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Locale.Category;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
@@ -153,8 +151,6 @@ public class CategoryController implements Initializable {
         items = FXCollections.observableList(new ArrayList<Category>());
         table.setItems(items);
         items.addAll(MainWindowController.factory.getCategoryDAO().getAll());
-    }
-
     }
 
     public void refresh() {
