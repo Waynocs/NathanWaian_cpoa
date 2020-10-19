@@ -57,7 +57,7 @@ public class MainWindowController implements Initializable {
     }
 
     public void seeCategories() {
-        var tab = CategoryController.createControl();
+        var tab = CategoriesController.createControl();
         mainTabPane.getTabs().add(tab);
         mainTabPane.getSelectionModel().select(tab);
     }

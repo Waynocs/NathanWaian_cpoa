@@ -26,7 +26,7 @@ import javafx.scene.image.ImageView;
 import javafx.util.Callback;
 import model.Category;
 
-public class CategoryController implements Initializable {
+public class CategoriesController implements Initializable {
 
     @FXML
     public TableView<Category> table;
@@ -45,7 +45,7 @@ public class CategoryController implements Initializable {
 
     public static Tab createControl() {
         try {
-            URL fxmlURL = CategoryController.class.getResource("../Category.fxml");
+            URL fxmlURL = CategoriesController.class.getResource("../Category.fxml");
             FXMLLoader fxmlLoader = new FXMLLoader(fxmlURL);
             return ((TabPane) fxmlLoader.load()).getTabs().get(0);
         } catch (IOException e) {
