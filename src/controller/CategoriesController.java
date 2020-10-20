@@ -21,8 +21,11 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.util.Callback;
 import model.Category;
 
@@ -42,6 +45,8 @@ public class CategoriesController implements Initializable {
     public TableColumn<Category, Void> detail;
     @FXML
     public TableColumn<Category, Void> remove;
+    @FXML
+    public TextField searchbar;
 
     public static Tab createControl() {
         try {
@@ -148,15 +153,50 @@ public class CategoriesController implements Initializable {
                 };
             };
         });
-        items = FXCollections.observableList(new ArrayList<Category>());
-        table.setItems(items);
-        items.addAll(MainWindowController.factory.getCategoryDAO().getAll());
+        displayedItems = FXCollections.observableList(new ArrayList<Category>());
+        allItems = new LinkedList<Category>();
+        table.setItems(displayedItems);
+        searchKey = "";
+        table.setOnKeyPressed((KeyEvent ev) -> {
+            if (ev.getCode() == KeyCode.DELETE) {
+                var categ = table.getSelectionModel().getSelectedItem();
+                if (categ != null) {
+                    if (MainWindowController.removeCategory(categ)) {
+                        allItems.remove(categ);
+                        applySearchKey();
+                    }
+                }
+            }
+        });
+        refresh();
     }
 
     public void refresh() {
-        items.clear();
-        items.addAll(MainWindowController.factory.getCategoryDAO().getAll());
+        allItems.clear();
+        for (Category category : MainWindowController.factory.getCategoryDAO().getAll())
+            allItems.add(category);
+        applySearchKey();
     }
 
-    private ObservableList<Category> items;
+    public void search() {
+        searchKey = searchbar.getText();
+        applySearchKey();
+    }
+
+    public void applySearchKey() {
+        displayedItems.clear();
+        for (Category categ : allItems) {
+            boolean toAdd = false;
+            if (Utilities.compareStrings(searchKey, categ.getName()))
+                toAdd = true;
+            else if (Utilities.compareStrings(searchKey, categ.getImagePath()))
+                toAdd = true;
+            if (toAdd)
+                displayedItems.add(categ);
+        }
+    }
+
+    private String searchKey;
+    private List<Category> allItems;
+    private ObservableList<Category> displayedItems;
 }
