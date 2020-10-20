@@ -10,11 +10,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
-import javafx.scene.control.Spinner;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.util.converter.NumberStringConverter;
 import model.Category;
 import model.Product;
 
@@ -30,7 +31,7 @@ public class EditProductController implements Initializable {
     @FXML
     public TextArea description;
     @FXML
-    public Spinner<Double> cost;
+    public TextField cost;
     @FXML
     public TextField image;
     @FXML
@@ -58,12 +59,12 @@ public class EditProductController implements Initializable {
 
     public void setupFields(Product prod) {
         product = prod;
+        cost.setTextFormatter(new TextFormatter<>(new NumberStringConverter()));
     }
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         reopenDetails = false;
-
     }
 
     public void reset() {

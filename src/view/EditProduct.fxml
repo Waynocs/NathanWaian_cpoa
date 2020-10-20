@@ -6,7 +6,6 @@
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
@@ -108,11 +107,11 @@
                                     <Insets right="5.0" />
                                  </HBox.margin>
                               </Label>
-                              <Spinner fx:id="cost" prefHeight="25.0" prefWidth="105.0">
+                              <TextField fx:id="cost" prefColumnCount="4" promptText="1,99">
                                  <HBox.margin>
                                     <Insets left="5.0" right="5.0" />
                                  </HBox.margin>
-                              </Spinner>
+                              </TextField>
                               <Label text="€">
                                  <HBox.margin>
                                     <Insets left="5.0" right="5.0" />
