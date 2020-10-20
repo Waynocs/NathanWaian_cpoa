@@ -4,10 +4,17 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import dao.DAOFactory;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class MainWindowController implements Initializable {
@@ -37,7 +44,24 @@ public class MainWindowController implements Initializable {
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         tabInstance = mainTabPane;
+        window.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            final KeyCombination keyComb = new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN);
 
+            public void handle(KeyEvent ke) {
+                if (keyComb.match(ke)) {
+                    if (mainTabPane.getTabs().size() > 0) {
+                        Tab tab = mainTabPane.getSelectionModel().getSelectedItem();
+                        EventHandler<Event> handler = tab.getOnClosed();
+                        if (null != handler) {
+                            handler.handle(null);
+                        } else {
+                            tab.getTabPane().getTabs().remove(tab);
+                        }
+                    }
+                    ke.consume();
+                }
+            }
+        });
     }
 
     public void addCategory() {
