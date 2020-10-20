@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -25,8 +28,6 @@ public class EditProductController implements Initializable {
     @FXML
     public Hyperlink categLink;
     @FXML
-    public Label id;
-    @FXML
     public TextField name;
     @FXML
     public TextArea description;
@@ -40,6 +41,7 @@ public class EditProductController implements Initializable {
     public ProductDetailController detailController;
     public boolean reopenDetails;
     public boolean saved;
+    public ObservableList<Category> categories;
 
     public static EditProductController createController(Product prod, ProductDetailController detail) {
         try {
@@ -59,12 +61,34 @@ public class EditProductController implements Initializable {
 
     public void setupFields(Product prod) {
         product = prod;
+        var categ = MainWindowController.factory.getCategoryDAO().getById(product.getCategory());
         cost.setTextFormatter(new TextFormatter<>(new NumberStringConverter()));
+        cost.setText(Double.toString(product.getCost()));
+        category.getSelectionModel().select(categ);
+        categLink.setDisable(false);
+        name.setText(product.getName());
+        description.setText(product.getDescription());
+        image.setText(product.getImagePath());
+        tab.setText("Editer:" + product.getName());
     }
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         reopenDetails = false;
+        categories = FXCollections.observableList(new ArrayList<Category>());
+        category.setItems(categories);
+        categLink.setOnAction((ActionEvent) -> {
+            // TODO open category detail tab
+        });
+        refreshCateg();
+    }
+
+    public void refreshCateg() {
+        var c = category.getSelectionModel().getSelectedItem();
+        categories.clear();
+        categories.addAll(MainWindowController.factory.getCategoryDAO().getAll());
+        if (categories.contains(c))
+            category.getSelectionModel().select(c);
     }
 
     public void reset() {
