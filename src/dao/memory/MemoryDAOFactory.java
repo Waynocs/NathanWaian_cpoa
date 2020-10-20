@@ -30,7 +30,7 @@ public class MemoryDAOFactory extends dao.DAOFactory {
         var categ = getCategoryDAO();
         var categ1 = categ.create(new Category("Pulls", "lespulls.png", 1));
         var categ2 = categ.create(new Category("Bonnets", "lesbonnets.png", 2));
-        var categ3 = categ.create(new Category("Chaussettes", "leschaussettes.png", 3));
+        categ.create(new Category("Chaussettes", "leschaussettes.png", 3));
         var customer = getCustomerDAO();
         var cust = customer.create(new Customer(1, "Pierre", "LAROCHE", "pl@ul.fr", "toto", "12", "rue des étudiants",
                 "57990", "Metz", "France"));
