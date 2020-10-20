@@ -22,7 +22,6 @@ import model.Category;
 import model.Customer;
 import model.Order;
 import model.Product;
-import model.Category;
 
 public class MainWindowController implements Initializable {
     public static Stage window;
