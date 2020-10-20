@@ -9,6 +9,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -25,6 +26,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.util.Callback;
 import model.Product;
 
@@ -185,13 +188,11 @@ public class ProductsController implements Initializable {
                         button.setGraphic(iv);
                         alignmentProperty().set(Pos.BASELINE_CENTER);
                         button.setOnAction((ActionEvent event) -> {
-                            if (!MainWindowController.factory.getProductDAO()
-                                    .delete(table.getItems().get(getIndex()))) {
-                                var alert = new Alert(AlertType.ERROR, "Un erreur est survenue");
-                                alert.setTitle("Erreur suppression");
-                                alert.showAndWait();
-                            } else
-                                refresh();
+                            var prod = table.getItems().get(getIndex());
+                            if (MainWindowController.removeProduct(prod)) {
+                                allItems.remove(prod);
+                                applySearchKey();
+                            }
                         });
                     }
 
@@ -211,6 +212,17 @@ public class ProductsController implements Initializable {
         allItems = new LinkedList<Product>();
         table.setItems(displayedItems);
         searchKey = "";
+        table.setOnKeyPressed((KeyEvent ev) -> {
+            if (ev.getCode() == KeyCode.DELETE) {
+                var prod = table.getSelectionModel().getSelectedItem();
+                if (prod != null) {
+                    if (MainWindowController.removeProduct(prod)) {
+                        allItems.remove(prod);
+                        applySearchKey();
+                    }
+                }
+            }
+        });
         refresh();
     }
 

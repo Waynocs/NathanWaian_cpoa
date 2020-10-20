@@ -8,14 +8,17 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import model.Product;
 
 public class MainWindowController implements Initializable {
     public static Stage window;
@@ -74,6 +77,16 @@ public class MainWindowController implements Initializable {
 
     public void addProduct() {
 
+    }
+
+    public static boolean removeProduct(Product prod) {
+        if (!factory.getProductDAO().delete(prod)) {
+            var alert = new Alert(AlertType.ERROR, "Un erreur est survenue");
+            alert.setTitle("Erreur suppression");
+            alert.showAndWait();
+            return false;
+        } else
+            return true;
     }
 
     public void addOrder() {
