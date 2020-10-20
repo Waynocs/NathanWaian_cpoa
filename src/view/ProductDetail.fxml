@@ -11,11 +11,10 @@
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="545.0" prefWidth="329.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="controller.ProductDetailController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="545.0" prefWidth="329.0" stylesheets="@style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProductDetailController">
   <tabs>
     <Tab fx:id="tab" text="&lt;product name&gt;">
       <content>
@@ -77,12 +76,9 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </VBox.margin>
                         </Label>
-                        <BorderPane>
-                           <right>
-                              <Button alignment="TOP_LEFT" mnemonicParsing="false" onAction="#edit" text="Éditer" BorderPane.alignment="CENTER">
-                                 <BorderPane.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </BorderPane.margin>
+                        <HBox alignment="CENTER_RIGHT">
+                           <children>
+                              <Button alignment="TOP_LEFT" mnemonicParsing="false" onAction="#edit" text="Éditer">
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
                                        <image>
@@ -90,9 +86,27 @@
                                        </image>
                                     </ImageView>
                                  </graphic>
+                                 <HBox.margin>
+                                    <Insets left="5.0" right="5.0" />
+                                 </HBox.margin>
                               </Button>
-                           </right>
-                        </BorderPane>
+                              <Button mnemonicParsing="false" onAction="#remove" text="Supprimer">
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../assets/icons/remove.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <HBox.margin>
+                                    <Insets left="5.0" right="5.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="5.0" top="5.0" />
+                           </VBox.margin>
+                        </HBox>
                      </children>
                   </VBox>
               </content>

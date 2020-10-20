@@ -5,6 +5,8 @@ import java.net.URL;
 import java.util.*;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -77,6 +79,17 @@ public class ProductDetailController implements Initializable {
     }
 
     public void edit() {
-        // TODO open a edit product tab
+        MainWindowController.editProduct(product);
+    }
+
+    public void remove() {
+        if (MainWindowController.removeProduct(product)) {
+            EventHandler<Event> handler = tab.getOnClosed();
+            if (null != handler) {
+                handler.handle(null);
+            } else {
+                tab.getTabPane().getTabs().remove(tab);
+            }
+        }
     }
 }
