@@ -22,8 +22,7 @@ public class Main extends Application {
                 MainWindowController.window = primaryStage;
                 URL fxmlURL = getClass().getResource("./view/MainWindow.fxml");
                 FXMLLoader fxmlLoader = new FXMLLoader(fxmlURL);
-                Node root = fxmlLoader.load();
-                Scene scene = new Scene((BorderPane) root);
+                Scene scene = new Scene(fxmlLoader.<BorderPane>load());
                 /*
                  * scene.getStylesheets().add(getClass().getResource("application.cs
                  * s").toExternalForm());

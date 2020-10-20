@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Tab;
@@ -21,6 +22,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -54,7 +56,7 @@ public class ProductsController implements Initializable {
         try {
             URL fxmlURL = ProductsController.class.getResource("../view/Products.fxml");
             FXMLLoader fxmlLoader = new FXMLLoader(fxmlURL);
-            return ((TabPane) fxmlLoader.load()).getTabs().get(0);
+            return fxmlLoader.<TabPane>load().getTabs().get(0);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -99,7 +101,7 @@ public class ProductsController implements Initializable {
                     @Override
                     public ObservableValue<String> call(CellDataFeatures<Product, String> arg0) {
                         return new ReadOnlyStringWrapper(MainWindowController.factory.getCategoryDAO()
-                                .getById(arg0.getValue().getId()).getName());
+                                .getById(arg0.getValue().getCategory()).getName());
                     }
                 });
         price.setCellValueFactory(
@@ -154,13 +156,13 @@ public class ProductsController implements Initializable {
                         iv.setImage(MainWindowController.detailImage);
                         button.setGraphic(iv);
                         alignmentProperty().set(Pos.BASELINE_CENTER);
-                        button.setOnAction((ActionEvent event) -> {
-                            // TODO open a product detail tab
-                        });
                     }
 
                     @Override
                     public void updateItem(Void item, boolean empty) {
+                        button.setOnAction((ActionEvent event) -> {
+                            MainWindowController.detailProduct(table.getItems().get(getIndex()));
+                        });
                         super.updateItem(item, empty);
                         if (empty) {
                             setGraphic(null);

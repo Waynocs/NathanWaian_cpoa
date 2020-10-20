@@ -18,6 +18,9 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import model.Category;
+import model.Customer;
+import model.Order;
 import model.Product;
 
 public class MainWindowController implements Initializable {
@@ -60,7 +63,8 @@ public class MainWindowController implements Initializable {
                         } else {
                             tab.getTabPane().getTabs().remove(tab);
                         }
-                    }
+                    } else
+                        close();
                     ke.consume();
                 }
             }
@@ -80,6 +84,8 @@ public class MainWindowController implements Initializable {
     }
 
     public static boolean removeProduct(Product prod) {
+        if (factory.getOrderLineDAO().getAllFromProduct(prod.getId()).length != 0)
+            return false;
         if (!factory.getProductDAO().delete(prod)) {
             var alert = new Alert(AlertType.ERROR, "Un erreur est survenue");
             alert.setTitle("Erreur suppression");
@@ -89,43 +95,64 @@ public class MainWindowController implements Initializable {
             return true;
     }
 
-    public void addOrder() {
+    public void addOrd() {
+        addOrder();
+    }
+
+    public static void addOrder() {
 
     }
 
-    public void seeCategories() {
+    public void seeCategs() {
+        seeCategories();
+    }
+
+    public static void seeCategories() {
         var tab = CategoriesController.createControl();
-        mainTabPane.getTabs().add(tab);
-        mainTabPane.getSelectionModel().select(tab);
+        tabInstance.getTabs().add(tab);
+        tabInstance.getSelectionModel().select(tab);
     }
 
-    public void seeCustomers() {
+    public void seeCusts() {
+        seeCustomers();
+    }
+
+    public static void seeCustomers() {
 
     }
 
-    public void seeProducts() {
+    public void seeProds() {
+        seeProducts();
+    }
+
+    public static void seeProducts() {
         var tab = ProductsController.createControl();
-        mainTabPane.getTabs().add(tab);
-        mainTabPane.getSelectionModel().select(tab);
+        tabInstance.getTabs().add(tab);
+        tabInstance.getSelectionModel().select(tab);
     }
 
-    public void seeOrders() {
-
+    public void seeOrds() {
+        seeOrders();
     }
 
-    public void detailCategory(Integer id) {
-
-    }
-
-    public void detailCustomer(Integer id) {
+    public static void seeOrders() {
 
     }
 
-    public void detailProduct(Integer id) {
+    public static void detailCategory(Category categ) {
+    }
+
+    public static void detailCustomer(Customer cust) {
 
     }
 
-    public void detailOrder(Integer id) {
+    public static void detailProduct(Product prod) {
+        var tab = ProductDetailController.createControl(prod);
+        tabInstance.getTabs().add(tab);
+        tabInstance.getSelectionModel().select(tab);
+    }
+
+    public static void detailOrder(Order ord) {
 
     }
 }
