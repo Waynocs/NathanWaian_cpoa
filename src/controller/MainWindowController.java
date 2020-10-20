@@ -166,10 +166,20 @@ public class MainWindowController implements Initializable {
         tabInstance.getSelectionModel().select(tab);
     }
 
-    public static void editProduct(Product prod) {
-        var tab = EditProductController.createControl(prod);
-        tabInstance.getTabs().add(tab);
-        tabInstance.getSelectionModel().select(tab);
+    public static void editProduct(Product prod, ProductDetailController controller) {
+        var editor = EditProductController.createController(prod, controller);
+        editor.tab.setOnClosed((Event) -> {
+            tabInstance.getTabs().remove(editor.tab);
+            if (editor.reopenDetails) {
+                tabInstance.getTabs().add(controller.tab);
+                tabInstance.getSelectionModel().select(controller.tab);
+                if (editor.saved)
+                    controller.refresh();
+            }
+        });
+        tabInstance.getTabs().remove(controller.tab);
+        tabInstance.getTabs().add(editor.tab);
+        tabInstance.getSelectionModel().select(editor.tab);
     }
 
     public static void detailOrder(Order ord) {

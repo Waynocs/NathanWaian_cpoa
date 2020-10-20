@@ -79,7 +79,7 @@ public class ProductDetailController implements Initializable {
     }
 
     public void edit() {
-        MainWindowController.editProduct(product);
+        MainWindowController.editProduct(product, this);
     }
 
     public void remove() {

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -37,15 +36,19 @@ public class EditProductController implements Initializable {
     @FXML
     public Tab tab;
     public Product product;
+    public ProductDetailController detailController;
+    public boolean reopenDetails;
+    public boolean saved;
 
-    public static Tab createControl(Product prod) {
+    public static EditProductController createController(Product prod, ProductDetailController detail) {
         try {
             URL fxmlURL = EditProductController.class.getResource("../view/EditProduct.fxml");
             FXMLLoader fxmlLoader = new FXMLLoader(fxmlURL);
-            var control = fxmlLoader.<TabPane>load();
+            fxmlLoader.<TabPane>load();
             var controller = fxmlLoader.<EditProductController>getController();
             controller.setupFields(prod);
-            return control.getTabs().get(0);
+            controller.detailController = detail;
+            return controller;
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(0);
@@ -59,12 +62,24 @@ public class EditProductController implements Initializable {
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
+        reopenDetails = false;
+
     }
 
-    public void refresh() {
+    public void reset() {
     }
 
-    public void edit() {
-        // TODO open a edit product tab
+    public void cancel() {
+        saved = false;
+        reopenDetails = true;
+        tab.getOnClosed().handle(null);
     }
+
+    public void save() {
+        // TODO fill product with new data
+        saved = true;
+        reopenDetails = true;
+        tab.getOnClosed().handle(null);
+    }
+
 }
