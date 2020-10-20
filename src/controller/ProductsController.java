@@ -21,6 +21,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.image.ImageView;
@@ -46,6 +47,8 @@ public class ProductsController implements Initializable {
     public TableColumn<Product, Void> detail;
     @FXML
     public TableColumn<Product, Void> remove;
+    @FXML
+    public TextField searchbar;
 
     public static Tab createControl() {
         try {
@@ -204,15 +207,44 @@ public class ProductsController implements Initializable {
                 };
             };
         });
-        items = FXCollections.observableList(new ArrayList<Product>());
-        table.setItems(items);
-        items.addAll(MainWindowController.factory.getProductDAO().getAll());
+        displayedItems = FXCollections.observableList(new ArrayList<Product>());
+        allItems = new LinkedList<Product>();
+        table.setItems(displayedItems);
+        searchKey = "";
+        refresh();
     }
 
     public void refresh() {
-        items.clear();
-        items.addAll(MainWindowController.factory.getProductDAO().getAll());
+        allItems.clear();
+        for (Product category : MainWindowController.factory.getProductDAO().getAll())
+            allItems.add(category);
+        applySearchKey();
     }
 
-    private ObservableList<Product> items;
+    public void search() {
+        searchKey = searchbar.getText();
+        applySearchKey();
+    }
+
+    public void applySearchKey() {
+        displayedItems.clear();
+        for (Product prod : allItems) {
+            boolean toAdd = false;
+            if (Utilities.compareStrings(searchKey, prod.getName()))
+                toAdd = true;
+            else if (Utilities.compareStrings(searchKey, prod.getImagePath()))
+                toAdd = true;
+            else if (Utilities.compareStrings(searchKey, prod.getDescription()))
+                toAdd = true;
+            else if (Utilities.compareStrings(searchKey,
+                    MainWindowController.factory.getCategoryDAO().getById(prod.getCategory()).getName()))
+                toAdd = true;
+            if (toAdd)
+                displayedItems.add(prod);
+        }
+    }
+
+    private String searchKey;
+    private List<Product> allItems;
+    private ObservableList<Product> displayedItems;
 }
