@@ -59,8 +59,8 @@
                   </Menu>
                   <Menu mnemonicParsing="false" text="Voir">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="Catégories" />
-                        <MenuItem mnemonicParsing="false" text="Produits" />
+                      <MenuItem mnemonicParsing="false" onAction="#seeCategories" text="Catégories" />
+                        <MenuItem mnemonicParsing="false" onAction="#seeProducts" text="Produits" />
                         <MenuItem mnemonicParsing="false" text="Clients" />
                         <MenuItem mnemonicParsing="false" text="Commandes" />
                     </items>
