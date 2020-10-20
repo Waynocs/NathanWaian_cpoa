@@ -19,6 +19,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import model.Product;
+import model.Category;
 
 public class MainWindowController implements Initializable {
     public static Stage window;
@@ -71,6 +72,16 @@ public class MainWindowController implements Initializable {
 
     }
 
+    public static boolean removeCategory(Category categ) {
+        if (!factory.getCategoryDAO().delete(categ)) {
+            var alert = new Alert(AlertType.ERROR, "Une erreur est survenue");
+            alert.setTitle("Erreur suppression");
+            alert.showAndWait();
+            return false;
+        } else
+            return true;
+    }
+
     public void addCustomer() {
 
     }
@@ -81,7 +92,7 @@ public class MainWindowController implements Initializable {
 
     public static boolean removeProduct(Product prod) {
         if (!factory.getProductDAO().delete(prod)) {
-            var alert = new Alert(AlertType.ERROR, "Un erreur est survenue");
+            var alert = new Alert(AlertType.ERROR, "Une erreur est survenue");
             alert.setTitle("Erreur suppression");
             alert.showAndWait();
             return false;

@@ -6,22 +6,24 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
 
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="785.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CategoriesController">
   <tabs>
     <Tab text="Catégories">
          <content>
-            <BorderPane prefHeight="200.0" prefWidth="200.0">
+            <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0">
                <top>
-                  <FlowPane rowValignment="BOTTOM" BorderPane.alignment="CENTER">
+                  <FlowPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER_LEFT">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#refresh" text="Actualiser">
+                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#refresh" text="Actualiser">
                            <FlowPane.margin>
-                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </FlowPane.margin>
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
@@ -29,6 +31,36 @@
                                     <Image url="@../assets/icons/refresh.png" />
                                  </image>
                               </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#search" text="Rechercher">
+                           <FlowPane.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </FlowPane.margin>
+                           <padding>
+                              <Insets right="5.0" />
+                           </padding>
+                           <graphic>
+                              <HBox alignment="CENTER">
+                                 <children>
+                                    <TextField fx:id="searchbar" prefColumnCount="15" promptText="Rechercher...">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                       <padding>
+                                          <Insets bottom="10.0" left="5.0" right="5.0" top="8.0" />
+                                       </padding>
+                                    </TextField>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                       <HBox.margin>
+                                          <Insets left="5.0" right="5.0" />
+                                       </HBox.margin>
+                                       <image>
+                                          <Image url="@../assets/icons/detail.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
                            </graphic>
                         </Button>
                      </children>
