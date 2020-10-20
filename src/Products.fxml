@@ -11,16 +11,17 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
 
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="785.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProductsController">
    <tabs>
       <Tab text="Produits">
         <content>
-            <BorderPane prefHeight="200.0" prefWidth="200.0">
+            <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0">
                <top>
-                  <FlowPane BorderPane.alignment="CENTER">
+                  <FlowPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER_LEFT">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#refresh" text="Actualiser">
+                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#refresh" style="-fx-background-insets: 0 0 -1 0, 0, 1, 2;" text="Actualiser">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
                                  <image>
@@ -32,16 +33,31 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </FlowPane.margin>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#search" text="Rechercher">
+                        <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#search" text="Rechercher">
                            <graphic>
-                              <TextField fx:id="searchbar" prefColumnCount="15" promptText="Recherche...">
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </TextField>
+                              <HBox alignment="CENTER">
+                                 <children>
+                                    <TextField fx:id="searchbar" prefColumnCount="15" promptText="Rechercher...">
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                       <padding>
+                                          <Insets bottom="8.0" left="5.0" right="5.0" top="8.0" />
+                                       </padding>
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </TextField>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@assets/icons/detail.png" />
+                                       </image>
+                                       <HBox.margin>
+                                          <Insets left="5.0" right="5.0" />
+                                       </HBox.margin>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
                            </graphic>
                            <FlowPane.margin>
                               <Insets left="5.0" right="5.0" />
