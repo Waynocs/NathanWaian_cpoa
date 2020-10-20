@@ -94,8 +94,12 @@ public class MainWindowController implements Initializable {
     }
 
     public static boolean removeProduct(Product prod) {
-        if (factory.getOrderLineDAO().getAllFromProduct(prod.getId()).length != 0)
+        if (factory.getOrderLineDAO().getAllFromProduct(prod.getId()).length != 0) {
+            var alert = new Alert(AlertType.WARNING, "Une commande possède ce produit");
+            alert.setTitle("Erreur suppression");
+            alert.showAndWait();
             return false;
+        }
         if (!factory.getProductDAO().delete(prod)) {
             var alert = new Alert(AlertType.ERROR, "Une erreur est survenue");
             alert.setTitle("Erreur suppression");
@@ -158,6 +162,12 @@ public class MainWindowController implements Initializable {
 
     public static void detailProduct(Product prod) {
         var tab = ProductDetailController.createControl(prod);
+        tabInstance.getTabs().add(tab);
+        tabInstance.getSelectionModel().select(tab);
+    }
+
+    public static void editProduct(Product prod) {
+        var tab = EditProductController.createControl(prod);
         tabInstance.getTabs().add(tab);
         tabInstance.getSelectionModel().select(tab);
     }

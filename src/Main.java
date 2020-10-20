@@ -23,10 +23,7 @@ public class Main extends Application {
                 URL fxmlURL = getClass().getResource("./view/MainWindow.fxml");
                 FXMLLoader fxmlLoader = new FXMLLoader(fxmlURL);
                 Scene scene = new Scene(fxmlLoader.<BorderPane>load());
-                /*
-                 * scene.getStylesheets().add(getClass().getResource("application.cs
-                 * s").toExternalForm());
-                 */
+                scene.getStylesheets().add(getClass().getResource("./view/style.css").toExternalForm());
                 primaryStage.setScene(scene);
                 primaryStage.setTitle("Business Pro Euro Simulator Deluxe Edition");
                 primaryStage.setWidth(1000);

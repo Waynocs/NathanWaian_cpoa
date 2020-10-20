@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="545.0" prefWidth="329.0" stylesheets="@style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditProductController">
+  <tabs>
+    <Tab fx:id="tab" text="&lt;product name&gt;">
+      <content>
+            <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0">
+              <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Button mnemonicParsing="false" text="Réinitialiser">
+                           <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/icons/refresh.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </VBox.margin>
+                        </Button>
+                        <HBox alignment="CENTER_LEFT">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </VBox.margin>
+                           <children>
+                              <Label text="Nom :">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <TextField fx:id="name" promptText="Nom...">
+                                 <HBox.margin>
+                                    <Insets left="5.0" right="5.0" />
+                                 </HBox.margin>
+                              </TextField>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </VBox.margin>
+                           <children>
+                              <Label text="Catégorie :">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <ComboBox fx:id="category" prefWidth="150.0" promptText="Choisir catégorie" />
+                              <Hyperlink fx:id="categLink" disable="true" text="voir catégorie">
+                                 <HBox.margin>
+                                    <Insets left="5.0" right="5.0" />
+                                 </HBox.margin>
+                              </Hyperlink>
+                           </children>
+                        </HBox>
+                        <TitledPane animated="false" collapsible="false" text="Description">
+                          <content>
+                              <TextArea fx:id="description" promptText="Pas de description.">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </TextArea>
+                          </content>
+                        </TitledPane>
+                        <HBox alignment="CENTER_LEFT">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </VBox.margin>
+                           <children>
+                              <Label text="Visuel :">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <TextField fx:id="image" promptText="exemple.png">
+                                 <HBox.margin>
+                                    <Insets left="5.0" right="5.0" />
+                                 </HBox.margin>
+                              </TextField>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </VBox.margin>
+                           <children>
+                              <Label text="Prix :">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Spinner fx:id="cost" prefHeight="25.0" prefWidth="105.0">
+                                 <HBox.margin>
+                                    <Insets left="5.0" right="5.0" />
+                                 </HBox.margin>
+                              </Spinner>
+                              <Label text="€">
+                                 <HBox.margin>
+                                    <Insets left="5.0" right="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT">
+                           <children>
+                              <Button mnemonicParsing="false" text="Annuler">
+                                 <HBox.margin>
+                                    <Insets left="5.0" right="5.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Button mnemonicParsing="false" styleClass="validate-button" text="Sauvegarder">
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </VBox.margin>
+                        </HBox>
+                     </children>
+                  </VBox>
+              </content>
+            </ScrollPane>
+      </content>
+    </Tab>
+  </tabs>
+</TabPane>
