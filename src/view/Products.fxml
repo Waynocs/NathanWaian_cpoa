@@ -25,7 +25,7 @@
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
                                  <image>
-                                    <Image url="@assets/icons/refresh.png" />
+                                    <Image url="@../assets/icons/refresh.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -50,7 +50,7 @@
                                     </TextField>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@assets/icons/detail.png" />
+                                          <Image url="@../assets/icons/detail.png" />
                                        </image>
                                        <HBox.margin>
                                           <Insets left="5.0" right="5.0" />

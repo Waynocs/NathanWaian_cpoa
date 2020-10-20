@@ -55,7 +55,7 @@ public class ProductsController implements Initializable {
 
     public static Tab createControl() {
         try {
-            URL fxmlURL = ProductsController.class.getResource("../Products.fxml");
+            URL fxmlURL = ProductsController.class.getResource("../view/Products.fxml");
             FXMLLoader fxmlLoader = new FXMLLoader(fxmlURL);
             return ((TabPane) fxmlLoader.load()).getTabs().get(0);
         } catch (IOException e) {

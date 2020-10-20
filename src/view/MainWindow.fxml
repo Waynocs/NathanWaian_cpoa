@@ -33,7 +33,7 @@
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@assets/icons/exit.png" />
+                              <Image url="@../assets/icons/exit.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -52,7 +52,7 @@
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@assets/icons/add.png" />
+                              <Image url="@../assets/icons/add.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -67,7 +67,7 @@
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@assets/icons/all.png" />
+                              <Image url="@../assets/icons/all.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -102,7 +102,7 @@
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
                                        <image>
-                                          <Image url="@assets/icons/add.png" />
+                                          <Image url="@../assets/icons/add.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -111,7 +111,7 @@
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
                                        <image>
-                                          <Image url="@assets/icons/detail.png" />
+                                          <Image url="@../assets/icons/detail.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -123,7 +123,7 @@
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
                                        <image>
-                                          <Image url="@assets/icons/all.png" />
+                                          <Image url="@../assets/icons/all.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -143,7 +143,7 @@
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
                                        <image>
-                                          <Image url="@assets/icons/add.png" />
+                                          <Image url="@../assets/icons/add.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -152,7 +152,7 @@
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
                                        <image>
-                                          <Image url="@assets/icons/detail.png" />
+                                          <Image url="@../assets/icons/detail.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -164,7 +164,7 @@
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@assets/icons/all.png" />
+                                          <Image url="@../assets/icons/all.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -184,7 +184,7 @@
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
                                        <image>
-                                          <Image url="@assets/icons/add.png" />
+                                          <Image url="@../assets/icons/add.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -193,7 +193,7 @@
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
                                        <image>
-                                          <Image url="@assets/icons/detail.png" />
+                                          <Image url="@../assets/icons/detail.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -205,7 +205,7 @@
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
                                        <image>
-                                          <Image url="@assets/icons/all.png" />
+                                          <Image url="@../assets/icons/all.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -225,7 +225,7 @@
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
                                        <image>
-                                          <Image url="@assets/icons/add.png" />
+                                          <Image url="@../assets/icons/add.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -234,7 +234,7 @@
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
                                        <image>
-                                          <Image url="@assets/icons/detail.png" />
+                                          <Image url="@../assets/icons/detail.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -246,7 +246,7 @@
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
                                        <image>
-                                          <Image url="@assets/icons/all.png" />
+                                          <Image url="@../assets/icons/all.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>

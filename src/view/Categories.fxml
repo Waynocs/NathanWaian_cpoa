@@ -26,7 +26,7 @@
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
                                  <image>
-                                    <Image url="@assets/icons/refresh.png" />
+                                    <Image url="@../assets/icons/refresh.png" />
                                  </image>
                               </ImageView>
                            </graphic>

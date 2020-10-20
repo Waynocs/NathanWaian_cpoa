@@ -1,6 +1,5 @@
 import java.net.URL;
 
-import application.AjoutProduitController;
 import controller.MainWindowController;
 import dao.DAOFactory;
 import dao.DAOFactory.Mode;
@@ -21,7 +20,7 @@ public class Main extends Application {
         try {
             {
                 MainWindowController.window = primaryStage;
-                URL fxmlURL = getClass().getResource("./MainWindow.fxml");
+                URL fxmlURL = getClass().getResource("./view/MainWindow.fxml");
                 FXMLLoader fxmlLoader = new FXMLLoader(fxmlURL);
                 Node root = fxmlLoader.load();
                 Scene scene = new Scene((BorderPane) root);

@@ -45,7 +45,7 @@ public class CategoriesController implements Initializable {
 
     public static Tab createControl() {
         try {
-            URL fxmlURL = CategoriesController.class.getResource("../Category.fxml");
+            URL fxmlURL = CategoriesController.class.getResource("../view/Categories.fxml");
             FXMLLoader fxmlLoader = new FXMLLoader(fxmlURL);
             return ((TabPane) fxmlLoader.load()).getTabs().get(0);
         } catch (IOException e) {
