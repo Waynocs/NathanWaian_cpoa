@@ -79,7 +79,7 @@
                         </Label>
                         <BorderPane>
                            <right>
-                              <Button alignment="TOP_LEFT" mnemonicParsing="false" text="Éditer" BorderPane.alignment="CENTER">
+                              <Button alignment="TOP_LEFT" mnemonicParsing="false" onAction="#edit" text="Éditer" BorderPane.alignment="CENTER">
                                  <BorderPane.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </BorderPane.margin>

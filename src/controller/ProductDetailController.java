@@ -49,7 +49,7 @@ public class ProductDetailController implements Initializable {
 
     public void setupFields(Product prod) {
         product = prod;
-        tab.setText(product.getName());
+        tab.setText("Détail:" + product.getName());
         category.setText(MainWindowController.factory.getCategoryDAO().getById(product.getCategory()).getName());
         category.setOnAction((ActionEvent e) -> {
             // TODO open a category detail tab
@@ -66,5 +66,17 @@ public class ProductDetailController implements Initializable {
     }
 
     public void refresh() {
+        product = MainWindowController.factory.getProductDAO().getById(product.getId());
+        tab.setText("Détail:" + product.getName());
+        category.setText(MainWindowController.factory.getCategoryDAO().getById(product.getCategory()).getName());
+        name.setText("Nom : " + product.getName());
+        id.setText("ID : " + product.getId());
+        description.setText(product.getDescription());
+        price.setText("Prix : " + product.getCost() + " €");
+        image.setText("Visuel : " + product.getImagePath());
+    }
+
+    public void edit() {
+        // TODO open a edit product tab
     }
 }
