@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -18,6 +19,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.control.Alert.AlertType;
 import javafx.util.converter.NumberStringConverter;
 import model.Category;
 import model.Product;
@@ -61,10 +63,9 @@ public class EditProductController implements Initializable {
 
     public void setupFields(Product prod) {
         product = prod;
-        var categ = MainWindowController.factory.getCategoryDAO().getById(product.getCategory());
-        cost.setTextFormatter(new TextFormatter<>(new NumberStringConverter()));
         cost.setText(Double.toString(product.getCost()));
-        category.getSelectionModel().select(categ);
+        category.getSelectionModel()
+                .select(MainWindowController.factory.getCategoryDAO().getById(product.getCategory()));
         categLink.setDisable(false);
         name.setText(product.getName());
         description.setText(product.getDescription());
@@ -80,6 +81,7 @@ public class EditProductController implements Initializable {
         categLink.setOnAction((ActionEvent) -> {
             // TODO open category detail tab
         });
+        cost.setTextFormatter(new TextFormatter<>(new NumberStringConverter(Locale.ENGLISH)));
         refreshCateg();
     }
 
@@ -92,6 +94,14 @@ public class EditProductController implements Initializable {
     }
 
     public void reset() {
+        cost.setText(Double.toString(product.getCost()));
+        category.getSelectionModel()
+                .select(MainWindowController.factory.getCategoryDAO().getById(product.getCategory()));
+        categLink.setDisable(false);
+        name.setText(product.getName());
+        description.setText(product.getDescription());
+        image.setText(product.getImagePath());
+        tab.setText("Editer:" + product.getName());
     }
 
     public void cancel() {
@@ -101,10 +111,29 @@ public class EditProductController implements Initializable {
     }
 
     public void save() {
-        // TODO fill product with new data
-        saved = true;
-        reopenDetails = true;
-        tab.getOnClosed().handle(null);
+        if (category.getSelectionModel().getSelectedItem() == null) {
+            new Alert(AlertType.WARNING, "Selectionnez une catégorie");
+            return;
+        }
+        if (Double.parseDouble(cost.getText()) <= 0) {
+            new Alert(AlertType.WARNING, "Selectionnez un prix supérieur à zéro");
+            return;
+        }
+        if (name.getText().length() == 0) {
+            new Alert(AlertType.WARNING, "Entrez un nom");
+            return;
+        }
+        product.setCategory(category.getSelectionModel().getSelectedItem().getId());
+        product.setCost(Double.parseDouble(cost.getText()));
+        product.setDescription(description.getText());
+        product.setImagePath(image.getText());
+        product.setName(name.getText());
+        if (MainWindowController.factory.getProductDAO().update(product)) {
+            saved = true;
+            reopenDetails = true;
+            tab.getOnClosed().handle(null);
+        } else
+            new Alert(AlertType.ERROR, "Impossible de sauvegarder les changement").showAndWait();
     }
 
 }
