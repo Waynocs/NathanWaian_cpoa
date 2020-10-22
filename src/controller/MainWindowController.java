@@ -8,6 +8,8 @@ import dao.DAOException;
 import dao.DAOFactory;
 import dao.DAOFactory.Mode;
 import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -16,6 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -42,11 +45,15 @@ public class MainWindowController implements Initializable {
     public ProgressBar loading;
     @FXML
     public MenuButton connectionMode;
+    @FXML
+    public MenuButton location;
+    private static MenuButton locationInstance;
     private static TabPane tabInstance;
     private static ProgressBar loadingInstance;
     private static MainWindowController mainInstance;
     public static DAOFactory factory;
     private Mode DAOMode;
+    private static ObservableList<MenuItem> locationMenu;
 
     public static MainWindowController getInstance() {
         return mainInstance;
@@ -66,7 +73,18 @@ public class MainWindowController implements Initializable {
         loadingInstance = loading;
         DAOMode = Mode.MEMORY;
         factory = DAOFactory.getFactory(DAOMode);
+        locationInstance = location;
         connectionMode.setText("Mémoire");
+        location.setText("Aucun onglet ouvert");
+        locationMenu = location.getItems();
+        mainTabPane.getTabs().addListener(new ListChangeListener<Tab>() {
+            @Override
+            public void onChanged(Change<? extends Tab> change) {
+                while (change.next())
+                    for (Tab tab : change.getRemoved())
+                        locationMenu.remove((MenuItem) tab.getUserData());
+            }
+        });
         window.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             final KeyCombination keyComb = new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN);
 
@@ -115,8 +133,19 @@ public class MainWindowController implements Initializable {
             URL fxmlURL = CategoriesController.class.getResource("../view/License.fxml");
             FXMLLoader fxmlLoader = new FXMLLoader(fxmlURL);
             var tab = fxmlLoader.<TabPane>load().getTabs().get(0);
+            tab.setOnSelectionChanged((e) -> {
+                if (tab.isSelected())
+                    location.setText("Aide>Licence");
+                else if (tabInstance.getTabs().size() == 0)
+                    locationInstance.setText("Aucun onglet ouvert");
+            });
             tabInstance.getTabs().add(tab);
             tabInstance.getSelectionModel().select(tab);
+            location.setText("Aide>Licence");
+            var menuItem = new MenuItem("Aide>Licence");
+            tab.setUserData(menuItem);
+            menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
+            locationMenu.add(menuItem);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -127,7 +156,7 @@ public class MainWindowController implements Initializable {
     }
 
     public static void addProduct() {
-        loadingInstance.setVisible(true);
+        loadingInstance.setProgress(-1);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -137,7 +166,18 @@ public class MainWindowController implements Initializable {
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        loadingInstance.setVisible(false);
+                        tab.setOnSelectionChanged((e) -> {
+                            if (tab.isSelected())
+                                locationInstance.setText("Produits>Nouveau");
+                            else if (tabInstance.getTabs().size() == 0)
+                                locationInstance.setText("Aucun onglet ouvert");
+                        });
+                        locationInstance.setText("Produits>Nouveau");
+                        var menuItem = new MenuItem("Produits>Nouveau");
+                        tab.setUserData(menuItem);
+                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
+                        locationMenu.add(menuItem);
+                        loadingInstance.setProgress(0);
                     }
                 });
             }
@@ -154,7 +194,7 @@ public class MainWindowController implements Initializable {
     }
 
     public static void removeOrder(Order ord, Runnable deleted, Runnable notDeleted) {
-        loadingInstance.setVisible(true);
+        loadingInstance.setProgress(-1);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -168,7 +208,7 @@ public class MainWindowController implements Initializable {
                                 alert.showAndWait();
                                 if (notDeleted != null)
                                     notDeleted.run();
-                                loadingInstance.setVisible(false);
+                                loadingInstance.setProgress(0);
                             }
                         });
                     } else {
@@ -179,7 +219,7 @@ public class MainWindowController implements Initializable {
                             public void run() {
                                 if (deleted != null)
                                     deleted.run();
-                                loadingInstance.setVisible(false);
+                                loadingInstance.setProgress(0);
                             }
                         });
                     }
@@ -191,7 +231,7 @@ public class MainWindowController implements Initializable {
     }
 
     public static void removeProduct(Product prod, Runnable deleted, Runnable notDeleted) {
-        loadingInstance.setVisible(true);
+        loadingInstance.setProgress(-1);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -205,7 +245,7 @@ public class MainWindowController implements Initializable {
                                 alert.showAndWait();
                                 if (notDeleted != null)
                                     notDeleted.run();
-                                loadingInstance.setVisible(false);
+                                loadingInstance.setProgress(0);
                             }
                         });
                     } else if (!factory.getProductDAO().delete(prod)) {
@@ -217,7 +257,7 @@ public class MainWindowController implements Initializable {
                                 alert.showAndWait();
                                 if (notDeleted != null)
                                     notDeleted.run();
-                                loadingInstance.setVisible(false);
+                                loadingInstance.setProgress(0);
                             }
                         });
                     } else
@@ -226,7 +266,7 @@ public class MainWindowController implements Initializable {
                             public void run() {
                                 if (deleted != null)
                                     deleted.run();
-                                loadingInstance.setVisible(false);
+                                loadingInstance.setProgress(0);
                             }
                         });
                 } catch (DAOException e) {
@@ -245,7 +285,7 @@ public class MainWindowController implements Initializable {
     }
 
     public static void runAsynchronously(Runnable fct) {
-        loadingInstance.setVisible(true);
+        loadingInstance.setProgress(-1);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -253,7 +293,7 @@ public class MainWindowController implements Initializable {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        loadingInstance.setVisible(false);
+                        loadingInstance.setProgress(0);
                     }
                 });
             }
@@ -268,6 +308,17 @@ public class MainWindowController implements Initializable {
         var tab = CategoriesController.createControl();
         tabInstance.getTabs().add(tab);
         tabInstance.getSelectionModel().select(tab);
+        tab.setOnSelectionChanged((e) -> {
+            if (tab.isSelected())
+                locationInstance.setText("Catégories>Tout voir");
+            else if (tabInstance.getTabs().size() == 0)
+                locationInstance.setText("Aucun onglet ouvert");
+        });
+        locationInstance.setText("Catégories>Tout voir");
+        var menuItem = new MenuItem("Catégories>Tout voir");
+        tab.setUserData(menuItem);
+        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
+        locationMenu.add(menuItem);
     }
 
     public void seeCusts() {
@@ -283,7 +334,7 @@ public class MainWindowController implements Initializable {
     }
 
     public static void seeProducts() {
-        loadingInstance.setVisible(true);
+        loadingInstance.setProgress(-1);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -293,7 +344,18 @@ public class MainWindowController implements Initializable {
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        loadingInstance.setVisible(false);
+                        tab.setOnSelectionChanged((e) -> {
+                            if (tab.isSelected())
+                                locationInstance.setText("Produits>Tout voir");
+                            else if (tabInstance.getTabs().size() == 0)
+                                locationInstance.setText("Aucun onglet ouvert");
+                        });
+                        locationInstance.setText("Produits>Tout voir");
+                        var menuItem = new MenuItem("Produits>Tout voir");
+                        tab.setUserData(menuItem);
+                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
+                        locationMenu.add(menuItem);
+                        loadingInstance.setProgress(0);
                     }
                 });
             }
@@ -305,7 +367,7 @@ public class MainWindowController implements Initializable {
     }
 
     public static void seeOrders() {
-        loadingInstance.setVisible(true);
+        loadingInstance.setProgress(-1);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -315,7 +377,18 @@ public class MainWindowController implements Initializable {
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        loadingInstance.setVisible(false);
+                        tab.setOnSelectionChanged((e) -> {
+                            if (tab.isSelected())
+                                locationInstance.setText("Commandes>Tout voir");
+                            else if (tabInstance.getTabs().size() == 0)
+                                locationInstance.setText("Aucun onglet ouvert");
+                        });
+                        locationInstance.setText("Commandes>Tout voir");
+                        var menuItem = new MenuItem("Commandes>Tout voir");
+                        tab.setUserData(menuItem);
+                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
+                        locationMenu.add(menuItem);
+                        loadingInstance.setProgress(0);
                     }
                 });
             }
@@ -330,7 +403,7 @@ public class MainWindowController implements Initializable {
     }
 
     public static void detailProduct(Product prod) {
-        loadingInstance.setVisible(true);
+        loadingInstance.setProgress(-1);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -340,7 +413,18 @@ public class MainWindowController implements Initializable {
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        loadingInstance.setVisible(false);
+                        tab.setOnSelectionChanged((e) -> {
+                            if (tab.isSelected())
+                                locationInstance.setText("Produits>Détail");
+                            else if (tabInstance.getTabs().size() == 0)
+                                locationInstance.setText("Aucun onglet ouvert");
+                        });
+                        locationInstance.setText("Produits>Détail");
+                        var menuItem = new MenuItem("Produits>Détail");
+                        tab.setUserData(menuItem);
+                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
+                        locationMenu.add(menuItem);
+                        loadingInstance.setProgress(0);
                     }
                 });
             }
@@ -348,7 +432,7 @@ public class MainWindowController implements Initializable {
     }
 
     public static void editProduct(Product prod, ProductDetailController controller) {
-        loadingInstance.setVisible(true);
+        loadingInstance.setProgress(-1);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -358,6 +442,17 @@ public class MainWindowController implements Initializable {
                     if (editor.reopenDetails) {
                         tabInstance.getTabs().add(controller.tab);
                         tabInstance.getSelectionModel().select(controller.tab);
+                        editor.tab.setOnSelectionChanged((e) -> {
+                            if (editor.tab.isSelected())
+                                locationInstance.setText("Produits>Éditer");
+                            else if (tabInstance.getTabs().size() == 0)
+                                locationInstance.setText("Aucun onglet ouvert");
+                        });
+                        locationInstance.setText("Produits>Éditer");
+                        var menuItem = new MenuItem("Produits>Éditer");
+                        editor.tab.setUserData(menuItem);
+                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(editor.tab));
+                        locationMenu.add(menuItem);
                         if (editor.saved)
                             controller.refresh();
                     }
@@ -368,7 +463,7 @@ public class MainWindowController implements Initializable {
                         tabInstance.getTabs().remove(controller.tab);
                         tabInstance.getTabs().add(editor.tab);
                         tabInstance.getSelectionModel().select(editor.tab);
-                        loadingInstance.setVisible(false);
+                        loadingInstance.setProgress(0);
                     }
                 });
             }
@@ -376,7 +471,7 @@ public class MainWindowController implements Initializable {
     }
 
     public static void detailOrder(Order ord) {
-        loadingInstance.setVisible(true);
+        loadingInstance.setProgress(-1);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -386,7 +481,18 @@ public class MainWindowController implements Initializable {
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        loadingInstance.setVisible(false);
+                        tab.setOnSelectionChanged((e) -> {
+                            if (tab.isSelected())
+                                locationInstance.setText("Commandes>Détail");
+                            else if (tabInstance.getTabs().size() == 0)
+                                locationInstance.setText("Aucun onglet ouvert");
+                        });
+                        locationInstance.setText("Commandes>Détail");
+                        var menuItem = new MenuItem("Commandes>Détail");
+                        tab.setUserData(menuItem);
+                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
+                        locationMenu.add(menuItem);
+                        loadingInstance.setProgress(0);
                     }
                 });
             }

@@ -9,6 +9,7 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.image.Image?>
@@ -241,12 +242,14 @@
                   <Insets />
                </HBox.margin>
             </MenuButton>
-            <Label fx:id="location" text="Dir" />
-            <ProgressBar fx:id="loading" prefHeight="20.0" prefWidth="163.0" visible="false">
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
+            <ProgressBar fx:id="loading" prefHeight="20.0" prefWidth="113.0" progress="0.0">
                <HBox.margin>
                   <Insets left="5.0" right="5.0" />
                </HBox.margin>
             </ProgressBar>
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
+            <MenuButton fx:id="location" mnemonicParsing="false" popupSide="TOP" styleClass="status-button" text="Location" />
          </children>
          <BorderPane.margin>
             <Insets left="5.0" />
