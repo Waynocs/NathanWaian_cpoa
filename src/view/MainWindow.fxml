@@ -80,8 +80,8 @@
           </Menu>
             <Menu mnemonicParsing="false" text="Aide">
               <items>
-                <MenuItem mnemonicParsing="false" text="A propos" />
-                  <MenuItem mnemonicParsing="false" text="License" />
+                  <MenuItem mnemonicParsing="false" onAction="#license" text="Licence" />
+                <MenuItem mnemonicParsing="false" onAction="#about" text="A propos" />
               </items>
             </Menu>
         </menus>
@@ -101,7 +101,7 @@
                         <content>
                               <VBox maxHeight="1.7976931348623157E308" spacing="5.0">
                                  <children>
-                                    <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Ajouter">
+                                    <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addCateg" text="Ajouter">
                                        <VBox.margin>
                                           <Insets />
                                        </VBox.margin>
@@ -165,7 +165,7 @@
                         <content>
                               <VBox maxHeight="1.7976931348623157E308" spacing="5.0">
                                  <children>
-                                    <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Ajouter">
+                                    <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addCust" text="Ajouter">
                                        <VBox.margin>
                                           <Insets />
                                        </VBox.margin>
@@ -177,7 +177,7 @@
                                           </ImageView>
                                        </graphic>
                                     </Button>
-                                    <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Tout voir">
+                                    <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#seeCusts" text="Tout voir">
                                        <VBox.margin>
                                           <Insets />
                                        </VBox.margin>
@@ -197,7 +197,7 @@
                         <content>
                               <VBox maxHeight="1.7976931348623157E308" spacing="5.0">
                                  <children>
-                                    <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Ajouter">
+                                    <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addOrd" text="Ajouter">
                                        <VBox.margin>
                                           <Insets />
                                        </VBox.margin>
@@ -209,7 +209,7 @@
                                           </ImageView>
                                        </graphic>
                                     </Button>
-                                    <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Tout voir">
+                                    <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#seeOrds" text="Tout voir">
                                        <VBox.margin>
                                           <Insets />
                                        </VBox.margin>
