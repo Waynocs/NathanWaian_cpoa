@@ -48,10 +48,10 @@
             <items>
                   <Menu mnemonicParsing="false" text="Ajouter">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="Catégorie" />
-                        <MenuItem mnemonicParsing="false" text="Produit" />
-                        <MenuItem mnemonicParsing="false" text="Client" />
-                        <MenuItem mnemonicParsing="false" text="Commande" />
+                      <MenuItem mnemonicParsing="false" onAction="#addCateg" text="Catégorie" />
+                        <MenuItem mnemonicParsing="false" onAction="#addProd" text="Produit" />
+                        <MenuItem mnemonicParsing="false" onAction="#addCust" text="Client" />
+                        <MenuItem mnemonicParsing="false" onAction="#addOrd" text="Commande" />
                     </items>
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
@@ -65,8 +65,8 @@
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#seeCategs" text="Catégories" />
                         <MenuItem mnemonicParsing="false" onAction="#seeProds" text="Produits" />
-                        <MenuItem mnemonicParsing="false" text="Clients" />
-                        <MenuItem mnemonicParsing="false" text="Commandes" />
+                        <MenuItem mnemonicParsing="false" onAction="#seeCusts" text="Clients" />
+                        <MenuItem mnemonicParsing="false" onAction="#seeOrds" text="Commandes" />
                     </items>
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">

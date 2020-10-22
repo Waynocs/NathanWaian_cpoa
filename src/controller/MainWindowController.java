@@ -107,6 +107,14 @@ public class MainWindowController implements Initializable {
 
     }
 
+    public void license() {
+
+    }
+
+    public void about() {
+
+    }
+
     public static void addProduct() {
         loadingInstance.setVisible(true);
         new Thread(new Runnable() {
