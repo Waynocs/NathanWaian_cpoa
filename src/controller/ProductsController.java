@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -19,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Callback;
+import model.Category;
 import model.Product;
 
 public class ProductsController implements Initializable {
@@ -42,6 +44,10 @@ public class ProductsController implements Initializable {
     public TableColumn<Product, Void> remove;
     @FXML
     public TextField searchbar;
+    private String searchKey;
+    private List<Product> allItems;
+    private Map<Integer, Category> allCategs;
+    private ObservableList<Product> displayedItems;
 
     public static Tab createControl() {
         try {
@@ -49,6 +55,9 @@ public class ProductsController implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(fxmlURL);
             return fxmlLoader.<TabPane>load().getTabs().get(0);
         } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -179,10 +188,15 @@ public class ProductsController implements Initializable {
                         alignmentProperty().set(Pos.BASELINE_CENTER);
                         button.setOnAction((ActionEvent event) -> {
                             var prod = table.getItems().get(getIndex());
-                            if (MainWindowController.removeProduct(prod)) {
-                                allItems.remove(prod);
-                                applySearchKey();
-                            }
+                            MainWindowController.removeProduct(prod, new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    allItems.remove(prod);
+                                    applySearchKey();
+                                }
+
+                            }, null);
                         });
                     }
 
@@ -200,16 +214,22 @@ public class ProductsController implements Initializable {
         });
         displayedItems = FXCollections.observableList(new ArrayList<Product>());
         allItems = new LinkedList<Product>();
+        allCategs = new HashMap<Integer, Category>();
         table.setItems(displayedItems);
         searchKey = "";
         table.setOnKeyPressed((KeyEvent ev) -> {
             if (ev.getCode() == KeyCode.DELETE) {
                 var prod = table.getSelectionModel().getSelectedItem();
                 if (prod != null) {
-                    if (MainWindowController.removeProduct(prod)) {
-                        allItems.remove(prod);
-                        applySearchKey();
-                    }
+                    MainWindowController.removeProduct(prod, new Runnable() {
+
+                        @Override
+                        public void run() {
+                            allItems.remove(prod);
+                            applySearchKey();
+                        }
+
+                    }, null);
                 }
             }
         });
@@ -217,10 +237,24 @@ public class ProductsController implements Initializable {
     }
 
     public void refresh() {
-        allItems.clear();
-        for (Product category : MainWindowController.factory.getProductDAO().getAll())
-            allItems.add(category);
-        applySearchKey();
+        MainWindowController.runAsynchronously(new Runnable() {
+
+            @Override
+            public void run() {
+                allItems.clear();
+                allCategs.clear();
+                for (Product prod : MainWindowController.factory.getProductDAO().getAll())
+                    allItems.add(prod);
+                for (Category categ : MainWindowController.factory.getCategoryDAO().getAll())
+                    allCategs.put(categ.getId(), categ);
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        applySearchKey();
+                    }
+                });
+            }
+        });
     }
 
     public void search() {
@@ -238,15 +272,11 @@ public class ProductsController implements Initializable {
                 toAdd = true;
             else if (Utilities.compareStrings(searchKey, prod.getDescription()))
                 toAdd = true;
-            else if (Utilities.compareStrings(searchKey,
-                    MainWindowController.factory.getCategoryDAO().getById(prod.getCategory()).getName()))
+            else if (Utilities.compareStrings(searchKey, allCategs.get(prod.getCategory()).getName()))
                 toAdd = true;
             if (toAdd)
                 displayedItems.add(prod);
         }
     }
 
-    private String searchKey;
-    private List<Product> allItems;
-    private ObservableList<Product> displayedItems;
 }

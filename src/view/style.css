@@ -25,3 +25,12 @@ Button {
 .big-button {
     -fx-padding: 10 10 10 10;
 }
+
+.status-button {
+    -fx-background-color: #00000000;
+    -fx-padding: -4 -4 -4 -4;
+}
+
+.status-button:hover {
+    -fx-background-color: #00000008;
+}

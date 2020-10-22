@@ -35,22 +35,10 @@ public class Main extends Application {
         }
     }
 
-    public static void launchUI(String[] args) {
-        switch (Utilities.getUserSelection("Choose a mode :\n1. MySQL\n2. Saved in memory", 2)) {
-            case 1:
-                MainWindowController.factory = DAOFactory.getFactory(Mode.SQL);
-                break;
-            case 2:
-                MainWindowController.factory = DAOFactory.getFactory(Mode.MEMORY);
-                break;
-        }
-        launch(args);
-    }
-
     public static void main(String[] args) {
         if (Utilities.getUserSelection("Use the UI ?\n1. Yes\n2. No", 2) == 2)
             MainMenu.start();
         else
-            launchUI(args);
+            launch(args);
     }
 }

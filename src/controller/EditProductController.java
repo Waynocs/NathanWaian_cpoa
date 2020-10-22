@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -40,6 +41,7 @@ public class EditProductController implements Initializable {
     @FXML
     public Tab tab;
     public Product product;
+    public Category initCateg;
     public ProductDetailController detailController;
     public boolean reopenDetails;
     public boolean saved;
@@ -63,9 +65,9 @@ public class EditProductController implements Initializable {
 
     public void setupFields(Product prod) {
         product = prod;
+        initCateg = MainWindowController.factory.getCategoryDAO().getById(product.getCategory());
         cost.setText(Double.toString(product.getCost()));
-        category.getSelectionModel()
-                .select(MainWindowController.factory.getCategoryDAO().getById(product.getCategory()));
+        category.getSelectionModel().select(initCateg);
         categLink.setDisable(false);
         name.setText(product.getName());
         description.setText(product.getDescription());
@@ -87,16 +89,30 @@ public class EditProductController implements Initializable {
 
     public void refreshCateg() {
         var c = category.getSelectionModel().getSelectedItem();
-        categories.clear();
-        categories.addAll(MainWindowController.factory.getCategoryDAO().getAll());
-        if (categories.contains(c))
-            category.getSelectionModel().select(c);
+        MainWindowController.runAsynchronously(new Runnable() {
+            @Override
+            public void run() {
+                var categList = MainWindowController.factory.getCategoryDAO().getAll();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        categories.clear();
+                        categories.addAll(categList);
+                        int index = categories.indexOf(c);
+                        if (index != -1)
+                            category.getSelectionModel().select(index);
+                    }
+                });
+            }
+        });
     }
 
     public void reset() {
         cost.setText(Double.toString(product.getCost()));
-        category.getSelectionModel()
-                .select(MainWindowController.factory.getCategoryDAO().getById(product.getCategory()));
+        if (category.getItems().contains(initCateg))
+            category.getSelectionModel().select(initCateg);
+        else
+            category.getSelectionModel().select(null);
         categLink.setDisable(false);
         name.setText(product.getName());
         description.setText(product.getDescription());
