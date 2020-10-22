@@ -376,7 +376,21 @@ public class MainWindowController implements Initializable {
     }
 
     public static void detailOrder(Order ord) {
-
+        loadingInstance.setVisible(true);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                var tab = OrderDetailController.createControl(ord);
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        tabInstance.getTabs().add(tab);
+                        tabInstance.getSelectionModel().select(tab);
+                        loadingInstance.setVisible(false);
+                    }
+                });
+            }
+        }).start();
     }
 
     public void toMySql() {

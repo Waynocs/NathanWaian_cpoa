@@ -91,169 +91,166 @@
       <TabPane fx:id="mainTabPane" prefHeight="490.0" prefWidth="625.0" tabClosingPolicy="ALL_TABS" BorderPane.alignment="CENTER" />
    </center>
    <left>
-      <BorderPane>
-         <center>
-            <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="250.0" minHeight="0.0" minWidth="170.0" prefWidth="200.0">
-               <content>
-                  <VBox>
-                     <children>
-                      <TitledPane animated="false" expanded="false" text="Catégories">
-                        <content>
-                              <VBox maxHeight="1.7976931348623157E308" spacing="5.0">
-                                 <children>
-                                    <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addCateg" text="Ajouter">
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                       <graphic>
-                                          <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
-                                             <image>
-                                                <Image url="@../assets/icons/add.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#seeCategs" text="Tout voir">
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                       <graphic>
-                                          <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
-                                             <image>
-                                                <Image url="@../assets/icons/all.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </VBox>
-                        </content>
-                      </TitledPane>
-                        <TitledPane animated="false" expanded="false" text="Produits">
-                          <content>
-                              <VBox maxHeight="1.7976931348623157E308" spacing="5.0">
-                                 <children>
-                                    <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addProd" text="Ajouter">
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                       <graphic>
-                                          <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
-                                             <image>
-                                                <Image url="@../assets/icons/add.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#seeProds" text="Tout voir">
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                       <graphic>
-                                          <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/icons/all.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </VBox>
-                          </content>
-                        </TitledPane>
-                      <TitledPane animated="false" expanded="false" text="Clients">
-                        <content>
-                              <VBox maxHeight="1.7976931348623157E308" spacing="5.0">
-                                 <children>
-                                    <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addCust" text="Ajouter">
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                       <graphic>
-                                          <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
-                                             <image>
-                                                <Image url="@../assets/icons/add.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#seeCusts" text="Tout voir">
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                       <graphic>
-                                          <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
-                                             <image>
-                                                <Image url="@../assets/icons/all.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </VBox>
-                        </content>
-                      </TitledPane>
-                      <TitledPane animated="false" expanded="false" text="Commandes">
-                        <content>
-                              <VBox maxHeight="1.7976931348623157E308" spacing="5.0">
-                                 <children>
-                                    <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addOrd" text="Ajouter">
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                       <graphic>
-                                          <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
-                                             <image>
-                                                <Image url="@../assets/icons/add.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#seeOrds" text="Tout voir">
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                       <graphic>
-                                          <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
-                                             <image>
-                                                <Image url="@../assets/icons/all.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </VBox>
-                        </content>
-                      </TitledPane>
-                     </children>
-                  </VBox>
-               </content>
-            </ScrollPane>
-         </center>
-         <bottom>
-            <HBox alignment="CENTER_LEFT" prefHeight="20.0" BorderPane.alignment="CENTER">
+      <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="175.0" minHeight="0.0" minWidth="100.0" prefWidth="125.0">
+         <content>
+            <VBox>
                <children>
-                  <Label text="Connecté en" />
-                  <MenuButton fx:id="connectionMode" mnemonicParsing="false" popupSide="TOP" styleClass="status-button" text="Co mode">
-                    <items>
-                      <MenuItem mnemonicParsing="false" onAction="#toMySql" text="MySQL" />
-                      <MenuItem mnemonicParsing="false" onAction="#toMemory" text="Mémoire" />
-                    </items>
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </MenuButton>
-                  <ProgressBar fx:id="loading" prefHeight="20.0" prefWidth="50.0" visible="false">
-                     <HBox.margin>
-                        <Insets left="5.0" right="5.0" />
-                     </HBox.margin>
-                  </ProgressBar>
+                <TitledPane animated="false" expanded="false" text="Catégories">
+                  <content>
+                        <VBox maxHeight="1.7976931348623157E308" spacing="5.0">
+                           <children>
+                              <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addCateg" text="Ajouter">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
+                                       <image>
+                                          <Image url="@../assets/icons/add.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#seeCategs" text="Tout voir">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
+                                       <image>
+                                          <Image url="@../assets/icons/all.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </VBox>
+                  </content>
+                </TitledPane>
+                  <TitledPane animated="false" expanded="false" text="Produits">
+                    <content>
+                        <VBox maxHeight="1.7976931348623157E308" spacing="5.0">
+                           <children>
+                              <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addProd" text="Ajouter">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
+                                       <image>
+                                          <Image url="@../assets/icons/add.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#seeProds" text="Tout voir">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../assets/icons/all.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </VBox>
+                    </content>
+                  </TitledPane>
+                <TitledPane animated="false" expanded="false" text="Clients">
+                  <content>
+                        <VBox maxHeight="1.7976931348623157E308" spacing="5.0">
+                           <children>
+                              <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addCust" text="Ajouter">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
+                                       <image>
+                                          <Image url="@../assets/icons/add.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#seeCusts" text="Tout voir">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
+                                       <image>
+                                          <Image url="@../assets/icons/all.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </VBox>
+                  </content>
+                </TitledPane>
+                <TitledPane animated="false" expanded="false" text="Commandes">
+                  <content>
+                        <VBox maxHeight="1.7976931348623157E308" spacing="5.0">
+                           <children>
+                              <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addOrd" text="Ajouter">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
+                                       <image>
+                                          <Image url="@../assets/icons/add.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#seeOrds" text="Tout voir">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
+                                       <image>
+                                          <Image url="@../assets/icons/all.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </VBox>
+                  </content>
+                </TitledPane>
                </children>
-               <BorderPane.margin>
-                  <Insets left="5.0" />
-               </BorderPane.margin>
-            </HBox>
-         </bottom>
-      </BorderPane>
+            </VBox>
+         </content>
+      </ScrollPane>
    </left>
+   <bottom>
+      <HBox alignment="CENTER_LEFT" prefHeight="20.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Connecté en" />
+            <MenuButton fx:id="connectionMode" mnemonicParsing="false" popupSide="TOP" styleClass="status-button" text="Co mode">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#toMySql" text="MySQL" />
+                <MenuItem mnemonicParsing="false" onAction="#toMemory" text="Mémoire" />
+              </items>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </MenuButton>
+            <Label fx:id="location" text="Dir" />
+            <ProgressBar fx:id="loading" prefHeight="20.0" prefWidth="163.0" visible="false">
+               <HBox.margin>
+                  <Insets left="5.0" right="5.0" />
+               </HBox.margin>
+            </ProgressBar>
+         </children>
+         <BorderPane.margin>
+            <Insets left="5.0" />
+         </BorderPane.margin>
+      </HBox>
+   </bottom>
 </BorderPane>
