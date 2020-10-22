@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -9,6 +10,7 @@ import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -108,7 +110,15 @@ public class MainWindowController implements Initializable {
     }
 
     public void license() {
-
+        try {
+            URL fxmlURL = CategoriesController.class.getResource("../view/License.fxml");
+            FXMLLoader fxmlLoader = new FXMLLoader(fxmlURL);
+            var tab = fxmlLoader.<TabPane>load().getTabs().get(0);
+            tabInstance.getTabs().add(tab);
+            tabInstance.getSelectionModel().select(tab);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void about() {
