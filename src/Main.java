@@ -36,9 +36,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        if (Utilities.getUserSelection("Use the UI ?\n1. Yes\n2. No", 2) == 2)
-            MainMenu.start();
-        else
-            launch(args);
+        // MainMenu.start();
+        launch(args);
     }
 }
