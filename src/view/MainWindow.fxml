@@ -26,14 +26,8 @@
                <items>
                   <Menu mnemonicParsing="false" text="Changer mode">
                     <items>
-                      <MenuItem mnemonicParsing="false" onAction="#toMySql" text="MySQL">
-                           <accelerator>
-                              <KeyCodeCombination alt="DOWN" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                           </accelerator></MenuItem>
-                        <MenuItem mnemonicParsing="false" onAction="#toMemory" text="Mémoire">
-                           <accelerator>
-                              <KeyCodeCombination alt="DOWN" code="M" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                           </accelerator></MenuItem>
+                      <MenuItem mnemonicParsing="false" onAction="#toMySql" text="MySQL" />
+                        <MenuItem mnemonicParsing="false" onAction="#toMemory" text="Mémoire" />
                     </items>
                   </Menu>
                   <MenuItem mnemonicParsing="false" onAction="#close" text="Fermer">
