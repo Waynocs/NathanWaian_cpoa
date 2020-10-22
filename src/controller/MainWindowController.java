@@ -153,7 +153,41 @@ public class MainWindowController implements Initializable {
         addProduct();
     }
 
-    public static void removeOrder(Order prod, Runnable deleted, Runnable notDeleted) {
+    public static void removeOrder(Order ord, Runnable deleted, Runnable notDeleted) {
+        loadingInstance.setVisible(true);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (!factory.getOrderDAO().delete(ord)) {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                var alert = new Alert(AlertType.ERROR, "Une erreur est survenue");
+                                alert.setTitle("Erreur suppression");
+                                alert.showAndWait();
+                                if (notDeleted != null)
+                                    notDeleted.run();
+                                loadingInstance.setVisible(false);
+                            }
+                        });
+                    } else {
+                        for (var line : factory.getOrderLineDAO().getAllFromOrder(ord.getId()))
+                            factory.getOrderLineDAO().delete(line);
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (deleted != null)
+                                    deleted.run();
+                                loadingInstance.setVisible(false);
+                            }
+                        });
+                    }
+                } catch (DAOException e) {
+                    new Alert(AlertType.ERROR, e.getMessage()).showAndWait();
+                }
+            }
+        }).start();
     }
 
     public static void removeProduct(Product prod, Runnable deleted, Runnable notDeleted) {
@@ -200,7 +234,6 @@ public class MainWindowController implements Initializable {
                 }
             }
         }).start();
-
     }
 
     public void addOrd() {
