@@ -2,6 +2,7 @@ package dao.memory;
 
 import java.util.*;
 
+import dao.DAOException;
 import dao.OrderLineDAO;
 import model.OrderLine;
 
@@ -64,6 +65,10 @@ public class MemoryOrderLineDAO implements OrderLineDAO {
 
     @Override
     public OrderLine create(OrderLine object) {
+        if (MemoryOrderDAO.getInstance().getById(object.getOrder()) == null)
+            throw new DAOException("No order with id '" + object.getOrder() + "' found");
+        if (MemoryProductDAO.getInstance().getById(object.getProduct()) == null)
+            throw new DAOException("No product with id '" + object.getProduct() + "' found");
         if (memory.containsKey(new DoubleIntID(object.getOrder(), object.getProduct())))
             return null;
         memory.put(new DoubleIntID(object.getOrder(), object.getProduct()),
@@ -73,6 +78,10 @@ public class MemoryOrderLineDAO implements OrderLineDAO {
 
     @Override
     public boolean update(OrderLine object) {
+        if (MemoryOrderDAO.getInstance().getById(object.getOrder()) == null)
+            throw new DAOException("No order with id '" + object.getOrder() + "' found");
+        if (MemoryProductDAO.getInstance().getById(object.getProduct()) == null)
+            throw new DAOException("No product with id '" + object.getProduct() + "' found");
         if (!memory.containsKey(new DoubleIntID(object.getOrder(), object.getProduct())))
             return false;
         memory.put(new DoubleIntID(object.getOrder(), object.getProduct()),

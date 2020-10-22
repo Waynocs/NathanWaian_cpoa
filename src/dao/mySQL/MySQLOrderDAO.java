@@ -6,6 +6,7 @@ import java.sql.Statement;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import dao.DAOException;
 import dao.OrderDAO;
 import model.Order;
 import request.Connection;
@@ -36,6 +37,8 @@ public class MySQLOrderDAO implements OrderDAO {
     @Override
     public Order create(final Order object) {
         try {
+            if (MySQLCustomerDAO.getInstance().getById(object.getCustomer()) == null)
+                throw new DAOException("No customer with id '" + object.getCustomer() + "' found");
             var statement = Connection.getConnection().prepareStatement(
                     "INSERT INTO `commande` (`date_commande`, `id_client`) VALUES ('"
                             + object.getDate().format(formatter) + "', '" + +object.getCustomer() + "');",
@@ -49,22 +52,22 @@ public class MySQLOrderDAO implements OrderDAO {
                 return getById((int) keys.getLong(1));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+            throw new DAOException(e);
         }
     }
 
     @Override
     public boolean update(final Order object) {
         try {
+            if (MySQLCustomerDAO.getInstance().getById(object.getCustomer()) == null)
+                throw new DAOException("No customer with id '" + object.getCustomer() + "' found");
             var statement = Connection.getConnection()
                     .prepareStatement("UPDATE `commande` SET `date_commande`= '" + object.getDate().format(formatter)
                             + "',`id_client`='" + object.getCustomer() + "' WHERE `id_commande` = " + object.getId());
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            throw new DAOException(e);
         }
     }
 
@@ -78,8 +81,7 @@ public class MySQLOrderDAO implements OrderDAO {
                 MySQLOrderLineDAO.getInstance().delete(line);
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            throw new DAOException(e);
         }
     }
 
@@ -94,8 +96,7 @@ public class MySQLOrderDAO implements OrderDAO {
                             result.getInt("id_client"))
                     : null;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+            throw new DAOException(e);
         }
     }
 
@@ -111,8 +112,7 @@ public class MySQLOrderDAO implements OrderDAO {
                         result.getTimestamp("date_commande").toLocalDateTime(), result.getInt("id_client")));
             return orderList.size() > 0 ? orderList.toArray(new Order[0]) : null;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return new Order[0];
+            throw new DAOException(e);
         }
     }
 

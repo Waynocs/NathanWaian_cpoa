@@ -3,6 +3,7 @@ package dao.mySQL;
 import java.sql.SQLException;
 import java.util.LinkedList;
 
+import dao.DAOException;
 import dao.OrderLineDAO;
 import model.OrderLine;
 import request.Connection;
@@ -32,6 +33,10 @@ public class MySQLOrderLineDAO implements OrderLineDAO {
     @Override
     public OrderLine create(OrderLine object) {
         try {
+            if (MySQLOrderDAO.getInstance().getById(object.getOrder()) == null)
+                throw new DAOException("No order with id '" + object.getOrder() + "' found");
+            if (MySQLProductDAO.getInstance().getById(object.getProduct()) == null)
+                throw new DAOException("No product with id '" + object.getProduct() + "' found");
             var statement = Connection.getConnection().createStatement();
             statement.executeUpdate(
                     "INSERT INTO `ligne_commande`(`id_commande`, `id_produit`, `quantite`, `tarif_unitaire`) VALUES ("
@@ -39,21 +44,23 @@ public class MySQLOrderLineDAO implements OrderLineDAO {
                             + +object.getCost() + ")");
             return object;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+            throw new DAOException(e);
         }
     }
 
     @Override
     public boolean update(OrderLine object) {
         try {
+            if (MySQLOrderDAO.getInstance().getById(object.getOrder()) == null)
+                throw new DAOException("No order with id '" + object.getOrder() + "' found");
+            if (MySQLProductDAO.getInstance().getById(object.getProduct()) == null)
+                throw new DAOException("No product with id '" + object.getProduct() + "' found");
             var statement = Connection.getConnection().createStatement();
             return statement.executeUpdate("UPDATE `ligne_commande` SET `quantite`=" + object.getQuantity()
                     + ",`tarif_unitaire`=" + object.getCost() + " WHERE `id_produit`=" + object.getProduct()
                     + " AND `id_commande`=" + object.getOrder()) != 0;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            throw new DAOException(e);
         }
     }
 
@@ -64,8 +71,7 @@ public class MySQLOrderLineDAO implements OrderLineDAO {
             return statement.executeUpdate("DELETE FROM `ligne_commande` WHERE `id_produit`=" + object.getProduct()
                     + " AND `id_commande`=" + object.getOrder()) != 0;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            throw new DAOException(e);
         }
     }
 
@@ -81,8 +87,7 @@ public class MySQLOrderLineDAO implements OrderLineDAO {
                             result.getDouble("tarif_unitaire"), result.getInt("quantite"))
                     : null;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+            throw new DAOException(e);
         }
     }
 
@@ -99,8 +104,7 @@ public class MySQLOrderLineDAO implements OrderLineDAO {
                         result.getDouble("tarif_unitaire"), result.getInt("quantite")));
             return list.toArray(new OrderLine[0]);
         } catch (SQLException e) {
-            e.printStackTrace();
-            return new OrderLine[0];
+            throw new DAOException(e);
         }
     }
 
@@ -117,8 +121,7 @@ public class MySQLOrderLineDAO implements OrderLineDAO {
                         result.getDouble("tarif_unitaire"), result.getInt("quantite")));
             return list.toArray(new OrderLine[0]);
         } catch (SQLException e) {
-            e.printStackTrace();
-            return new OrderLine[0];
+            throw new DAOException(e);
         }
     }
 
@@ -134,8 +137,7 @@ public class MySQLOrderLineDAO implements OrderLineDAO {
                         result.getDouble("tarif_unitaire"), result.getInt("quantite")));
             return list.toArray(new OrderLine[0]);
         } catch (SQLException e) {
-            e.printStackTrace();
-            return new OrderLine[0];
+            throw new DAOException(e);
         }
     }
 }

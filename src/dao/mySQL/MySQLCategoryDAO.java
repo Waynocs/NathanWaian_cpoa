@@ -1,7 +1,7 @@
 package dao.mySQL;
 
 import dao.CategoryDAO;
-
+import dao.DAOException;
 import model.Category;
 import request.Connection;
 
@@ -47,8 +47,7 @@ public class MySQLCategoryDAO implements CategoryDAO {
                 return getById((int) keys.getLong(1));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+            throw new DAOException(e);
         }
     }
 
@@ -61,8 +60,7 @@ public class MySQLCategoryDAO implements CategoryDAO {
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            throw new DAOException(e);
         }
     }
 
@@ -74,8 +72,7 @@ public class MySQLCategoryDAO implements CategoryDAO {
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            throw new DAOException(e);
         }
     }
 
@@ -89,8 +86,7 @@ public class MySQLCategoryDAO implements CategoryDAO {
                     ? new Category(result.getString("titre"), result.getString("visuel"), result.getInt("id_categorie"))
                     : null;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+            throw new DAOException(e);
         }
     }
 
@@ -106,8 +102,7 @@ public class MySQLCategoryDAO implements CategoryDAO {
                         result.getInt("id_categorie")));
             return categoryList.toArray(new Category[0]);
         } catch (SQLException e) {
-            e.printStackTrace();
-            return new Category[0];
+            throw new DAOException(e);
         }
     }
 }

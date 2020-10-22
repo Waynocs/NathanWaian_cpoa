@@ -12,14 +12,16 @@ public interface CategoryDAO extends DAO<Category> {
      * 
      * @param id id of the category
      * @return the category found, or null for nothing
+     * @exception DAOException thrown when bad stuff happened
      */
-    Category getById(int id);
+    Category getById(int id) throws DAOException;
 
     /**
      * Returns every categories
      * 
      * @return every categories
+     * @exception DAOException thrown when bad stuff happened
      */
-    Category[] getAll();
+    Category[] getAll() throws DAOException;
 
 }

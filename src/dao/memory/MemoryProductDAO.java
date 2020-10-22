@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import dao.DAOException;
 import model.Product;
 
 /**
@@ -48,6 +49,8 @@ public class MemoryProductDAO implements dao.ProductDAO {
 
     @Override
     public Product create(Product object) {
+        if (MemoryCategoryDAO.getInstance().getById(object.getCategory()) == null)
+            throw new DAOException("No category with id '" + object.getCategory() + "' found");
         memory.put(index++, new Data(object.getName(), object.getImagePath(), object.getCost(), object.getDescription(),
                 object.getCategory()));
         return getById(index - 1);
@@ -55,6 +58,8 @@ public class MemoryProductDAO implements dao.ProductDAO {
 
     @Override
     public boolean update(Product object) {
+        if (MemoryCategoryDAO.getInstance().getById(object.getCategory()) == null)
+            throw new DAOException("No category with id '" + object.getCategory() + "' found");
         if (!memory.keySet().contains(object.getId()))
             return false;
         else {

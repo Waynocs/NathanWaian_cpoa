@@ -12,14 +12,16 @@ public interface ProductDAO extends DAO<Product> {
      * 
      * @param id id of the product
      * @return the product found, or null for nothing
+     * @exception DAOException thrown when bad stuff happened
      */
-    Product getById(int id);
+    Product getById(int id) throws DAOException;
 
     /**
      * Returns every products
      * 
      * @return every products
+     * @exception DAOException thrown when bad stuff happened
      */
-    Product[] getAll();
+    Product[] getAll() throws DAOException;
 
 }

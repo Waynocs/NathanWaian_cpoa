@@ -12,14 +12,16 @@ public interface OrderDAO extends DAO<Order> {
      * 
      * @param id id of the order
      * @return the order found, or null for nothing
+     * @exception DAOException thrown when bad stuff happened
      */
-    Order getById(int id);
+    Order getById(int id) throws DAOException;
 
     /**
      * Returns every orders
      * 
      * @return every orders
+     * @exception DAOException thrown when bad stuff happened
      */
-    Order[] getAll();
+    Order[] getAll() throws DAOException;
 
 }

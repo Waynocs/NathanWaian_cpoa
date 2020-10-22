@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import dao.DAOException;
 import model.Order;
 
 /**
@@ -43,12 +44,16 @@ public class MemoryOrderDAO implements dao.OrderDAO {
 
     @Override
     public Order create(Order object) {
+        if (MemoryCustomerDAO.getInstance().getById(object.getCustomer()) == null)
+            throw new DAOException("No customer with id '" + object.getCustomer() + "' found");
         memory.put(index++, new Data(object.getDate(), object.getCustomer()));
         return getById(index - 1);
     }
 
     @Override
     public boolean update(Order object) {
+        if (MemoryCustomerDAO.getInstance().getById(object.getCustomer()) == null)
+            throw new DAOException("No customer with id '" + object.getCustomer() + "' found");
         if (!memory.keySet().contains(object.getId()))
             return false;
         else {

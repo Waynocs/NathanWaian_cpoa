@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.sql.Statement;
 
 import dao.CustomerDAO;
+import dao.DAOException;
 import model.Customer;
 import request.Connection;
 
@@ -51,8 +52,7 @@ public class MySQLCustomerDAO implements CustomerDAO {
                 return getById((int) keys.getLong(1));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+            throw new DAOException(e);
         }
     }
 
@@ -69,8 +69,7 @@ public class MySQLCustomerDAO implements CustomerDAO {
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            throw new DAOException(e);
         }
     }
 
@@ -82,8 +81,7 @@ public class MySQLCustomerDAO implements CustomerDAO {
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            throw new DAOException(e);
         }
     }
 
@@ -99,8 +97,7 @@ public class MySQLCustomerDAO implements CustomerDAO {
                     result.getString("adr_numero"), result.getString("adr_voie"), result.getString("adr_code_postal"),
                     result.getString("adr_ville"), result.getString("adr_pays")) : null;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+            throw new DAOException(e);
         }
     }
 
@@ -119,8 +116,7 @@ public class MySQLCustomerDAO implements CustomerDAO {
                         result.getString("adr_pays")));
             return customerList.toArray(new Customer[0]);
         } catch (SQLException e) {
-            e.printStackTrace();
-            return new Customer[0];
+            throw new DAOException(e);
         }
     }
 }

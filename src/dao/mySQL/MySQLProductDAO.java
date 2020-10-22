@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 
+import dao.DAOException;
 import dao.ProductDAO;
 import model.Product;
 import request.Connection;
@@ -34,6 +35,8 @@ public class MySQLProductDAO implements ProductDAO {
     @Override
     public Product create(Product object) {
         try {
+            if (MySQLCategoryDAO.getInstance().getById(object.getCategory()) == null)
+                throw new DAOException("No category with id '" + object.getCategory() + "' found");
             var statement = Connection.getConnection().prepareStatement(
                     "INSERT INTO `produit` (`nom`, `description`, `tarif`, `visuel`, `id_categorie`) VALUES ('"
                             + object.getName() + "', '" + object.getDescription() + "', " + object.getCost() + ", '"
@@ -48,14 +51,15 @@ public class MySQLProductDAO implements ProductDAO {
                 return getById((int) keys.getLong(1));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+            throw new DAOException(e);
         }
     }
 
     @Override
     public boolean update(Product object) {
         try {
+            if (MySQLCategoryDAO.getInstance().getById(object.getCategory()) == null)
+                throw new DAOException("No category with id '" + object.getCategory() + "' found");
             var statement = Connection.getConnection()
                     .prepareStatement("UPDATE `produit` SET `nom`= '" + object.getName() + "',`description`= '"
                             + object.getDescription() + "',`tarif`= " + object.getCost() + ",`visuel`= '"
@@ -64,8 +68,7 @@ public class MySQLProductDAO implements ProductDAO {
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            throw new DAOException(e);
         }
     }
 
@@ -77,8 +80,7 @@ public class MySQLProductDAO implements ProductDAO {
 
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            throw new DAOException(e);
         }
     }
 
@@ -94,8 +96,7 @@ public class MySQLProductDAO implements ProductDAO {
                             result.getString("description"), result.getInt("id_categorie"), result.getString("visuel"))
                     : null;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+            throw new DAOException(e);
         }
     }
 
@@ -112,8 +113,7 @@ public class MySQLProductDAO implements ProductDAO {
                         result.getString("visuel")));
             return productList.size() > 0 ? productList.toArray(new Product[0]) : null;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return new Product[0];
+            throw new DAOException(e);
         }
     }
 }
