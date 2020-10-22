@@ -157,40 +157,43 @@ public class MainWindowController implements Initializable {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
-                if (factory.getOrderLineDAO().getAllFromProduct(prod.getId()).length != 0) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            var alert = new Alert(AlertType.WARNING, "Une commande possède ce produit");
-                            alert.setTitle("Erreur suppression");
-                            alert.showAndWait();
-                            if (notDeleted != null)
-                                notDeleted.run();
-                            loadingInstance.setVisible(false);
-                        }
-                    });
-                } else if (!factory.getProductDAO().delete(prod)) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            var alert = new Alert(AlertType.ERROR, "Une erreur est survenue");
-                            alert.setTitle("Erreur suppression");
-                            alert.showAndWait();
-                            if (notDeleted != null)
-                                notDeleted.run();
-                            loadingInstance.setVisible(false);
-                        }
-                    });
-                } else
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (deleted != null)
-                                deleted.run();
-                            loadingInstance.setVisible(false);
-                        }
-                    });
+                try {
+                    if (factory.getOrderLineDAO().getAllFromProduct(prod.getId()).length != 0) {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                var alert = new Alert(AlertType.WARNING, "Une commande possède ce produit");
+                                alert.setTitle("Erreur suppression");
+                                alert.showAndWait();
+                                if (notDeleted != null)
+                                    notDeleted.run();
+                                loadingInstance.setVisible(false);
+                            }
+                        });
+                    } else if (!factory.getProductDAO().delete(prod)) {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                var alert = new Alert(AlertType.ERROR, "Une erreur est survenue");
+                                alert.setTitle("Erreur suppression");
+                                alert.showAndWait();
+                                if (notDeleted != null)
+                                    notDeleted.run();
+                                loadingInstance.setVisible(false);
+                            }
+                        });
+                    } else
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (deleted != null)
+                                    deleted.run();
+                                loadingInstance.setVisible(false);
+                            }
+                        });
+                } catch (DAOException e) {
+                    new Alert(AlertType.ERROR, e.getMessage()).showAndWait();
+                }
             }
         }).start();
 
