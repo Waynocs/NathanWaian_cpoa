@@ -1,8 +1,6 @@
 import java.net.URL;
 
 import controller.MainWindowController;
-import dao.DAOFactory;
-import dao.DAOFactory.Mode;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
