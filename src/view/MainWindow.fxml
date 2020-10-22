@@ -133,7 +133,7 @@
                           <content>
                               <VBox maxHeight="1.7976931348623157E308" spacing="5.0">
                                  <children>
-                                    <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Ajouter">
+                                    <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addProd" text="Ajouter">
                                        <VBox.margin>
                                           <Insets />
                                        </VBox.margin>
@@ -249,6 +249,9 @@
                      </HBox.margin>
                   </ProgressBar>
                </children>
+               <BorderPane.margin>
+                  <Insets left="5.0" />
+               </BorderPane.margin>
             </HBox>
          </bottom>
       </BorderPane>

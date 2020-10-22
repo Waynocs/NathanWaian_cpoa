@@ -17,26 +17,14 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="545.0" prefWidth="375.0" stylesheets="@style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditProductController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="545.0" prefWidth="375.0" stylesheets="@style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NewProductController">
   <tabs>
-    <Tab fx:id="tab" text="&lt;product name&gt;">
+    <Tab fx:id="tab" text="Nouveau produit">
       <content>
             <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0">
               <content>
                   <VBox prefHeight="200.0" prefWidth="430.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#reset" text="Réinitialiser">
-                           <graphic>
-                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../assets/icons/refresh.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <VBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </VBox.margin>
-                        </Button>
                         <HBox alignment="CENTER_LEFT">
                            <VBox.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -65,7 +53,7 @@
                                  </HBox.margin>
                               </Label>
                               <ComboBox fx:id="category" onAction="#categoryChanged" prefWidth="150.0" promptText="Choisir catégorie" />
-                              <Hyperlink fx:id="categLink" text="voir catégorie">
+                              <Hyperlink fx:id="categLink" disable="true" text="voir catégorie">
                                  <HBox.margin>
                                     <Insets left="5.0" right="5.0" />
                                  </HBox.margin>
@@ -136,7 +124,7 @@
                                     <Insets left="5.0" right="5.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button mnemonicParsing="false" onAction="#save" text="Sauvegarder">
+                              <Button mnemonicParsing="false" onAction="#save" text="Ajouter">
                                  <HBox.margin>
                                     <Insets left="5.0" />
                                  </HBox.margin>

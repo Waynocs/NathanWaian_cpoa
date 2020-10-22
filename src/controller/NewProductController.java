@@ -24,7 +24,7 @@ import javafx.util.converter.NumberStringConverter;
 import model.Category;
 import model.Product;
 
-public class EditProductController implements Initializable {
+public class NewProductController implements Initializable {
     @FXML
     public ComboBox<Category> category;
     @FXML
@@ -39,63 +39,28 @@ public class EditProductController implements Initializable {
     public TextField image;
     @FXML
     public Tab tab;
-    public Product product;
-    public Category initCateg;
-    public ProductDetailController detailController;
-    public boolean reopenDetails;
-    public boolean saved;
     public ObservableList<Category> categories;
 
-    public static EditProductController createController(Product prod, ProductDetailController detail) {
+    public static Tab createControl() {
         try {
-            URL fxmlURL = EditProductController.class.getResource("../view/EditProduct.fxml");
+            URL fxmlURL = CategoriesController.class.getResource("../view/NewProduct.fxml");
             FXMLLoader fxmlLoader = new FXMLLoader(fxmlURL);
-            fxmlLoader.<TabPane>load();
-            var controller = fxmlLoader.<EditProductController>getController();
-            controller.setupFields(prod);
-            controller.detailController = detail;
-            return controller;
+            return fxmlLoader.<TabPane>load().getTabs().get(0);
         } catch (IOException e) {
             e.printStackTrace();
-            System.exit(0);
             return null;
         }
     }
 
-    public void setupFields(Product prod) {
-        product = prod;
-        cost.setText(Double.toString(product.getCost()));
-        categLink.setDisable(false);
-        name.setText(product.getName());
-        description.setText(product.getDescription());
-        image.setText(product.getImagePath());
-        tab.setText("Editer:" + product.getName());
-        MainWindowController.runAsynchronously(new Runnable() {
-
-            @Override
-            public void run() {
-                initCateg = MainWindowController.factory.getCategoryDAO().getById(product.getCategory());
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        categories.add(initCateg);
-                        category.getSelectionModel().select(initCateg);
-                        refreshCateg();
-                    }
-                });
-            }
-        });
-    }
-
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        reopenDetails = false;
         categories = FXCollections.observableList(new ArrayList<Category>());
         category.setItems(categories);
         categLink.setOnAction((ActionEvent) -> {
             // TODO open category detail tab
         });
         cost.setTextFormatter(new TextFormatter<>(new NumberStringConverter(Locale.ENGLISH)));
+        refreshCateg();
     }
 
     public void refreshCateg() {
@@ -121,29 +86,15 @@ public class EditProductController implements Initializable {
         });
     }
 
-    public void reset() {
-        cost.setText(Double.toString(product.getCost()));
-        if (category.getItems().contains(initCateg)) {
-            category.getSelectionModel().select(initCateg);
-            categLink.setDisable(false);
-        } else {
-            category.getSelectionModel().select(null);
-            categLink.setDisable(true);
-        }
-        name.setText(product.getName());
-        description.setText(product.getDescription());
-        image.setText(product.getImagePath());
-        tab.setText("Editer:" + product.getName());
-    }
-
     public void cancel() {
-        saved = false;
-        reopenDetails = true;
-        tab.getOnClosed().handle(null);
+        MainWindowController.getMainTabPane().getTabs().remove(tab);
     }
 
     public void categoryChanged() {
-        categLink.setDisable(false);
+        if (category.getSelectionModel().getSelectedIndex() == -1)
+            categLink.setDisable(true);
+        else
+            categLink.setDisable(false);
     }
 
     public void save() {
@@ -159,21 +110,16 @@ public class EditProductController implements Initializable {
             new Alert(AlertType.WARNING, "Entrez un nom").showAndWait();
             return;
         }
-        product.setCategory(category.getSelectionModel().getSelectedItem().getId());
-        product.setCost(Double.parseDouble(cost.getText()));
-        product.setDescription(description.getText());
-        product.setImagePath(image.getText());
-        product.setName(name.getText());
+        var product = new Product(0, name.getText(), Double.parseDouble(cost.getText()), description.getText(),
+                category.getSelectionModel().getSelectedItem().getId(), image.getText());
         try {
-            if (MainWindowController.factory.getProductDAO().update(product)) {
-                saved = true;
-                reopenDetails = true;
-                tab.getOnClosed().handle(null);
-            } else
-                new Alert(AlertType.ERROR, "Impossible de modifier ce produit").showAndWait();
-
+            if (MainWindowController.factory.getProductDAO().create(product) != null)
+                MainWindowController.getMainTabPane().getTabs().remove(tab);
+            else
+                new Alert(AlertType.ERROR, "Impossible de créer ce produit").showAndWait();
         } catch (DAOException e) {
             new Alert(AlertType.ERROR, e.getMessage()).showAndWait();
         }
     }
+
 }

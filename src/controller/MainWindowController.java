@@ -85,7 +85,11 @@ public class MainWindowController implements Initializable {
         });
     }
 
-    public void addCategory() {
+    public void addCateg() {
+        addCategory();
+    }
+
+    public static void addCategory() {
 
     }
 
@@ -99,12 +103,35 @@ public class MainWindowController implements Initializable {
             return true;
     }
 
-    public void addCustomer() {
+    public static void addCustomer() {
 
     }
 
-    public void addProduct() {
+    public static void addProduct() {
+        loadingInstance.setVisible(true);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                var tab = NewProductController.createControl();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        tabInstance.getTabs().add(tab);
+                        tabInstance.getSelectionModel().select(tab);
+                        loadingInstance.setVisible(false);
+                    }
+                });
+            }
+        }).start();
 
+    }
+
+    public void addCust() {
+        addCustomer();
+    }
+
+    public void addProd() {
+        addProduct();
     }
 
     public static void removeProduct(Product prod, Runnable deleted, Runnable notDeleted) {
