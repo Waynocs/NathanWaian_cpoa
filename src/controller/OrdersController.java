@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import javafx.application.Platform;
@@ -20,38 +21,32 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Callback;
-import model.Category;
-import model.Product;
+import model.Customer;
+import model.Order;
 
-public class ProductsController implements Initializable {
+public class OrdersController implements Initializable {
     @FXML
-    public TableView<Product> table;
+    public TableView<Order> table;
     @FXML
-    public TableColumn<Product, String> category;
+    public TableColumn<Order, String> customer;
     @FXML
-    public TableColumn<Product, String> id;
+    public TableColumn<Order, String> id;
     @FXML
-    public TableColumn<Product, String> name;
+    public TableColumn<Order, String> date;
     @FXML
-    public TableColumn<Product, String> description;
+    public TableColumn<Order, Void> detail;
     @FXML
-    public TableColumn<Product, String> price;
-    @FXML
-    public TableColumn<Product, String> image;
-    @FXML
-    public TableColumn<Product, Void> detail;
-    @FXML
-    public TableColumn<Product, Void> remove;
+    public TableColumn<Order, Void> remove;
     @FXML
     public TextField searchbar;
     private String searchKey;
-    private List<Product> allItems;
-    private Map<Integer, Category> allCategs;
-    private ObservableList<Product> displayedItems;
+    private List<Order> allItems;
+    private Map<Integer, Customer> allCusts;
+    private ObservableList<Order> displayedItems;
 
     public static Tab createControl() {
         try {
-            URL fxmlURL = ProductsController.class.getResource("../view/Products.fxml");
+            URL fxmlURL = ProductsController.class.getResource("../view/Orders.fxml");
             FXMLLoader fxmlLoader = new FXMLLoader(fxmlURL);
             return fxmlLoader.<TabPane>load().getTabs().get(0);
         } catch (IOException e) {
@@ -66,10 +61,10 @@ public class ProductsController implements Initializable {
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
 
-        category.setCellFactory(new Callback<TableColumn<Product, String>, TableCell<Product, String>>() {
+        customer.setCellFactory(new Callback<TableColumn<Order, String>, TableCell<Order, String>>() {
             @Override
-            public TableCell<Product, String> call(TableColumn<Product, String> arg0) {
-                return new TableCell<Product, String>() {
+            public TableCell<Order, String> call(TableColumn<Order, String> arg0) {
+                return new TableCell<Order, String>() {
 
                     private Hyperlink link = new Hyperlink();
 
@@ -77,7 +72,7 @@ public class ProductsController implements Initializable {
 
                         {
                             link.setOnAction((ActionEvent event) -> {
-                                // TODO open a category detail tab
+                                // TODO open a customer detail tab
                             });
                         }
                     }
@@ -95,57 +90,34 @@ public class ProductsController implements Initializable {
                 };
             };
         });
-        category.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<Product, String>, ObservableValue<String>>() {
+        customer.setCellValueFactory(
+                new Callback<TableColumn.CellDataFeatures<Order, String>, ObservableValue<String>>() {
 
                     @Override
-                    public ObservableValue<String> call(CellDataFeatures<Product, String> arg0) {
-                        return new ReadOnlyStringWrapper(allCategs.get(arg0.getValue().getCategory()).getName());
+                    public ObservableValue<String> call(CellDataFeatures<Order, String> arg0) {
+                        var cust = allCusts.get(arg0.getValue().getCustomer());
+                        return new ReadOnlyStringWrapper(cust.getName() + " " + cust.getSurname());
                     }
                 });
-        price.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<Product, String>, ObservableValue<String>>() {
-
-                    @Override
-                    public ObservableValue<String> call(CellDataFeatures<Product, String> arg0) {
-                        return new ReadOnlyStringWrapper(arg0.getValue().getCost() + "€");
-                    }
-                });
-        id.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Product, String>, ObservableValue<String>>() {
+        date.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Order, String>, ObservableValue<String>>() {
 
             @Override
-            public ObservableValue<String> call(CellDataFeatures<Product, String> arg0) {
+            public ObservableValue<String> call(CellDataFeatures<Order, String> arg0) {
+                return new ReadOnlyStringWrapper(
+                        arg0.getValue().getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd, HH:mm")));
+            }
+        });
+        id.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Order, String>, ObservableValue<String>>() {
+
+            @Override
+            public ObservableValue<String> call(CellDataFeatures<Order, String> arg0) {
                 return new ReadOnlyStringWrapper(Integer.toString(arg0.getValue().getId()));
             }
         });
-        name.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<Product, String>, ObservableValue<String>>() {
-
-                    @Override
-                    public ObservableValue<String> call(CellDataFeatures<Product, String> arg0) {
-                        return new ReadOnlyStringWrapper(arg0.getValue().getName());
-                    }
-                });
-        description.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<Product, String>, ObservableValue<String>>() {
-
-                    @Override
-                    public ObservableValue<String> call(CellDataFeatures<Product, String> arg0) {
-                        return new ReadOnlyStringWrapper(arg0.getValue().getDescription());
-                    }
-                });
-        image.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<Product, String>, ObservableValue<String>>() {
-
-                    @Override
-                    public ObservableValue<String> call(CellDataFeatures<Product, String> arg0) {
-                        return new ReadOnlyStringWrapper(arg0.getValue().getImagePath());
-                    }
-                });
-        detail.setCellFactory(new Callback<TableColumn<Product, Void>, TableCell<Product, Void>>() {
+        detail.setCellFactory(new Callback<TableColumn<Order, Void>, TableCell<Order, Void>>() {
             @Override
-            public TableCell<Product, Void> call(TableColumn<Product, Void> arg0) {
-                return new TableCell<Product, Void>() {
+            public TableCell<Order, Void> call(TableColumn<Order, Void> arg0) {
+                return new TableCell<Order, Void>() {
 
                     private Button button = new Button();
                     {
@@ -160,7 +132,7 @@ public class ProductsController implements Initializable {
                     @Override
                     public void updateItem(Void item, boolean empty) {
                         button.setOnAction((ActionEvent event) -> {
-                            MainWindowController.detailProduct(table.getItems().get(getIndex()));
+                            MainWindowController.detailOrder(table.getItems().get(getIndex()));
                         });
                         super.updateItem(item, empty);
                         if (empty) {
@@ -172,10 +144,10 @@ public class ProductsController implements Initializable {
                 };
             };
         });
-        remove.setCellFactory(new Callback<TableColumn<Product, Void>, TableCell<Product, Void>>() {
+        remove.setCellFactory(new Callback<TableColumn<Order, Void>, TableCell<Order, Void>>() {
             @Override
-            public TableCell<Product, Void> call(TableColumn<Product, Void> arg0) {
-                return new TableCell<Product, Void>() {
+            public TableCell<Order, Void> call(TableColumn<Order, Void> arg0) {
+                return new TableCell<Order, Void>() {
 
                     private Button button = new Button();
                     {
@@ -186,12 +158,12 @@ public class ProductsController implements Initializable {
                         button.setGraphic(iv);
                         alignmentProperty().set(Pos.BASELINE_CENTER);
                         button.setOnAction((ActionEvent event) -> {
-                            var prod = table.getItems().get(getIndex());
-                            MainWindowController.removeProduct(prod, new Runnable() {
+                            var ord = table.getItems().get(getIndex());
+                            MainWindowController.removeOrder(ord, new Runnable() {
 
                                 @Override
                                 public void run() {
-                                    allItems.remove(prod);
+                                    allItems.remove(ord);
                                     applySearchKey();
                                 }
 
@@ -211,20 +183,20 @@ public class ProductsController implements Initializable {
                 };
             };
         });
-        displayedItems = FXCollections.observableList(new ArrayList<Product>());
-        allItems = new LinkedList<Product>();
-        allCategs = new HashMap<Integer, Category>();
+        displayedItems = FXCollections.observableList(new ArrayList<Order>());
+        allItems = new LinkedList<Order>();
+        allCusts = new HashMap<Integer, Customer>();
         table.setItems(displayedItems);
         searchKey = "";
         table.setOnKeyPressed((KeyEvent ev) -> {
             if (ev.getCode() == KeyCode.DELETE) {
-                var prod = table.getSelectionModel().getSelectedItem();
-                if (prod != null) {
-                    MainWindowController.removeProduct(prod, new Runnable() {
+                var ord = table.getSelectionModel().getSelectedItem();
+                if (ord != null) {
+                    MainWindowController.removeOrder(ord, new Runnable() {
 
                         @Override
                         public void run() {
-                            allItems.remove(prod);
+                            allItems.remove(ord);
                             applySearchKey();
                         }
 
@@ -241,11 +213,11 @@ public class ProductsController implements Initializable {
             @Override
             public void run() {
                 allItems.clear();
-                allCategs.clear();
-                for (Category categ : MainWindowController.factory.getCategoryDAO().getAll())
-                    allCategs.put(categ.getId(), categ);
-                for (Product prod : MainWindowController.factory.getProductDAO().getAll())
-                    allItems.add(prod);
+                allCusts.clear();
+                for (Order ord : MainWindowController.factory.getOrderDAO().getAll())
+                    allItems.add(ord);
+                for (Customer cust : MainWindowController.factory.getCustomerDAO().getAll())
+                    allCusts.put(cust.getId(), cust);
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
@@ -263,18 +235,17 @@ public class ProductsController implements Initializable {
 
     public void applySearchKey() {
         displayedItems.clear();
-        for (Product prod : allItems) {
+        for (Order ord : allItems) {
             boolean toAdd = false;
-            if (Utilities.compareStrings(searchKey, prod.getName()))
+            if (Utilities.compareStrings(searchKey,
+                    ord.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd, HH:mm"))))
                 toAdd = true;
-            else if (Utilities.compareStrings(searchKey, prod.getImagePath()))
+            else if (Utilities.compareStrings(searchKey, "" + ord.getId()))
                 toAdd = true;
-            else if (Utilities.compareStrings(searchKey, prod.getDescription()))
-                toAdd = true;
-            else if (Utilities.compareStrings(searchKey, allCategs.get(prod.getCategory()).getName()))
+            else if (Utilities.compareStrings(searchKey, allCusts.get(ord.getCustomer()).getName()))
                 toAdd = true;
             if (toAdd)
-                displayedItems.add(prod);
+                displayedItems.add(ord);
         }
     }
 

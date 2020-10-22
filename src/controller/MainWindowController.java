@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import dao.DAOException;
 import dao.DAOFactory;
 import dao.DAOFactory.Mode;
 import javafx.application.Platform;
@@ -152,6 +153,9 @@ public class MainWindowController implements Initializable {
         addProduct();
     }
 
+    public static void removeOrder(Order prod, Runnable deleted, Runnable notDeleted) {
+    }
+
     public static void removeProduct(Product prod, Runnable deleted, Runnable notDeleted) {
         loadingInstance.setVisible(true);
         new Thread(new Runnable() {
@@ -268,7 +272,21 @@ public class MainWindowController implements Initializable {
     }
 
     public static void seeOrders() {
-
+        loadingInstance.setVisible(true);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                var tab = OrdersController.createControl();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        tabInstance.getTabs().add(tab);
+                        tabInstance.getSelectionModel().select(tab);
+                        loadingInstance.setVisible(false);
+                    }
+                });
+            }
+        }).start();
     }
 
     public static void detailCategory(Category categ) {
