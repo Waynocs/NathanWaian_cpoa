@@ -2,9 +2,12 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,8 +20,12 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.util.Callback;
+import model.Customer;
 import model.Order;
 import model.OrderLine;
 import model.Product;
@@ -48,6 +55,7 @@ public class OrderDetailController implements Initializable {
     public Tab tab;
     public Order order;
     public ObservableList<OrderLine> displayedLines;
+    public Map<Integer, Product> allProducts;
 
     public static Tab createControl(Order ord) {
         try {
@@ -65,15 +73,112 @@ public class OrderDetailController implements Initializable {
     }
 
     public void setupFields(Order ord) {
-
+        order = ord;
+        refresh();
     }
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         displayedLines = FXCollections.observableList(new ArrayList<OrderLine>());
+        table.setItems(displayedLines);
+        allProducts = new HashMap<Integer, Product>();
+        products.setCellFactory(new Callback<TableColumn<OrderLine, String>, TableCell<OrderLine, String>>() {
+            @Override
+            public TableCell<OrderLine, String> call(TableColumn<OrderLine, String> arg0) {
+                return new TableCell<OrderLine, String>() {
+
+                    private Hyperlink link = new Hyperlink();
+
+                    {
+
+                        {
+                            link.setOnAction((ActionEvent event) -> {
+                                MainWindowController
+                                        .detailProduct(allProducts.get(table.getItems().get(getIndex()).getProduct()));
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        link.setText(item);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(link);
+                        }
+                    }
+                };
+            };
+        });
+        products.setCellValueFactory(
+                new Callback<TableColumn.CellDataFeatures<OrderLine, String>, ObservableValue<String>>() {
+                    @Override
+                    public ObservableValue<String> call(CellDataFeatures<OrderLine, String> arg0) {
+                        return new ReadOnlyStringWrapper(allProducts.get(arg0.getValue().getProduct()).getName());
+                    }
+                });
+        quantities.setCellValueFactory(
+                new Callback<TableColumn.CellDataFeatures<OrderLine, String>, ObservableValue<String>>() {
+                    @Override
+                    public ObservableValue<String> call(CellDataFeatures<OrderLine, String> arg0) {
+                        return new ReadOnlyStringWrapper(Integer.toString(arg0.getValue().getQuantity()));
+                    }
+                });
+        prices.setCellValueFactory(
+                new Callback<TableColumn.CellDataFeatures<OrderLine, String>, ObservableValue<String>>() {
+                    @Override
+                    public ObservableValue<String> call(CellDataFeatures<OrderLine, String> arg0) {
+                        return new ReadOnlyStringWrapper(arg0.getValue().getCost() + " €");
+                    }
+                });
+        totals.setCellValueFactory(
+                new Callback<TableColumn.CellDataFeatures<OrderLine, String>, ObservableValue<String>>() {
+                    @Override
+                    public ObservableValue<String> call(CellDataFeatures<OrderLine, String> arg0) {
+                        return new ReadOnlyStringWrapper(
+                                (arg0.getValue().getQuantity() * arg0.getValue().getCost()) + " €");
+                    }
+                });
     }
 
     public void refresh() {
+        MainWindowController.runAsynchronously(new Runnable() {
+            @Override
+            public void run() {
+                order = MainWindowController.factory.getOrderDAO().getById(order.getId());
+                var customerModel = MainWindowController.factory.getCustomerDAO().getById(order.getCustomer());
+                var lines = MainWindowController.factory.getOrderLineDAO().getAllFromOrder(order.getId());
+                allProducts.clear();
+
+                for (Product prod : MainWindowController.factory.getProductDAO().getAll())
+                    allProducts.put(prod.getId(), prod);
+
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        tab.setText("Détail:" + customerModel.getSurname() + " "
+                                + order.getDate().format(DateTimeFormatter.ofPattern("dd/MM")));
+                        id.setText("ID : " + order.getId());
+                        customer.setText(customerModel.getName() + " " + customerModel.getSurname());
+                        customer.setOnAction((e) -> {
+                            MainWindowController.detailCustomer(customerModel);
+                        });
+                        date.setText("Date : " + order.getDate().format(DateTimeFormatter.ofPattern("dd MMMM yyyy")));
+                        time.setText("Heure : " + order.getDate().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+                        double orderCost = 0;
+                        displayedLines.clear();
+                        displayedLines.addAll(lines);
+                        for (OrderLine orderLine : lines) {
+                            orderCost += orderLine.getQuantity() * orderLine.getCost();
+                        }
+                        totalCost.setText("Coût total : " + orderCost + " €");
+                    }
+                });
+            }
+        });
+        id.setText("ID : " + order.getId());
 
     }
 
@@ -82,6 +187,17 @@ public class OrderDetailController implements Initializable {
     }
 
     public void remove() {
+        MainWindowController.removeOrder(order, new Runnable() {
+            @Override
+            public void run() {
+                EventHandler<Event> handler = tab.getOnClosed();
+                if (null != handler) {
+                    handler.handle(null);
+                } else {
+                    tab.getTabPane().getTabs().remove(tab);
+                }
+            }
 
+        }, null);
     }
 }
