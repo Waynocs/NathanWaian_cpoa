@@ -5,7 +5,12 @@ import java.util.Objects;
 /**
  * Defines a product
  */
-public class Product {
+public class Product implements Base<Product> {
+
+    @Override
+    public Product clone() {
+        return new Product(id, name, cost, description, category, imagePath);
+    }
 
     @Override
     public int hashCode() {

@@ -6,11 +6,16 @@ import java.util.Objects;
 /**
  * Defines an order made by a customer
  */
-public class Order {
+public class Order implements Base<Order> {
 
     private int id;
     private LocalDateTime date;
     private int customer;
+
+    @Override
+    public Order clone() {
+        return new Order(id, date, customer);
+    }
 
     /**
      * Constructor.

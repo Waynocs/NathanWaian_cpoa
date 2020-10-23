@@ -5,10 +5,15 @@ import java.util.Objects;
 /**
  * Defines a category
  */
-public class Category {
+public class Category implements Base<Category> {
     private String name;
     private String imagePath;
     private int id;
+
+    @Override
+    public Category clone() {
+        return new Category(name, imagePath, id);
+    }
 
     @Override
     public boolean equals(Object o) {

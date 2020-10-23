@@ -5,7 +5,12 @@ import java.util.Objects;
 /**
  * A line for a product in an order
  */
-public class OrderLine {
+public class OrderLine implements Base<OrderLine> {
+
+    @Override
+    public OrderLine clone() {
+        return new OrderLine(order, product, cost, quantity);
+    }
 
     @Override
     public boolean equals(Object o) {

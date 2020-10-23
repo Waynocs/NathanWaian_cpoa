@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * Defines a customer
  */
-public class Customer {
+public class Customer implements Base<Customer> {
     private int id;
     private String name;
     private String surname;
@@ -16,6 +16,12 @@ public class Customer {
     private String addressPostalCode;
     private String addressCity;
     private String addressCountry;
+
+    @Override
+    public Customer clone() {
+        return new Customer(id, name, surname, identifier, pwd, addressNumber, addressStreet, addressPostalCode,
+                addressCity, addressCountry);
+    }
 
     @Override
     public boolean equals(Object o) {
