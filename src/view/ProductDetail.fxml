@@ -22,7 +22,7 @@
               <content>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Button mnemonicParsing="false" text="Actualiser">
+                        <Button mnemonicParsing="false" onAction="#refresh" text="Actualiser">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
