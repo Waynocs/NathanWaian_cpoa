@@ -132,13 +132,16 @@ public class CategoriesController implements Initializable {
                         button.setGraphic(iv);
                         alignmentProperty().set(Pos.BASELINE_CENTER);
                         button.setOnAction((ActionEvent event) -> {
-                            if (!MainWindowController.factory.getCategoryDAO()
-                                    .delete(table.getItems().get(getIndex()))) {
-                                var alert = new Alert(AlertType.ERROR, "Une erreur est survenue");
-                                alert.setTitle("Erreur suppression");
-                                alert.showAndWait();
-                            } else
-                                refresh();
+                            var categ = table.getItems().get(getIndex());
+                            MainWindowController.removeCategory(categ, new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    allItems.remove(categ);
+                                    applySearchKey();
+                                }
+
+                            }, null);
                         });
                     }
 
@@ -162,10 +165,15 @@ public class CategoriesController implements Initializable {
             if (ev.getCode() == KeyCode.DELETE) {
                 var categ = table.getSelectionModel().getSelectedItem();
                 if (categ != null) {
-                    if (MainWindowController.removeCategory(categ)) {
-                        allItems.remove(categ);
-                        applySearchKey();
-                    }
+                    MainWindowController.removeCategory(categ, new Runnable() {
+
+                        @Override
+                        public void run() {
+                            allItems.remove(categ);
+                            applySearchKey();
+                        }
+
+                    }, null);
                 }
             }
         });

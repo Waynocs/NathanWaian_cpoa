@@ -111,17 +111,84 @@ public class MainWindowController implements Initializable {
     }
 
     public static void addCategory() {
+        loadingInstance.setProgress(-1);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                var tab = NewCategoryController.createControl();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        tabInstance.getTabs().add(tab);
+                        tabInstance.getSelectionModel().select(tab);
+                        tab.setOnSelectionChanged((e) -> {
+                            if (tab.isSelected())
+                                locationInstance.setText("Catégories>Nouvelle");
+                            else if (tabInstance.getTabs().size() == 0)
+                                locationInstance.setText("Aucun onglet ouvert");
+                        });
+                        locationInstance.setText("Catégories>Nouvelle");
+                        var menuItem = new MenuItem("Catégories>Nouvelle");
+                        tab.setUserData(menuItem);
+                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
+                        locationMenu.add(menuItem);
+                        loadingInstance.setProgress(0);
+                    }
+                });
+            }
+        }).start();
 
     }
 
-    public static boolean removeCategory(Category categ) {
-        if (!factory.getCategoryDAO().delete(categ)) {
-            var alert = new Alert(AlertType.ERROR, "Une erreur est survenue");
-            alert.setTitle("Erreur suppression");
-            alert.showAndWait();
-            return false;
-        } else
-            return true;
+    public static void removeCategory(Category categ, Runnable deleted, Runnable notDeleted) {
+        loadingInstance.setProgress(-1);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    var prods = factory.getProductDAO().getAll();
+                    for (Product product : prods) {
+                        if (product.getCategory() == categ.getId()) {
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    var alert = new Alert(AlertType.WARNING, "Un produit utilise cette catégorie");
+                                    alert.setTitle("Erreur suppression");
+                                    alert.showAndWait();
+                                    if (notDeleted != null)
+                                        notDeleted.run();
+                                    loadingInstance.setProgress(0);
+                                }
+                            });
+                            return;
+                        }
+                    }
+                    if (!factory.getCategoryDAO().delete(categ)) {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                var alert = new Alert(AlertType.ERROR, "Une erreur est survenue");
+                                alert.setTitle("Erreur suppression");
+                                alert.showAndWait();
+                                if (notDeleted != null)
+                                    notDeleted.run();
+                                loadingInstance.setProgress(0);
+                            }
+                        });
+                    } else
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (deleted != null)
+                                    deleted.run();
+                                loadingInstance.setProgress(0);
+                            }
+                        });
+                } catch (DAOException e) {
+                    new Alert(AlertType.ERROR, e.getMessage()).showAndWait();
+                }
+            }
+        }).start();
     }
 
     public static void addCustomer() {
@@ -482,6 +549,31 @@ public class MainWindowController implements Initializable {
         }).start();
     }
 
+    /*
+     * public static void editCategory(Category categ, CategoryDetailController
+     * controller) { loadingInstance.setProgress(-1); new Thread(new Runnable() {
+     * 
+     * @Override public void run() { var editor =
+     * EditCategoryController.createController(categ, controller);
+     * editor.tab.setOnClosed((Event) -> { tabInstance.getTabs().remove(editor.tab);
+     * if (editor.reopenDetails) { tabInstance.getTabs().add(controller.tab);
+     * tabInstance.getSelectionModel().select(controller.tab);
+     * editor.tab.setOnSelectionChanged((e) -> { if (editor.tab.isSelected())
+     * locationInstance.setText("Catégories>Éditer"); else if
+     * (tabInstance.getTabs().size() == 0)
+     * locationInstance.setText("Aucun onglet ouvert"); });
+     * locationInstance.setText("Catégories>Éditer"); var menuItem = new
+     * MenuItem("Catégories>Éditer"); editor.tab.setUserData(menuItem);
+     * menuItem.setOnAction((e) ->
+     * tabInstance.getSelectionModel().select(editor.tab));
+     * locationMenu.add(menuItem); if (editor.saved) controller.refresh(); } });
+     * Platform.runLater(new Runnable() {
+     * 
+     * @Override public void run() { tabInstance.getTabs().remove(controller.tab);
+     * tabInstance.getTabs().add(editor.tab);
+     * tabInstance.getSelectionModel().select(editor.tab);
+     * loadingInstance.setProgress(0); } }); } }).start(); }
+     */
     public static void detailOrder(Order ord) {
         loadingInstance.setProgress(-1);
         new Thread(new Runnable() {
