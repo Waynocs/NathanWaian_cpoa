@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -172,10 +173,21 @@ public class CategoriesController implements Initializable {
     }
 
     public void refresh() {
-        allItems.clear();
-        for (Category category : MainWindowController.factory.getCategoryDAO().getAll())
-            allItems.add(category);
-        applySearchKey();
+        MainWindowController.runAsynchronously(new Runnable() {
+
+            @Override
+            public void run() {
+                allItems.clear();
+                for (Category categ : MainWindowController.factory.getCategoryDAO().getAll())
+                    allItems.add(categ);
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        applySearchKey();
+                    }
+                });
+            }
+        });
     }
 
     public void search() {

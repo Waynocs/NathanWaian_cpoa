@@ -305,20 +305,32 @@ public class MainWindowController implements Initializable {
     }
 
     public static void seeCategories() {
-        var tab = CategoriesController.createControl();
-        tabInstance.getTabs().add(tab);
-        tabInstance.getSelectionModel().select(tab);
-        tab.setOnSelectionChanged((e) -> {
-            if (tab.isSelected())
-                locationInstance.setText("Catégories>Tout voir");
-            else if (tabInstance.getTabs().size() == 0)
-                locationInstance.setText("Aucun onglet ouvert");
-        });
-        locationInstance.setText("Catégories>Tout voir");
-        var menuItem = new MenuItem("Catégories>Tout voir");
-        tab.setUserData(menuItem);
-        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
-        locationMenu.add(menuItem);
+        loadingInstance.setProgress(-1);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                var tab = CategoriesController.createControl();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        tabInstance.getTabs().add(tab);
+                        tabInstance.getSelectionModel().select(tab);
+                        tab.setOnSelectionChanged((e) -> {
+                            if (tab.isSelected())
+                                locationInstance.setText("Catégories>Tout voir");
+                            else if (tabInstance.getTabs().size() == 0)
+                                locationInstance.setText("Aucun onglet ouvert");
+                        });
+                        locationInstance.setText("Catégories>Tout voir");
+                        var menuItem = new MenuItem("Catégories>Tout voir");
+                        tab.setUserData(menuItem);
+                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
+                        locationMenu.add(menuItem);
+                        loadingInstance.setProgress(0);
+                    }
+                });
+            }
+        }).start();
     }
 
     public void seeCusts() {
