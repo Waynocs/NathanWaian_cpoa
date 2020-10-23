@@ -75,6 +75,8 @@ public class MySQLProductDAO implements ProductDAO {
     @Override
     public boolean delete(Product object) {
         try {
+            if (MySQLOrderLineDAO.getInstance().getAllFromProduct(object.getId()).length > 0)
+                throw new DAOException("The product '" + object.getId() + "' is mentioned in an order");
             var statement = Connection.getConnection()
                     .prepareStatement("DELETE FROM `produit` WHERE `id_produit` = " + object.getId());
 

@@ -3,6 +3,7 @@ package dao.mySQL;
 import dao.CategoryDAO;
 import dao.DAOException;
 import model.Category;
+import model.Product;
 import request.Connection;
 
 import java.sql.ResultSet;
@@ -67,6 +68,9 @@ public class MySQLCategoryDAO implements CategoryDAO {
     @Override
     public boolean delete(Category object) {
         try {
+            for (Product product : MySQLProductDAO.getInstance().getAll())
+                if (product.getCategory() == object.getId())
+                    throw new DAOException("The category '" + object.getId() + "' is used by a product");
             var statement = Connection.getConnection()
                     .prepareStatement("DELETE FROM `categorie` WHERE `id_categorie` = " + object.getId());
 

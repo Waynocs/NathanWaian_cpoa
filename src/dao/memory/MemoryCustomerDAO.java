@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import dao.DAOException;
 import model.Customer;
+import model.Order;
 
 /**
  * Class used to manage customers using the MySQLDAOFactory
@@ -78,6 +80,9 @@ public class MemoryCustomerDAO implements dao.CustomerDAO {
 
     @Override
     public boolean delete(final Customer object) {
+        for (Order order : MemoryOrderDAO.getInstance().getAll())
+            if (order.getCustomer() == object.getId())
+                throw new DAOException("The customer '" + object.getId() + "' is used by an order");
         if (!memory.keySet().contains(object.getId()))
             return false;
         else {

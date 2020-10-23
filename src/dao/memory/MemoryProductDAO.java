@@ -71,6 +71,8 @@ public class MemoryProductDAO implements dao.ProductDAO {
 
     @Override
     public boolean delete(Product object) {
+        if (MemoryOrderLineDAO.getInstance().getAllFromProduct(object.getId()).length > 0)
+            throw new DAOException("The product '" + object.getId() + "' is mentioned in an order");
         if (!memory.keySet().contains(object.getId()))
             return false;
         else {

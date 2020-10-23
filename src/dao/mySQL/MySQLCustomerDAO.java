@@ -9,6 +9,7 @@ import java.sql.Statement;
 import dao.CustomerDAO;
 import dao.DAOException;
 import model.Customer;
+import model.Order;
 import request.Connection;
 
 /**
@@ -76,6 +77,9 @@ public class MySQLCustomerDAO implements CustomerDAO {
     @Override
     public boolean delete(final Customer object) {
         try {
+            for (Order order : MySQLOrderDAO.getInstance().getAll())
+                if (order.getCustomer() == object.getId())
+                    throw new DAOException("The customer '" + object.getId() + "' is used by an order");
             final var statement = Connection.getConnection()
                     .prepareStatement("DELETE FROM `client` WHERE `id_client` = " + object.getId());
 

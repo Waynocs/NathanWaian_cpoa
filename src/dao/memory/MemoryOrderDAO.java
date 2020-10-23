@@ -7,6 +7,7 @@ import java.util.Map;
 
 import dao.DAOException;
 import model.Order;
+import model.OrderLine;
 
 /**
  * Class used to manage orders using the MySQLDAOFactory
@@ -64,6 +65,8 @@ public class MemoryOrderDAO implements dao.OrderDAO {
 
     @Override
     public boolean delete(Order object) {
+        for (OrderLine line : MemoryOrderLineDAO.getInstance().getAllFromOrder(object.getId()))
+            MemoryOrderLineDAO.getInstance().delete(line);
         if (!memory.keySet().contains(object.getId()))
             return false;
         else {

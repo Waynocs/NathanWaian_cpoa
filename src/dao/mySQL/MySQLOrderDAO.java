@@ -9,6 +9,7 @@ import java.util.*;
 import dao.DAOException;
 import dao.OrderDAO;
 import model.Order;
+import model.OrderLine;
 import request.Connection;
 
 /**
@@ -74,6 +75,8 @@ public class MySQLOrderDAO implements OrderDAO {
     @Override
     public boolean delete(final Order object) {
         try {
+            for (OrderLine line : MySQLOrderLineDAO.getInstance().getAllFromOrder(object.getId()))
+                MySQLOrderLineDAO.getInstance().delete(line);
             var statement = Connection.getConnection()
                     .prepareStatement("DELETE FROM `commande` WHERE `id_commande` = " + object.getId());
 

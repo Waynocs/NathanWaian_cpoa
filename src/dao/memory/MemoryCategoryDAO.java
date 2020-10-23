@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import dao.DAOException;
 import model.Category;
+import model.Product;
 
 /**
  * Class used to manage categories using the MemoryDAOFactory
@@ -57,6 +59,9 @@ public class MemoryCategoryDAO implements dao.CategoryDAO {
 
     @Override
     public boolean delete(Category object) {
+        for (Product product : MemoryProductDAO.getInstance().getAll())
+            if (product.getCategory() == object.getId())
+                throw new DAOException("The category '" + object.getId() + "' is used by a product");
         if (!memory.keySet().contains(object.getId()))
             return false;
         else {
