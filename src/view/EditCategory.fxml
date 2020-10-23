@@ -21,7 +21,7 @@
                <content>
                   <VBox prefHeight="200.0" prefWidth="430.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#reset" text="Réinisialiser ">
+                        <Button mnemonicParsing="false" onAction="#reset" text="Réinitialiser ">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                  <image>

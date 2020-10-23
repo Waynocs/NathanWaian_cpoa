@@ -475,6 +475,32 @@ public class MainWindowController implements Initializable {
     }
 
     public static void detailCategory(Category categ) {
+        loadingInstance.setProgress(-1);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                var tab = CategoryDetailController.createControl(categ);
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        tabInstance.getTabs().add(tab);
+                        tabInstance.getSelectionModel().select(tab);
+                        tab.setOnSelectionChanged((e) -> {
+                            if (tab.isSelected())
+                                locationInstance.setText("Catégories>Détail");
+                            else if (tabInstance.getTabs().size() == 0)
+                                locationInstance.setText("Aucun onglet ouvert");
+                        });
+                        locationInstance.setText("Catégories>Détail");
+                        var menuItem = new MenuItem("Catégories>Détail");
+                        tab.setUserData(menuItem);
+                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
+                        locationMenu.add(menuItem);
+                        loadingInstance.setProgress(0);
+                    }
+                });
+            }
+        }).start();
     }
 
     public static void detailCustomer(Customer cust) {
@@ -549,31 +575,47 @@ public class MainWindowController implements Initializable {
         }).start();
     }
 
-    /*
-     * public static void editCategory(Category categ, CategoryDetailController
-     * controller) { loadingInstance.setProgress(-1); new Thread(new Runnable() {
-     * 
-     * @Override public void run() { var editor =
-     * EditCategoryController.createController(categ, controller);
-     * editor.tab.setOnClosed((Event) -> { tabInstance.getTabs().remove(editor.tab);
-     * if (editor.reopenDetails) { tabInstance.getTabs().add(controller.tab);
-     * tabInstance.getSelectionModel().select(controller.tab);
-     * editor.tab.setOnSelectionChanged((e) -> { if (editor.tab.isSelected())
-     * locationInstance.setText("Catégories>Éditer"); else if
-     * (tabInstance.getTabs().size() == 0)
-     * locationInstance.setText("Aucun onglet ouvert"); });
-     * locationInstance.setText("Catégories>Éditer"); var menuItem = new
-     * MenuItem("Catégories>Éditer"); editor.tab.setUserData(menuItem);
-     * menuItem.setOnAction((e) ->
-     * tabInstance.getSelectionModel().select(editor.tab));
-     * locationMenu.add(menuItem); if (editor.saved) controller.refresh(); } });
-     * Platform.runLater(new Runnable() {
-     * 
-     * @Override public void run() { tabInstance.getTabs().remove(controller.tab);
-     * tabInstance.getTabs().add(editor.tab);
-     * tabInstance.getSelectionModel().select(editor.tab);
-     * loadingInstance.setProgress(0); } }); } }).start(); }
-     */
+    public static void editCategory(Category categ, CategoryDetailController controller) {
+        loadingInstance.setProgress(-1);
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                var editor = EditCategoryController.createController(categ, controller);
+                editor.tab.setOnClosed((Event) -> {
+                    tabInstance.getTabs().remove(editor.tab);
+                    if (editor.reopenDetails) {
+                        tabInstance.getTabs().add(controller.tab);
+                        tabInstance.getSelectionModel().select(controller.tab);
+                        editor.tab.setOnSelectionChanged((e) -> {
+                            if (editor.tab.isSelected())
+                                locationInstance.setText("Catégories>Éditer");
+                            else if (tabInstance.getTabs().size() == 0)
+                                locationInstance.setText("Aucun onglet ouvert");
+                        });
+                        locationInstance.setText("Catégories>Éditer");
+                        var menuItem = new MenuItem("Catégories>Éditer");
+                        editor.tab.setUserData(menuItem);
+                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(editor.tab));
+                        locationMenu.add(menuItem);
+                        if (editor.saved)
+                            controller.refresh();
+                    }
+                });
+                Platform.runLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        tabInstance.getTabs().remove(controller.tab);
+                        tabInstance.getTabs().add(editor.tab);
+                        tabInstance.getSelectionModel().select(editor.tab);
+                        loadingInstance.setProgress(0);
+                    }
+                });
+            }
+        }).start();
+    }
+
     public static void detailOrder(Order ord) {
         loadingInstance.setProgress(-1);
         new Thread(new Runnable() {

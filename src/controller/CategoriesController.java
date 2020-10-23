@@ -14,7 +14,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -23,7 +22,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -102,7 +100,7 @@ public class CategoriesController implements Initializable {
                         button.setGraphic(iv);
                         alignmentProperty().set(Pos.BASELINE_CENTER);
                         button.setOnAction((ActionEvent event) -> {
-                            // TODO open a category detail tab
+                            MainWindowController.detailCategory(table.getItems().get(getIndex()));
                         });
                     }
 
