@@ -542,7 +542,7 @@ public class MainWindowController implements Initializable {
             @Override
             public void run() {
                 var editor = EditProductController.createController(prod, controller);
-                editor.tab.setOnClosed((Event) -> {
+                editor.tab.setOnClosed((e1) -> Platform.runLater(() -> {
                     tabInstance.getTabs().remove(editor.tab);
                     if (editor.reopenDetails) {
                         tabInstance.getTabs().add(controller.tab);
@@ -561,7 +561,7 @@ public class MainWindowController implements Initializable {
                         if (editor.saved)
                             controller.refresh();
                     }
-                });
+                }));
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
@@ -582,7 +582,7 @@ public class MainWindowController implements Initializable {
             @Override
             public void run() {
                 var editor = EditCategoryController.createController(categ, controller);
-                editor.tab.setOnClosed((Event) -> {
+                editor.tab.setOnClosed((e1) -> Platform.runLater(() -> {
                     tabInstance.getTabs().remove(editor.tab);
                     if (editor.reopenDetails) {
                         tabInstance.getTabs().add(controller.tab);
@@ -601,7 +601,7 @@ public class MainWindowController implements Initializable {
                         if (editor.saved)
                             controller.refresh();
                     }
-                });
+                }));
                 Platform.runLater(new Runnable() {
 
                     @Override

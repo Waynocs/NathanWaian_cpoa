@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import dao.DAOException;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -73,24 +74,25 @@ public class EditCategoryController implements Initializable {
     }
 
     public void save() {
+        MainWindowController.runAsynchronously(() -> {
+            if (title.getText().length() == 0) {
+                Platform.runLater(() -> new Alert(AlertType.WARNING, "Entrez un titre").showAndWait());
+                return;
+            }
+            category.setImagePath(image.getText());
+            category.setName(title.getText());
+            try {
+                if (MainWindowController.factory.getCategoryDAO().update(category)) {
+                    saved = true;
+                    reopenDetails = true;
+                    tab.getOnClosed().handle(null);
+                } else
+                    Platform.runLater(
+                            () -> new Alert(AlertType.ERROR, "Impossible de modifier cette catégorie").showAndWait());
 
-        if (title.getText().length() == 0) {
-            new Alert(AlertType.WARNING, "Entrez un titre").showAndWait();
-            return;
-        }
-        category.setImagePath(image.getText());
-        category.setName(title.getText());
-        try {
-            if (MainWindowController.factory.getCategoryDAO().update(category)) {
-                saved = true;
-                reopenDetails = true;
-                tab.getOnClosed().handle(null);
-            } else
-                new Alert(AlertType.ERROR, "Impossible de modifier ce produit").showAndWait();
-
-        } catch (DAOException e) {
-            new Alert(AlertType.ERROR, e.getMessage()).showAndWait();
-        }
+            } catch (DAOException e) {
+                Platform.runLater(() -> new Alert(AlertType.ERROR, e.getMessage()).showAndWait());
+            }
+        });
     }
-
 }
