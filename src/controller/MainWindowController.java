@@ -575,6 +575,47 @@ public class MainWindowController implements Initializable {
         }).start();
     }
 
+    public static void editCategory(Category categ, CategoryDetailController controller) {
+        loadingInstance.setProgress(-1);
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                var editor = EditCategoryController.createController(categ, controller);
+                editor.tab.setOnClosed((Event) -> {
+                    tabInstance.getTabs().remove(editor.tab);
+                    if (editor.reopenDetails) {
+                        tabInstance.getTabs().add(controller.tab);
+                        tabInstance.getSelectionModel().select(controller.tab);
+                        editor.tab.setOnSelectionChanged((e) -> {
+                            if (editor.tab.isSelected())
+                                locationInstance.setText("Catégories>Éditer");
+                            else if (tabInstance.getTabs().size() == 0)
+                                locationInstance.setText("Aucun onglet ouvert");
+                        });
+                        locationInstance.setText("Catégories>Éditer");
+                        var menuItem = new MenuItem("Catégories>Éditer");
+                        editor.tab.setUserData(menuItem);
+                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(editor.tab));
+                        locationMenu.add(menuItem);
+                        if (editor.saved)
+                            controller.refresh();
+                    }
+                });
+                Platform.runLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        tabInstance.getTabs().remove(controller.tab);
+                        tabInstance.getTabs().add(editor.tab);
+                        tabInstance.getSelectionModel().select(editor.tab);
+                        loadingInstance.setProgress(0);
+                    }
+                });
+            }
+        }).start();
+    }
+
     public static void editOrder(Order ord, OrderDetailController controller) {
         loadingInstance.setProgress(-1);
         new Thread(new Runnable() {
