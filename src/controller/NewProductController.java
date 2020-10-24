@@ -98,28 +98,31 @@ public class NewProductController implements Initializable {
     }
 
     public void save() {
-        if (category.getSelectionModel().getSelectedItem() == null) {
-            new Alert(AlertType.WARNING, "Selectionnez une catégorie").showAndWait();
-            return;
-        }
-        if (cost.getText().length() == 0 || Double.parseDouble(cost.getText()) <= 0) {
-            new Alert(AlertType.WARNING, "Selectionnez un prix supérieur à zéro").showAndWait();
-            return;
-        }
-        if (name.getText().length() == 0) {
-            new Alert(AlertType.WARNING, "Entrez un nom").showAndWait();
-            return;
-        }
-        var product = new Product(0, name.getText(), Double.parseDouble(cost.getText()), description.getText(),
-                category.getSelectionModel().getSelectedItem().getId(), image.getText());
-        try {
-            if (MainWindowController.factory.getProductDAO().create(product) != null)
-                MainWindowController.getMainTabPane().getTabs().remove(tab);
-            else
-                new Alert(AlertType.ERROR, "Impossible de créer ce produit").showAndWait();
-        } catch (DAOException e) {
-            new Alert(AlertType.ERROR, e.getMessage()).showAndWait();
-        }
+        MainWindowController.runAsynchronously(() -> {
+            if (category.getSelectionModel().getSelectedItem() == null) {
+                Platform.runLater(() -> new Alert(AlertType.WARNING, "Selectionnez une catégorie").showAndWait());
+                return;
+            }
+            if (cost.getText().length() == 0 || Double.parseDouble(cost.getText()) <= 0) {
+                Platform.runLater(
+                        () -> new Alert(AlertType.WARNING, "Selectionnez un prix supérieur à zéero").showAndWait());
+                return;
+            }
+            if (name.getText().length() == 0) {
+                Platform.runLater(() -> new Alert(AlertType.WARNING, "Entrez un nom").showAndWait());
+                return;
+            }
+            var product = new Product(0, name.getText(), Double.parseDouble(cost.getText()), description.getText(),
+                    category.getSelectionModel().getSelectedItem().getId(), image.getText());
+            try {
+                if (MainWindowController.factory.getProductDAO().create(product) != null)
+                    MainWindowController.getMainTabPane().getTabs().remove(tab);
+                else
+                    Platform.runLater(() -> new Alert(AlertType.ERROR, "Impossible de créer ce produit").showAndWait());
+            } catch (DAOException e) {
+                Platform.runLater(() -> new Alert(AlertType.ERROR, e.getMessage()).showAndWait());
+            }
+        });
     }
 
 }

@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import dao.DAOException;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -45,19 +46,22 @@ public class NewCategoryController implements Initializable {
     }
 
     public void save() {
-        if (title.getText().length() == 0) {
-            new Alert(AlertType.WARNING, "Entrez un titre").showAndWait();
-            return;
-        }
-        var category = new Category(title.getText(), image.getText(), 0);
+        MainWindowController.runAsynchronously(() -> {
+            if (title.getText().length() == 0) {
+                Platform.runLater(() -> new Alert(AlertType.WARNING, "Entrez un titre").showAndWait());
+                return;
+            }
+            var category = new Category(title.getText(), image.getText(), 0);
 
-        try {
-            if (MainWindowController.factory.getCategoryDAO().create(category) != null)
-                MainWindowController.getMainTabPane().getTabs().remove(tab);
-            else
-                new Alert(AlertType.ERROR, "Impossible de créer cette catégorie").showAndWait();
-        } catch (DAOException e) {
-            new Alert(AlertType.ERROR, e.getMessage()).showAndWait();
-        }
+            try {
+                if (MainWindowController.factory.getCategoryDAO().create(category) != null)
+                    MainWindowController.getMainTabPane().getTabs().remove(tab);
+                else
+                    Platform.runLater(
+                            () -> new Alert(AlertType.ERROR, "Impossible de créer cette catégorie").showAndWait());
+            } catch (DAOException e) {
+                Platform.runLater(() -> new Alert(AlertType.ERROR, e.getMessage()).showAndWait());
+            }
+        });
     }
 }
