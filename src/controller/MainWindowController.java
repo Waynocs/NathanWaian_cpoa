@@ -195,6 +195,43 @@ public class MainWindowController implements Initializable {
 
     }
 
+    public static void removeCustomer(Customer custo, Runnable deleted, Runnable notDeleted) {
+        loadingInstance.setProgress(-1);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    var custos = factory.getCustomerDAO().getAll();
+                    for (Customer custo : custos) {
+                    }
+                    if (!factory.getCustomerDAO().delete(custo)) {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                var alert = new Alert(AlertType.ERROR, "Une erreur est survenue");
+                                alert.setTitle("Erreur suppression");
+                                alert.showAndWait();
+                                if (notDeleted != null)
+                                    notDeleted.run();
+                                loadingInstance.setProgress(0);
+                            }
+                        });
+                    } else
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (deleted != null)
+                                    deleted.run();
+                                loadingInstance.setProgress(0);
+                            }
+                        });
+                } catch (DAOException e) {
+                    new Alert(AlertType.ERROR, e.getMessage()).showAndWait();
+                }
+            }
+        }).start();
+    }
+
     public void license() {
         try {
             URL fxmlURL = CategoriesController.class.getResource("../view/License.fxml");
@@ -405,6 +442,32 @@ public class MainWindowController implements Initializable {
     }
 
     public static void seeCustomers() {
+        loadingInstance.setProgress(-1);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                var tab = CustomersController.createControl();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        tabInstance.getTabs().add(tab);
+                        tabInstance.getSelectionModel().select(tab);
+                        tab.setOnSelectionChanged((e) -> {
+                            if (tab.isSelected())
+                                locationInstance.setText("Clients>Tout voir");
+                            else if (tabInstance.getTabs().size() == 0)
+                                locationInstance.setText("Aucun onglet ouvert");
+                        });
+                        locationInstance.setText("Clients>Tout voir");
+                        var menuItem = new MenuItem("Clients>Tout voir");
+                        tab.setUserData(menuItem);
+                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
+                        locationMenu.add(menuItem);
+                        loadingInstance.setProgress(0);
+                    }
+                });
+            }
+        }).start();
 
     }
 
