@@ -49,13 +49,13 @@ public class MainWindowController implements Initializable {
     public MenuButton connectionMode;
     @FXML
     public MenuButton location;
-    private static MenuButton locationInstance;
     private static TabPane tabInstance;
     private static ProgressBar loadingInstance;
     private static MainWindowController mainInstance;
     public static DAOFactory factory;
     private Mode DAOMode;
     private static ObservableList<MenuItem> locationMenu;
+    private static int runningTasks;
 
     public static MainWindowController getInstance() {
         return mainInstance;
@@ -71,11 +71,11 @@ public class MainWindowController implements Initializable {
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
+        runningTasks = 0;
         tabInstance = mainTabPane;
         loadingInstance = loading;
         DAOMode = Mode.MEMORY;
         factory = DAOFactory.getFactory(DAOMode);
-        locationInstance = location;
         connectionMode.setText("Mémoire");
         location.setText("Aucun onglet ouvert");
         locationMenu = location.getItems();
@@ -133,8 +133,8 @@ public class MainWindowController implements Initializable {
     }
 
     public static void addCategory() {
-        loadingInstance.setProgress(-1);
-        new Thread(new Runnable() {
+
+        runAsynchronously(new Runnable() {
             @Override
             public void run() {
                 var tab = NewCategoryController.createControl();
@@ -144,17 +144,15 @@ public class MainWindowController implements Initializable {
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        loadingInstance.setProgress(0);
                     }
                 });
             }
-        }).start();
+        });
 
     }
 
     public static void removeCategory(Category categ, Runnable deleted, Runnable notDeleted) {
-        loadingInstance.setProgress(-1);
-        new Thread(new Runnable() {
+        runAsynchronously(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -169,7 +167,6 @@ public class MainWindowController implements Initializable {
                                     alert.showAndWait();
                                     if (notDeleted != null)
                                         notDeleted.run();
-                                    loadingInstance.setProgress(0);
                                 }
                             });
                             return;
@@ -184,23 +181,24 @@ public class MainWindowController implements Initializable {
                                 alert.showAndWait();
                                 if (notDeleted != null)
                                     notDeleted.run();
-                                loadingInstance.setProgress(0);
                             }
                         });
                     } else
                         Platform.runLater(new Runnable() {
+
                             @Override
                             public void run() {
                                 if (deleted != null)
                                     deleted.run();
-                                loadingInstance.setProgress(0);
                             }
                         });
-                } catch (DAOException e) {
+                } catch (
+
+                DAOException e) {
                     new Alert(AlertType.ERROR, e.getMessage()).showAndWait();
                 }
             }
-        }).start();
+        });
     }
 
     public static void addCustomer() {
@@ -225,8 +223,7 @@ public class MainWindowController implements Initializable {
     }
 
     public static void addProduct() {
-        loadingInstance.setProgress(-1);
-        new Thread(new Runnable() {
+        runAsynchronously(new Runnable() {
             @Override
             public void run() {
                 var tab = NewProductController.createControl();
@@ -236,11 +233,10 @@ public class MainWindowController implements Initializable {
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        loadingInstance.setProgress(0);
                     }
                 });
             }
-        }).start();
+        });
 
     }
 
@@ -253,8 +249,7 @@ public class MainWindowController implements Initializable {
     }
 
     public static void removeOrder(Order ord, Runnable deleted, Runnable notDeleted) {
-        loadingInstance.setProgress(-1);
-        new Thread(new Runnable() {
+        runAsynchronously(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -267,7 +262,6 @@ public class MainWindowController implements Initializable {
                                 alert.showAndWait();
                                 if (notDeleted != null)
                                     notDeleted.run();
-                                loadingInstance.setProgress(0);
                             }
                         });
                     } else {
@@ -278,20 +272,20 @@ public class MainWindowController implements Initializable {
                             public void run() {
                                 if (deleted != null)
                                     deleted.run();
-                                loadingInstance.setProgress(0);
                             }
                         });
                     }
-                } catch (DAOException e) {
+                } catch (
+
+                DAOException e) {
                     new Alert(AlertType.ERROR, e.getMessage()).showAndWait();
                 }
             }
-        }).start();
+        });
     }
 
     public static void removeProduct(Product prod, Runnable deleted, Runnable notDeleted) {
-        loadingInstance.setProgress(-1);
-        new Thread(new Runnable() {
+        runAsynchronously(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -304,7 +298,6 @@ public class MainWindowController implements Initializable {
                                 alert.showAndWait();
                                 if (notDeleted != null)
                                     notDeleted.run();
-                                loadingInstance.setProgress(0);
                             }
                         });
                     } else if (!factory.getProductDAO().delete(prod)) {
@@ -316,23 +309,24 @@ public class MainWindowController implements Initializable {
                                 alert.showAndWait();
                                 if (notDeleted != null)
                                     notDeleted.run();
-                                loadingInstance.setProgress(0);
                             }
                         });
                     } else
                         Platform.runLater(new Runnable() {
+
                             @Override
                             public void run() {
                                 if (deleted != null)
                                     deleted.run();
-                                loadingInstance.setProgress(0);
                             }
                         });
-                } catch (DAOException e) {
+                } catch (
+
+                DAOException e) {
                     new Alert(AlertType.ERROR, e.getMessage()).showAndWait();
                 }
             }
-        }).start();
+        });
     }
 
     public void addOrd() {
@@ -340,8 +334,7 @@ public class MainWindowController implements Initializable {
     }
 
     public static void addOrder() {
-        loadingInstance.setProgress(-1);
-        new Thread(new Runnable() {
+        runAsynchronously(new Runnable() {
             @Override
             public void run() {
                 var tab = NewOrderController.createControl();
@@ -351,27 +344,42 @@ public class MainWindowController implements Initializable {
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        loadingInstance.setProgress(0);
                     }
                 });
             }
-        }).start();
+        });
     }
 
-    public static void runAsynchronously(Runnable fct) {
-        loadingInstance.setProgress(-1);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                fct.run();
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadingInstance.setProgress(0);
+    public static void runAsynchronously(Runnable subthread) {
+        runAsynchronously(subthread, null);
+    }
+
+    public static void runAsynchronously(Runnable subthread, Runnable mainthread) {
+        Platform.runLater(() -> {
+            newThread();
+            new Thread(() -> {
+                try {
+                    subthread.run();
+                } catch (Exception e) {
+                    Platform.runLater(() -> {
+                        endThread();
+                    });
+                    throw e;
+                }
+                Platform.runLater(() -> {
+                    try {
+                        if (mainthread != null)
+                            mainthread.run();
+                    } catch (Exception e) {
+                        Platform.runLater(() -> {
+                            endThread();
+                        });
+                        throw e;
                     }
+                    endThread();
                 });
-            }
-        }).start();
+            }).start();
+        });
     }
 
     public void seeCategs() {
@@ -379,8 +387,7 @@ public class MainWindowController implements Initializable {
     }
 
     public static void seeCategories() {
-        loadingInstance.setProgress(-1);
-        new Thread(new Runnable() {
+        runAsynchronously(new Runnable() {
             @Override
             public void run() {
                 var tab = CategoriesController.createControl();
@@ -390,11 +397,10 @@ public class MainWindowController implements Initializable {
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        loadingInstance.setProgress(0);
                     }
                 });
             }
-        }).start();
+        });
     }
 
     public void seeCusts() {
@@ -410,8 +416,7 @@ public class MainWindowController implements Initializable {
     }
 
     public static void seeProducts() {
-        loadingInstance.setProgress(-1);
-        new Thread(new Runnable() {
+        runAsynchronously(new Runnable() {
             @Override
             public void run() {
                 var tab = ProductsController.createControl();
@@ -421,11 +426,10 @@ public class MainWindowController implements Initializable {
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        loadingInstance.setProgress(0);
                     }
                 });
             }
-        }).start();
+        });
     }
 
     public void seeOrds() {
@@ -433,8 +437,7 @@ public class MainWindowController implements Initializable {
     }
 
     public static void seeOrders() {
-        loadingInstance.setProgress(-1);
-        new Thread(new Runnable() {
+        runAsynchronously(new Runnable() {
             @Override
             public void run() {
                 var tab = OrdersController.createControl();
@@ -444,16 +447,14 @@ public class MainWindowController implements Initializable {
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        loadingInstance.setProgress(0);
                     }
                 });
             }
-        }).start();
+        });
     }
 
     public static void detailCategory(Category categ) {
-        loadingInstance.setProgress(-1);
-        new Thread(new Runnable() {
+        runAsynchronously(new Runnable() {
             @Override
             public void run() {
                 var tab = CategoryDetailController.createControl(categ);
@@ -463,11 +464,10 @@ public class MainWindowController implements Initializable {
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        loadingInstance.setProgress(0);
                     }
                 });
             }
-        }).start();
+        });
     }
 
     public static void detailCustomer(Customer cust) {
@@ -475,8 +475,7 @@ public class MainWindowController implements Initializable {
     }
 
     public static void detailProduct(Product prod) {
-        loadingInstance.setProgress(-1);
-        new Thread(new Runnable() {
+        runAsynchronously(new Runnable() {
             @Override
             public void run() {
                 var tab = ProductDetailController.createControl(prod);
@@ -486,16 +485,14 @@ public class MainWindowController implements Initializable {
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        loadingInstance.setProgress(0);
                     }
                 });
             }
-        }).start();
+        });
     }
 
     public static void editProduct(Product prod, ProductDetailController controller) {
-        loadingInstance.setProgress(-1);
-        new Thread(new Runnable() {
+        runAsynchronously(new Runnable() {
             @Override
             public void run() {
                 var editor = EditProductController.createController(prod, controller);
@@ -515,16 +512,14 @@ public class MainWindowController implements Initializable {
                         tabInstance.getTabs().remove(controller.tab);
                         tabInstance.getTabs().add(editor.tab);
                         tabInstance.getSelectionModel().select(editor.tab);
-                        loadingInstance.setProgress(0);
                     }
                 });
             }
-        }).start();
+        });
     }
 
     public static void editCategory(Category categ, CategoryDetailController controller) {
-        loadingInstance.setProgress(-1);
-        new Thread(new Runnable() {
+        runAsynchronously(new Runnable() {
 
             @Override
             public void run() {
@@ -546,16 +541,14 @@ public class MainWindowController implements Initializable {
                         tabInstance.getTabs().remove(controller.tab);
                         tabInstance.getTabs().add(editor.tab);
                         tabInstance.getSelectionModel().select(editor.tab);
-                        loadingInstance.setProgress(0);
                     }
                 });
             }
-        }).start();
+        });
     }
 
     public static void editOrder(Order ord, OrderDetailController controller) {
-        loadingInstance.setProgress(-1);
-        new Thread(new Runnable() {
+        runAsynchronously(new Runnable() {
             @Override
             public void run() {
                 var editor = EditOrderController.createController(ord, controller);
@@ -575,17 +568,14 @@ public class MainWindowController implements Initializable {
                         tabInstance.getTabs().remove(controller.tab);
                         tabInstance.getTabs().add(editor.tab);
                         tabInstance.getSelectionModel().select(editor.tab);
-                        loadingInstance.setProgress(0);
                     }
                 });
             }
-        }).start();
+        });
     }
 
-    // TODO take count of the running op
     public static void detailOrder(Order ord) {
-        loadingInstance.setProgress(-1);
-        new Thread(new Runnable() {
+        runAsynchronously(new Runnable() {
             @Override
             public void run() {
                 var tab = OrderDetailController.createControl(ord);
@@ -595,11 +585,27 @@ public class MainWindowController implements Initializable {
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        loadingInstance.setProgress(0);
                     }
                 });
             }
-        }).start();
+        });
+    }
+
+    private static void newThread() {
+        runningTasks++;
+        scanThreads();
+    }
+
+    private static void scanThreads() {
+        if (runningTasks == 0)
+            loadingInstance.setProgress(0);
+        else
+            loadingInstance.setProgress(-1);
+    }
+
+    private static void endThread() {
+        runningTasks--;
+        scanThreads();
     }
 
     public void toMySql() {
