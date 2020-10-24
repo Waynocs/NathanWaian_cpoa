@@ -459,32 +459,20 @@ public class MainWindowController implements Initializable {
     }
 
     public static void seeCustomers() {
-        loadingInstance.setProgress(-1);
-        new Thread(new Runnable() {
+        runAsynchronously(new Runnable() {
             @Override
             public void run() {
                 var tab = CustomersController.createControl();
+                tab.setUserData("Clients>Tout voir");
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        tab.setOnSelectionChanged((e) -> {
-                            if (tab.isSelected())
-                                locationInstance.setText("Clients>Tout voir");
-                            else if (tabInstance.getTabs().size() == 0)
-                                locationInstance.setText("Aucun onglet ouvert");
-                        });
-                        locationInstance.setText("Clients>Tout voir");
-                        var menuItem = new MenuItem("Clients>Tout voir");
-                        tab.setUserData(menuItem);
-                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
-                        locationMenu.add(menuItem);
-                        loadingInstance.setProgress(0);
                     }
                 });
             }
-        }).start();
+        });
 
     }
 
