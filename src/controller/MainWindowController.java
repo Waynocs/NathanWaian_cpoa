@@ -201,8 +201,22 @@ public class MainWindowController implements Initializable {
             @Override
             public void run() {
                 try {
-                    var custos = factory.getCustomerDAO().getAll();
-                    for (Customer custo : custos) {
+                    var ords = factory.getOrderDAO().getAll();
+                    for (Order ord : ords) {
+                        if (ord.getCustomer() == ord.getId()) {
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    var alert = new Alert(AlertType.WARNING, "Une commande est associée à ce client");
+                                    alert.setTitle("Erreur suppression");
+                                    alert.showAndWait();
+                                    if (notDeleted != null)
+                                        notDeleted.run();
+                                    loadingInstance.setProgress(0);
+                                }
+                            });
+                            return;
+                        }
                     }
                     if (!factory.getCustomerDAO().delete(custo)) {
                         Platform.runLater(new Runnable() {
