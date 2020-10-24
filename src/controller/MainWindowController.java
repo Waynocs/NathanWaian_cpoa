@@ -622,7 +622,7 @@ public class MainWindowController implements Initializable {
             @Override
             public void run() {
                 var editor = EditOrderController.createController(ord, controller);
-                editor.tab.setOnClosed((e1) -> {
+                editor.tab.setOnClosed((e1) -> Platform.runLater(() -> {
                     tabInstance.getTabs().remove(editor.tab);
                     if (editor.reopenDetails) {
                         tabInstance.getTabs().add(controller.tab);
@@ -641,7 +641,7 @@ public class MainWindowController implements Initializable {
                         if (editor.saved)
                             controller.refresh();
                     }
-                });
+                }));
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -80,6 +81,7 @@ public class EditOrderController implements Initializable {
     @FXML
     public Tab tab;
     public Order order;
+    public Order initOrder;
     public OrderDetailController detailController;
     public Customer initCustomer;
     public boolean reopenDetails;
@@ -138,6 +140,7 @@ public class EditOrderController implements Initializable {
 
     public void setupFields(Order ord) {
         order = ord;
+        initOrder = order.clone();
         MainWindowController.runAsynchronously(() -> {
             for (Product prod : MainWindowController.factory.getProductDAO().getAll())
                 allProducts.put(prod.getId(), prod);
@@ -362,16 +365,16 @@ public class EditOrderController implements Initializable {
     public void reset() {
         customer.getSelectionModel().select(null);
         for (Customer cust : customers)
-            if (cust.getId() == order.getCustomer()) {
+            if (cust.getId() == initOrder.getCustomer()) {
                 customer.getSelectionModel().select(cust);
                 break;
             }
-        date.setValue(order.getDate().toLocalDate());
-        hours.getEditor().setText("" + order.getDate().getHour());
-        minutes.getEditor().setText("" + order.getDate().getMinute());
-        seconds.getEditor().setText("" + order.getDate().getSecond());
+        date.setValue(initOrder.getDate().toLocalDate());
+        hours.getValueFactory().setValue(initOrder.getDate().getHour());
+        minutes.getValueFactory().setValue(initOrder.getDate().getMinute());
+        seconds.getValueFactory().setValue(initOrder.getDate().getSecond());
         tab.setText("Éditer:" + initCustomer.getSurname() + " "
-                + order.getDate().format(DateTimeFormatter.ofPattern("dd/MM")));
+                + initOrder.getDate().format(DateTimeFormatter.ofPattern("dd/MM")));
         customer.getSelectionModel().select(initCustomer);
         var prods = table.getItems();
         prods.clear();
@@ -394,36 +397,48 @@ public class EditOrderController implements Initializable {
     }
 
     public void save() {
-        // if (category.getSelectionModel().getSelectedItem() == null) {
-        // new Alert(AlertType.WARNING, "Selectionnez une catégorie").showAndWait();
-        // return;
-        // }
-        // if (cost.getText().length() == 0 || Double.parseDouble(cost.getText()) <= 0)
-        // {
-        // new Alert(AlertType.WARNING, "Selectionnez un prix supérieur à
-        // zéro").showAndWait();
-        // return;
-        // }
-        // if (name.getText().length() == 0) {
-        // new Alert(AlertType.WARNING, "Entrez un nom").showAndWait();
-        // return;
-        // }
-        // product.setCategory(category.getSelectionModel().getSelectedItem().getId());
-        // product.setCost(Double.parseDouble(cost.getText()));
-        // product.setDescription(description.getText());
-        // product.setImagePath(image.getText());
-        // product.setName(name.getText());
-        // try {
-        // if (MainWindowController.factory.getProductDAO().update(product)) {
-        // saved = true;
-        // reopenDetails = true;
-        // tab.getOnClosed().handle(null);
-        // } else
-        // new Alert(AlertType.ERROR, "Impossible de modifier ce
-        // produit").showAndWait();
-
-        // } catch (DAOException e) {
-        // new Alert(AlertType.ERROR, e.getMessage()).showAndWait();
-        // }
+        MainWindowController.runAsynchronously(() -> {
+            if (customer.getSelectionModel().getSelectedItem() == null) {
+                Platform.runLater(() -> new Alert(AlertType.WARNING, "Selectionnez un client").showAndWait());
+                return;
+            }
+            if (date.getValue() == null) {
+                Platform.runLater(() -> new Alert(AlertType.WARNING, "Selectionnez une date").showAndWait());
+                return;
+            }
+            if (table.getItems().size() == 0) {
+                Platform.runLater(() -> new Alert(AlertType.WARNING, "Ajoutez au moins un produit").showAndWait());
+                return;
+            }
+            order.setDate(LocalDateTime.of(date.getValue(),
+                    LocalTime.of(hours.getValue(), minutes.getValue(), seconds.getValue())));
+            try {
+                if (!MainWindowController.factory.getOrderDAO().update(order)) {
+                    Platform.runLater(
+                            () -> new Alert(AlertType.ERROR, "Impossible de modifier une partie de la commande.")
+                                    .showAndWait());
+                    return;
+                }
+                for (var line : MainWindowController.factory.getOrderLineDAO().getAllFromOrder(order.getId()))
+                    if (!MainWindowController.factory.getOrderLineDAO().delete(line)) {
+                        Platform.runLater(() -> new Alert(AlertType.ERROR,
+                                "Impossible de modifier une partie de la commande. Risque de corruption.")
+                                        .showAndWait());
+                        return;
+                    }
+                for (var line : table.getItems())
+                    if (MainWindowController.factory.getOrderLineDAO().create(line) == null) {
+                        Platform.runLater(() -> new Alert(AlertType.ERROR,
+                                "Impossible de modifier une partie de la commande. Risque de corruption.")
+                                        .showAndWait());
+                        return;
+                    }
+                saved = true;
+                reopenDetails = true;
+                tab.getOnClosed().handle(null);
+            } catch (DAOException e) {
+                Platform.runLater(() -> new Alert(AlertType.ERROR, e.getMessage()).showAndWait());
+            }
+        });
     }
 }
