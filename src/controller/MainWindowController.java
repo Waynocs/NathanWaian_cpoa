@@ -8,6 +8,8 @@ import dao.DAOException;
 import dao.DAOFactory;
 import dao.DAOFactory.Mode;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -80,9 +82,29 @@ public class MainWindowController implements Initializable {
         mainTabPane.getTabs().addListener(new ListChangeListener<Tab>() {
             @Override
             public void onChanged(Change<? extends Tab> change) {
-                while (change.next())
+                while (change.next()) {
+                    for (Tab tab : change.getAddedSubList()) {
+                        var menuItem = new MenuItem(tab.getUserData().toString());
+                        menuItem.setUserData(tab);
+                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
+                        locationMenu.add(menuItem);
+                    }
                     for (Tab tab : change.getRemoved())
-                        locationMenu.remove((MenuItem) tab.getUserData());
+                        for (MenuItem menuItem : locationMenu)
+                            if (menuItem.getUserData() == tab) {
+                                locationMenu.remove(menuItem);
+                                break;
+                            }
+                }
+            }
+        });
+        mainTabPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
+            @Override
+            public void changed(ObservableValue<? extends Tab> arg0, Tab arg1, Tab arg2) {
+                if (arg2 != null)
+                    location.setText(arg2.getUserData().toString());
+                else
+                    location.setText("Aucun onglet ouvert");
             }
         });
         window.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
@@ -116,22 +138,12 @@ public class MainWindowController implements Initializable {
             @Override
             public void run() {
                 var tab = NewCategoryController.createControl();
+                tab.setUserData("Catégories>Nouvelle");
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        tab.setOnSelectionChanged((e) -> {
-                            if (tab.isSelected())
-                                locationInstance.setText("Catégories>Nouvelle");
-                            else if (tabInstance.getTabs().size() == 0)
-                                locationInstance.setText("Aucun onglet ouvert");
-                        });
-                        locationInstance.setText("Catégories>Nouvelle");
-                        var menuItem = new MenuItem("Catégories>Nouvelle");
-                        tab.setUserData(menuItem);
-                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
-                        locationMenu.add(menuItem);
                         loadingInstance.setProgress(0);
                     }
                 });
@@ -200,19 +212,9 @@ public class MainWindowController implements Initializable {
             URL fxmlURL = CategoriesController.class.getResource("../view/License.fxml");
             FXMLLoader fxmlLoader = new FXMLLoader(fxmlURL);
             var tab = fxmlLoader.<TabPane>load().getTabs().get(0);
-            tab.setOnSelectionChanged((e) -> {
-                if (tab.isSelected())
-                    location.setText("Aide>Licence");
-                else if (tabInstance.getTabs().size() == 0)
-                    locationInstance.setText("Aucun onglet ouvert");
-            });
+            tab.setUserData("Aide>Licence");
             tabInstance.getTabs().add(tab);
             tabInstance.getSelectionModel().select(tab);
-            location.setText("Aide>Licence");
-            var menuItem = new MenuItem("Aide>Licence");
-            tab.setUserData(menuItem);
-            menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
-            locationMenu.add(menuItem);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -228,22 +230,12 @@ public class MainWindowController implements Initializable {
             @Override
             public void run() {
                 var tab = NewProductController.createControl();
+                tab.setUserData("Produits>Nouveau");
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        tab.setOnSelectionChanged((e) -> {
-                            if (tab.isSelected())
-                                locationInstance.setText("Produits>Nouveau");
-                            else if (tabInstance.getTabs().size() == 0)
-                                locationInstance.setText("Aucun onglet ouvert");
-                        });
-                        locationInstance.setText("Produits>Nouveau");
-                        var menuItem = new MenuItem("Produits>Nouveau");
-                        tab.setUserData(menuItem);
-                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
-                        locationMenu.add(menuItem);
                         loadingInstance.setProgress(0);
                     }
                 });
@@ -353,22 +345,12 @@ public class MainWindowController implements Initializable {
             @Override
             public void run() {
                 var tab = NewOrderController.createControl();
+                tab.setUserData("Commandes>Nouvelle");
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        tab.setOnSelectionChanged((e) -> {
-                            if (tab.isSelected())
-                                locationInstance.setText("Commandes>Nouvelle");
-                            else if (tabInstance.getTabs().size() == 0)
-                                locationInstance.setText("Aucun onglet ouvert");
-                        });
-                        locationInstance.setText("Commandes>Nouvelle");
-                        var menuItem = new MenuItem("Commandes>Nouvelle");
-                        tab.setUserData(menuItem);
-                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
-                        locationMenu.add(menuItem);
                         loadingInstance.setProgress(0);
                     }
                 });
@@ -402,22 +384,12 @@ public class MainWindowController implements Initializable {
             @Override
             public void run() {
                 var tab = CategoriesController.createControl();
+                tab.setUserData("Catégories>Tout voir");
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        tab.setOnSelectionChanged((e) -> {
-                            if (tab.isSelected())
-                                locationInstance.setText("Catégories>Tout voir");
-                            else if (tabInstance.getTabs().size() == 0)
-                                locationInstance.setText("Aucun onglet ouvert");
-                        });
-                        locationInstance.setText("Catégories>Tout voir");
-                        var menuItem = new MenuItem("Catégories>Tout voir");
-                        tab.setUserData(menuItem);
-                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
-                        locationMenu.add(menuItem);
                         loadingInstance.setProgress(0);
                     }
                 });
@@ -443,22 +415,12 @@ public class MainWindowController implements Initializable {
             @Override
             public void run() {
                 var tab = ProductsController.createControl();
+                tab.setUserData("Produits>Tout voir");
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        tab.setOnSelectionChanged((e) -> {
-                            if (tab.isSelected())
-                                locationInstance.setText("Produits>Tout voir");
-                            else if (tabInstance.getTabs().size() == 0)
-                                locationInstance.setText("Aucun onglet ouvert");
-                        });
-                        locationInstance.setText("Produits>Tout voir");
-                        var menuItem = new MenuItem("Produits>Tout voir");
-                        tab.setUserData(menuItem);
-                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
-                        locationMenu.add(menuItem);
                         loadingInstance.setProgress(0);
                     }
                 });
@@ -476,22 +438,12 @@ public class MainWindowController implements Initializable {
             @Override
             public void run() {
                 var tab = OrdersController.createControl();
+                tab.setUserData("Commandes>Tout voir");
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        tab.setOnSelectionChanged((e) -> {
-                            if (tab.isSelected())
-                                locationInstance.setText("Commandes>Tout voir");
-                            else if (tabInstance.getTabs().size() == 0)
-                                locationInstance.setText("Aucun onglet ouvert");
-                        });
-                        locationInstance.setText("Commandes>Tout voir");
-                        var menuItem = new MenuItem("Commandes>Tout voir");
-                        tab.setUserData(menuItem);
-                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
-                        locationMenu.add(menuItem);
                         loadingInstance.setProgress(0);
                     }
                 });
@@ -505,22 +457,12 @@ public class MainWindowController implements Initializable {
             @Override
             public void run() {
                 var tab = CategoryDetailController.createControl(categ);
+                tab.setUserData("Catégories>Détail");
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        tab.setOnSelectionChanged((e) -> {
-                            if (tab.isSelected())
-                                locationInstance.setText("Catégories>Détail");
-                            else if (tabInstance.getTabs().size() == 0)
-                                locationInstance.setText("Aucun onglet ouvert");
-                        });
-                        locationInstance.setText("Catégories>Détail");
-                        var menuItem = new MenuItem("Catégories>Détail");
-                        tab.setUserData(menuItem);
-                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
-                        locationMenu.add(menuItem);
                         loadingInstance.setProgress(0);
                     }
                 });
@@ -538,22 +480,12 @@ public class MainWindowController implements Initializable {
             @Override
             public void run() {
                 var tab = ProductDetailController.createControl(prod);
+                tab.setUserData("Produits>Détail");
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        tab.setOnSelectionChanged((e) -> {
-                            if (tab.isSelected())
-                                locationInstance.setText("Produits>Détail");
-                            else if (tabInstance.getTabs().size() == 0)
-                                locationInstance.setText("Aucun onglet ouvert");
-                        });
-                        locationInstance.setText("Produits>Détail");
-                        var menuItem = new MenuItem("Produits>Détail");
-                        tab.setUserData(menuItem);
-                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
-                        locationMenu.add(menuItem);
                         loadingInstance.setProgress(0);
                     }
                 });
@@ -567,22 +499,12 @@ public class MainWindowController implements Initializable {
             @Override
             public void run() {
                 var editor = EditProductController.createController(prod, controller);
+                editor.tab.setUserData("Produits>Éditer");
                 editor.tab.setOnClosed((e1) -> Platform.runLater(() -> {
                     tabInstance.getTabs().remove(editor.tab);
                     if (editor.reopenDetails) {
                         tabInstance.getTabs().add(controller.tab);
                         tabInstance.getSelectionModel().select(controller.tab);
-                        editor.tab.setOnSelectionChanged((e) -> {
-                            if (editor.tab.isSelected())
-                                locationInstance.setText("Produits>Éditer");
-                            else if (tabInstance.getTabs().size() == 0)
-                                locationInstance.setText("Aucun onglet ouvert");
-                        });
-                        locationInstance.setText("Produits>Éditer");
-                        var menuItem = new MenuItem("Produits>Éditer");
-                        editor.tab.setUserData(menuItem);
-                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(editor.tab));
-                        locationMenu.add(menuItem);
                         if (editor.saved)
                             controller.refresh();
                     }
@@ -607,22 +529,12 @@ public class MainWindowController implements Initializable {
             @Override
             public void run() {
                 var editor = EditCategoryController.createController(categ, controller);
+                editor.tab.setUserData("Catégories>Éditer");
                 editor.tab.setOnClosed((e1) -> Platform.runLater(() -> {
                     tabInstance.getTabs().remove(editor.tab);
                     if (editor.reopenDetails) {
                         tabInstance.getTabs().add(controller.tab);
                         tabInstance.getSelectionModel().select(controller.tab);
-                        editor.tab.setOnSelectionChanged((e) -> {
-                            if (editor.tab.isSelected())
-                                locationInstance.setText("Catégories>Éditer");
-                            else if (tabInstance.getTabs().size() == 0)
-                                locationInstance.setText("Aucun onglet ouvert");
-                        });
-                        locationInstance.setText("Catégories>Éditer");
-                        var menuItem = new MenuItem("Catégories>Éditer");
-                        editor.tab.setUserData(menuItem);
-                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(editor.tab));
-                        locationMenu.add(menuItem);
                         if (editor.saved)
                             controller.refresh();
                     }
@@ -647,22 +559,12 @@ public class MainWindowController implements Initializable {
             @Override
             public void run() {
                 var editor = EditOrderController.createController(ord, controller);
+                editor.tab.setUserData("Commandes>Éditer");
                 editor.tab.setOnClosed((e1) -> Platform.runLater(() -> {
                     tabInstance.getTabs().remove(editor.tab);
                     if (editor.reopenDetails) {
                         tabInstance.getTabs().add(controller.tab);
                         tabInstance.getSelectionModel().select(controller.tab);
-                        editor.tab.setOnSelectionChanged((e2) -> {
-                            if (editor.tab.isSelected())
-                                locationInstance.setText("Commandes>Éditer");
-                            else if (tabInstance.getTabs().size() == 0)
-                                locationInstance.setText("Aucun onglet ouvert");
-                        });
-                        locationInstance.setText("Commandes>Éditer");
-                        var menuItem = new MenuItem("Commandes>Éditer");
-                        editor.tab.setUserData(menuItem);
-                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(editor.tab));
-                        locationMenu.add(menuItem);
                         if (editor.saved)
                             controller.refresh();
                     }
@@ -687,22 +589,12 @@ public class MainWindowController implements Initializable {
             @Override
             public void run() {
                 var tab = OrderDetailController.createControl(ord);
+                tab.setUserData("Commandes>Détail");
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
                         tabInstance.getTabs().add(tab);
                         tabInstance.getSelectionModel().select(tab);
-                        tab.setOnSelectionChanged((e) -> {
-                            if (tab.isSelected())
-                                locationInstance.setText("Commandes>Détail");
-                            else if (tabInstance.getTabs().size() == 0)
-                                locationInstance.setText("Aucun onglet ouvert");
-                        });
-                        locationInstance.setText("Commandes>Détail");
-                        var menuItem = new MenuItem("Commandes>Détail");
-                        tab.setUserData(menuItem);
-                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
-                        locationMenu.add(menuItem);
                         loadingInstance.setProgress(0);
                     }
                 });
