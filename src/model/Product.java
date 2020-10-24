@@ -13,6 +13,11 @@ public class Product implements Base<Product> {
     }
 
     @Override
+    public String toString() {
+        return name;
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hashCode(id);
     }

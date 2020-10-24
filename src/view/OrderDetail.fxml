@@ -12,60 +12,72 @@
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="555.0" prefWidth="778.0" stylesheets="@style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OrderDetailController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="781.0" prefWidth="1040.0" stylesheets="@style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OrderDetailController">
   <tabs>
     <Tab fx:id="tab" text="&lt;commande&gt;">
       <content>
             <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                <content>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                        <Button mnemonicParsing="false" onAction="#refresh" text="Actualiser">
-                           <VBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </VBox.margin>
-                           <graphic>
-                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
-                                 <image>
-                                    <Image url="@../assets/icons/refresh.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Label fx:id="id" text="ID : &lt;id&gt;">
-                           <VBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </VBox.margin>
-                        </Label>
-                        <HBox alignment="CENTER_LEFT">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
+                  <BorderPane>
+                     <top>
+                        <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Label text="Client :">
-                                 <HBox.margin>
+                              <Button mnemonicParsing="false" onAction="#refresh" text="Actualiser">
+                                 <VBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </HBox.margin>
+                                 </VBox.margin>
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
+                                       <image>
+                                          <Image url="@../assets/icons/refresh.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Label fx:id="id" text="ID : &lt;id&gt;">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </VBox.margin>
                               </Label>
-                              <Hyperlink fx:id="customer" text="&lt;customer&gt;" />
+                              <HBox alignment="CENTER_LEFT">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <children>
+                                    <Label text="Client :">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <Hyperlink fx:id="customer" text="&lt;customer&gt;" />
+                                 </children>
+                              </HBox>
+                              <Label fx:id="date" text="Date : &lt;date&gt;">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Label fx:id="time" text="Heure : &lt;time&gt;">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Label fx:id="totalCost" text="Coût total : &lt;cost&gt;">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </VBox.margin>
+                              </Label>
                            </children>
-                        </HBox>
-                        <Label fx:id="date" text="Date : &lt;date&gt;">
-                           <VBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </VBox.margin>
-                        </Label>
-                        <Label fx:id="time" text="Heure : &lt;time&gt;">
-                           <VBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </VBox.margin>
-                        </Label>
-                        <TitledPane animated="false" text="Produits">
+                        </VBox>
+                     </top>
+                     <center>
+                        <TitledPane animated="false" collapsible="false" text="Produits commandés" BorderPane.alignment="CENTER">
                           <content>
-                              <TableView fx:id="table" prefHeight="200.0" prefWidth="200.0">
+                              <TableView fx:id="table">
                                 <columns>
                                   <TableColumn fx:id="products" prefWidth="201.0" text="Produit" />
                                   <TableColumn fx:id="quantities" prefWidth="78.0" text="Quantité" />
@@ -75,12 +87,9 @@
                               </TableView>
                           </content>
                         </TitledPane>
-                        <Label fx:id="totalCost" text="Coût total : &lt;cost&gt;">
-                           <VBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </VBox.margin>
-                        </Label>
-                        <HBox alignment="CENTER_RIGHT">
+                     </center>
+                     <bottom>
+                        <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
                            <children>
                               <Button mnemonicParsing="false" onAction="#edit" text="Editer">
                                  <HBox.margin>
@@ -108,8 +117,8 @@
                               </Button>
                            </children>
                         </HBox>
-                     </children>
-                  </VBox>
+                     </bottom>
+                  </BorderPane>
                </content>
             </ScrollPane>
       </content>

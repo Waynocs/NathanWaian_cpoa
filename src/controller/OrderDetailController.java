@@ -183,7 +183,7 @@ public class OrderDetailController implements Initializable {
     }
 
     public void edit() {
-
+        MainWindowController.editOrder(order, this);
     }
 
     public void remove() {
