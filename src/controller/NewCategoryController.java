@@ -55,7 +55,7 @@ public class NewCategoryController implements Initializable {
 
             try {
                 if (MainWindowController.factory.getCategoryDAO().create(category) != null)
-                    MainWindowController.getMainTabPane().getTabs().remove(tab);
+                    Platform.runLater(() -> MainWindowController.getMainTabPane().getTabs().remove(tab));
                 else
                     Platform.runLater(
                             () -> new Alert(AlertType.ERROR, "Impossible de créer cette catégorie").showAndWait());
