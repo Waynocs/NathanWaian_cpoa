@@ -116,7 +116,7 @@ public class NewProductController implements Initializable {
                     category.getSelectionModel().getSelectedItem().getId(), image.getText());
             try {
                 if (MainWindowController.factory.getProductDAO().create(product) != null)
-                    MainWindowController.getMainTabPane().getTabs().remove(tab);
+                    Platform.runLater(() -> MainWindowController.getMainTabPane().getTabs().remove(tab));
                 else
                     Platform.runLater(() -> new Alert(AlertType.ERROR, "Impossible de créer ce produit").showAndWait());
             } catch (DAOException e) {
