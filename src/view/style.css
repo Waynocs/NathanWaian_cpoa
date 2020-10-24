@@ -34,3 +34,7 @@ Button {
 .status-button:hover {
     -fx-background-color: #00000008;
 }
+
+Hyperlink {
+    -fx-text-fill: #33557c;
+}
