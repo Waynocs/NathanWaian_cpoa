@@ -348,7 +348,32 @@ public class MainWindowController implements Initializable {
     }
 
     public static void addOrder() {
-
+        loadingInstance.setProgress(-1);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                var tab = NewOrderController.createControl();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        tabInstance.getTabs().add(tab);
+                        tabInstance.getSelectionModel().select(tab);
+                        tab.setOnSelectionChanged((e) -> {
+                            if (tab.isSelected())
+                                locationInstance.setText("Commandes>Nouvelle");
+                            else if (tabInstance.getTabs().size() == 0)
+                                locationInstance.setText("Aucun onglet ouvert");
+                        });
+                        locationInstance.setText("Commandes>Nouvelle");
+                        var menuItem = new MenuItem("Commandes>Nouvelle");
+                        tab.setUserData(menuItem);
+                        menuItem.setOnAction((e) -> tabInstance.getSelectionModel().select(tab));
+                        locationMenu.add(menuItem);
+                        loadingInstance.setProgress(0);
+                    }
+                });
+            }
+        }).start();
     }
 
     public static void runAsynchronously(Runnable fct) {
