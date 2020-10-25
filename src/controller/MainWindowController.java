@@ -133,72 +133,43 @@ public class MainWindowController implements Initializable {
     }
 
     public static void addCategory() {
-
-        runAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                var tab = NewCategoryController.createControl();
-                tab.setUserData("Catégories>Nouvelle");
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        tabInstance.getTabs().add(tab);
-                        tabInstance.getSelectionModel().select(tab);
-                    }
-                });
-            }
+        var tab = new Ptr<Tab>();
+        runAsynchronously(() -> {
+            tab.value = NewCategoryController.createControl();
+            tab.value.setUserData("Catégories>Nouvelle");
+        }, () -> {
+            tabInstance.getTabs().add(tab.value);
+            tabInstance.getSelectionModel().select(tab.value);
         });
-
     }
 
     public static void removeCategory(Category categ, Runnable deleted, Runnable notDeleted) {
-        runAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    var prods = factory.getProductDAO().getAll();
-                    for (Product product : prods) {
-                        if (product.getCategory() == categ.getId()) {
-                            Platform.runLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    var alert = new Alert(AlertType.WARNING, "Un produit utilise cette catégorie");
-                                    alert.setTitle("Erreur suppression");
-                                    alert.showAndWait();
-                                    if (notDeleted != null)
-                                        notDeleted.run();
-                                }
-                            });
-                            return;
-                        }
+        var alertType = new Ptr<AlertType>(AlertType.ERROR);
+        var alertText = new Ptr<String>();
+        runAsynchronously(() -> {
+            try {
+                var prods = factory.getProductDAO().getAll();
+                for (Product product : prods) {
+                    if (product.getCategory() == categ.getId()) {
+                        alertText.value = "Un produit utilise cette catégorie";
+                        alertType.value = AlertType.WARNING;
+                        return;
                     }
-                    if (!factory.getCategoryDAO().delete(categ)) {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                var alert = new Alert(AlertType.ERROR, "Une erreur est survenue");
-                                alert.setTitle("Erreur suppression");
-                                alert.showAndWait();
-                                if (notDeleted != null)
-                                    notDeleted.run();
-                            }
-                        });
-                    } else
-                        Platform.runLater(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                if (deleted != null)
-                                    deleted.run();
-                            }
-                        });
-                } catch (
-
-                DAOException e) {
-                    new Alert(AlertType.ERROR, e.getMessage()).showAndWait();
                 }
+                if (!factory.getCategoryDAO().delete(categ))
+                    alertText.value = "Une erreur est survenue";
+            } catch (DAOException e) {
+                alertText.value = e.getMessage();
             }
+        }, () -> {
+            if (alertText.value != null) {
+                new Alert(alertType.value, alertText.value).showAndWait();
+                if (notDeleted != null)
+                    notDeleted.run();
+            } else if (deleted != null)
+                deleted.run();
         });
+
     }
 
     public static void addCustomer() {
@@ -206,54 +177,32 @@ public class MainWindowController implements Initializable {
     }
 
     public static void removeCustomer(Customer custo, Runnable deleted, Runnable notDeleted) {
-        loadingInstance.setProgress(-1);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    var ords = factory.getOrderDAO().getAll();
-                    for (Order ord : ords) {
-                        if (ord.getCustomer() == ord.getId()) {
-                            Platform.runLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    var alert = new Alert(AlertType.WARNING, "Une commande est associée à ce client");
-                                    alert.setTitle("Erreur suppression");
-                                    alert.showAndWait();
-                                    if (notDeleted != null)
-                                        notDeleted.run();
-                                    loadingInstance.setProgress(0);
-                                }
-                            });
-                            return;
-                        }
+        var alertType = new Ptr<AlertType>(AlertType.ERROR);
+        var alertText = new Ptr<String>();
+        runAsynchronously(() -> {
+            try {
+                var ords = factory.getOrderDAO().getAll();
+                for (Order ord : ords) {
+                    if (ord.getCustomer() == custo.getId()) {
+                        alertText.value = "Une commande est associée à ce client";
+                        alertType.value = AlertType.WARNING;
+                        return;
                     }
-                    if (!factory.getCustomerDAO().delete(custo)) {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                var alert = new Alert(AlertType.ERROR, "Une erreur est survenue");
-                                alert.setTitle("Erreur suppression");
-                                alert.showAndWait();
-                                if (notDeleted != null)
-                                    notDeleted.run();
-                                loadingInstance.setProgress(0);
-                            }
-                        });
-                    } else
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (deleted != null)
-                                    deleted.run();
-                                loadingInstance.setProgress(0);
-                            }
-                        });
-                } catch (DAOException e) {
-                    new Alert(AlertType.ERROR, e.getMessage()).showAndWait();
                 }
+
+                if (!factory.getCustomerDAO().delete(custo))
+                    alertText.value = "Une erreur est survenue";
+            } catch (DAOException e) {
+                alertText.value = e.getMessage();
             }
-        }).start();
+        }, () -> {
+            if (alertText.value != null) {
+                new Alert(alertType.value, alertText.value).showAndWait();
+                if (notDeleted != null)
+                    notDeleted.run();
+            } else if (deleted != null)
+                deleted.run();
+        });
     }
 
     public void license() {
@@ -300,83 +249,50 @@ public class MainWindowController implements Initializable {
     }
 
     public static void removeOrder(Order ord, Runnable deleted, Runnable notDeleted) {
-        runAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (!factory.getOrderDAO().delete(ord)) {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                var alert = new Alert(AlertType.ERROR, "Une erreur est survenue");
-                                alert.setTitle("Erreur suppression");
-                                alert.showAndWait();
-                                if (notDeleted != null)
-                                    notDeleted.run();
-                            }
-                        });
-                    } else {
-                        for (var line : factory.getOrderLineDAO().getAllFromOrder(ord.getId()))
-                            factory.getOrderLineDAO().delete(line);
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (deleted != null)
-                                    deleted.run();
-                            }
-                        });
-                    }
-                } catch (
+        var alertType = new Ptr<AlertType>(AlertType.ERROR);
+        var alertText = new Ptr<String>();
+        runAsynchronously(() -> {
+            try {
+                if (!factory.getOrderDAO().delete(ord))
+                    alertText.value = "Une erreur est survenue";
+            } catch (
 
-                DAOException e) {
-                    new Alert(AlertType.ERROR, e.getMessage()).showAndWait();
-                }
+            DAOException e) {
+                alertText.value = e.getMessage();
             }
+        }, () -> {
+            if (alertText.value != null) {
+                new Alert(alertType.value, alertText.value).showAndWait();
+                if (notDeleted != null)
+                    notDeleted.run();
+            } else if (deleted != null)
+                deleted.run();
         });
     }
 
     public static void removeProduct(Product prod, Runnable deleted, Runnable notDeleted) {
-        runAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (factory.getOrderLineDAO().getAllFromProduct(prod.getId()).length != 0) {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                var alert = new Alert(AlertType.WARNING, "Une commande possède ce produit");
-                                alert.setTitle("Erreur suppression");
-                                alert.showAndWait();
-                                if (notDeleted != null)
-                                    notDeleted.run();
-                            }
-                        });
-                    } else if (!factory.getProductDAO().delete(prod)) {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                var alert = new Alert(AlertType.ERROR, "Une erreur est survenue");
-                                alert.setTitle("Erreur suppression");
-                                alert.showAndWait();
-                                if (notDeleted != null)
-                                    notDeleted.run();
-                            }
-                        });
-                    } else
-                        Platform.runLater(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                if (deleted != null)
-                                    deleted.run();
-                            }
-                        });
-                } catch (
-
-                DAOException e) {
-                    new Alert(AlertType.ERROR, e.getMessage()).showAndWait();
+        var alertType = new Ptr<AlertType>(AlertType.ERROR);
+        var alertText = new Ptr<String>();
+        runAsynchronously(() -> {
+            try {
+                if (factory.getOrderLineDAO().getAllFromProduct(prod.getId()).length != 0) {
+                    alertText.value = "Une commande possède ce produit";
+                    alertType.value = AlertType.WARNING;
+                    if (notDeleted != null)
+                        notDeleted.run();
+                } else if (!factory.getProductDAO().delete(prod)) {
+                    alertText.value = "Une erreur est survenue";
                 }
+            } catch (DAOException e) {
+                alertText.value = e.getMessage();
             }
+        }, () -> {
+            if (alertText.value != null) {
+                new Alert(alertType.value, alertText.value).showAndWait();
+                if (notDeleted != null)
+                    notDeleted.run();
+            } else if (deleted != null)
+                deleted.run();
         });
     }
 
