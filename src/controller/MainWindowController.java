@@ -173,6 +173,15 @@ public class MainWindowController implements Initializable {
     }
 
     public static void addCustomer() {
+        var tab = new Ptr<Tab>();
+        runAsynchronously(() -> {
+            tab.value = NewCustomerController.createControl();
+            tab.value.setUserData("Clients>Nouveau");
+        }, () -> {
+
+            tabInstance.getTabs().add(tab.value);
+            tabInstance.getSelectionModel().select(tab.value);
+        });
 
     }
 
@@ -410,7 +419,15 @@ public class MainWindowController implements Initializable {
         });
     }
 
-    public static void detailCustomer(Customer cust) {
+    public static void detailCustomer(Customer custo) {
+        var tab = new Ptr<Tab>();
+        runAsynchronously(() -> {
+            tab.value = CustomerDetailController.createControl(custo);
+            tab.value.setUserData("Clients>Détail");
+        }, () -> {
+            tabInstance.getTabs().add(tab.value);
+            tabInstance.getSelectionModel().select(tab.value);
+        });
 
     }
 
@@ -475,6 +492,27 @@ public class MainWindowController implements Initializable {
         runAsynchronously(() -> {
             editor.value = EditOrderController.createController(ord, controller);
             editor.value.tab.setUserData("Commandes>Éditer");
+            editor.value.tab.setOnClosed((e1) -> Platform.runLater(() -> {
+                tabInstance.getTabs().remove(editor.value.tab);
+                if (editor.value.reopenDetails) {
+                    tabInstance.getTabs().add(controller.tab);
+                    tabInstance.getSelectionModel().select(controller.tab);
+                    if (editor.value.saved)
+                        controller.refresh();
+                }
+            }));
+        }, () -> {
+            tabInstance.getTabs().remove(controller.tab);
+            tabInstance.getTabs().add(editor.value.tab);
+            tabInstance.getSelectionModel().select(editor.value.tab);
+        });
+    }
+
+    public static void editCustomer(Customer custo, CustomerDetailController controller) {
+        var editor = new Ptr<EditCustomerController>();
+        runAsynchronously(() -> {
+            editor.value = EditCustomerController.createController(custo, controller);
+            editor.value.tab.setUserData("Clients>Éditer");
             editor.value.tab.setOnClosed((e1) -> Platform.runLater(() -> {
                 tabInstance.getTabs().remove(editor.value.tab);
                 if (editor.value.reopenDetails) {

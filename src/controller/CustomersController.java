@@ -35,9 +35,9 @@ public class CustomersController implements Initializable {
     @FXML
     public TableColumn<Customer, String> id;
     @FXML
-    public TableColumn<Customer, String> name;
-    @FXML
     public TableColumn<Customer, String> surname;
+    @FXML
+    public TableColumn<Customer, String> name;
     @FXML
     public TableColumn<Customer, String> identity;
     @FXML
