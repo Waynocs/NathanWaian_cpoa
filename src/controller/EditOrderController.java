@@ -9,7 +9,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import dao.DAOException;
-import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -127,8 +126,7 @@ public class EditOrderController implements Initializable {
             allProducts.clear();
             for (var product : MainWindowController.factory.getProductDAO().getAll())
                 allProducts.put(product.getId(), product);
-            Platform.runLater(() -> scanAvailableProducts());
-        });
+        }, () -> scanAvailableProducts());
     }
 
     public void setupFields(Order ord) {
@@ -141,12 +139,11 @@ public class EditOrderController implements Initializable {
             for (OrderLine line : MainWindowController.factory.getOrderLineDAO().getAllFromOrder(ord.getId()))
                 initialValues.add(line.clone());
             initCustomer = MainWindowController.factory.getCustomerDAO().getById(order.getCustomer());
-            var list = MainWindowController.factory.getCustomerDAO().getAll();
-            Platform.runLater(() -> {
-                customers.addAll(list);
-                refreshAvailableProducts();
-                reset();
-            });
+            return MainWindowController.factory.getCustomerDAO().getAll();
+        }, (list) -> {
+            customers.addAll(list);
+            refreshAvailableProducts();
+            reset();
         });
     }
 
@@ -340,18 +337,15 @@ public class EditOrderController implements Initializable {
     }
 
     public void refreshCust() {
-        MainWindowController.runAsynchronously(() -> {
-            var list = MainWindowController.factory.getCustomerDAO().getAll();
-            Platform.runLater(() -> {
-                var c = customer.getSelectionModel().getSelectedItem();
-                customers.clear();
-                customers.addAll(list);
-                if (c != null) {
-                    customer.getSelectionModel().select(c);
-                    customerLink.setDisable(false);
-                } else
-                    customerLink.setDisable(true);
-            });
+        MainWindowController.runAsynchronously(() -> MainWindowController.factory.getCustomerDAO().getAll(), (list) -> {
+            var c = customer.getSelectionModel().getSelectedItem();
+            customers.clear();
+            customers.addAll(list);
+            if (c != null) {
+                customer.getSelectionModel().select(c);
+                customerLink.setDisable(false);
+            } else
+                customerLink.setDisable(true);
         });
     }
 
@@ -391,47 +385,35 @@ public class EditOrderController implements Initializable {
 
     public void save() {
         MainWindowController.runAsynchronously(() -> {
-            if (customer.getSelectionModel().getSelectedItem() == null) {
-                Platform.runLater(() -> new Alert(AlertType.WARNING, "Selectionnez un client").showAndWait());
-                return;
-            }
-            if (date.getValue() == null) {
-                Platform.runLater(() -> new Alert(AlertType.WARNING, "Selectionnez une date").showAndWait());
-                return;
-            }
-            if (table.getItems().size() == 0) {
-                Platform.runLater(() -> new Alert(AlertType.WARNING, "Ajoutez au moins un produit").showAndWait());
-                return;
-            }
+            if (customer.getSelectionModel().getSelectedItem() == null)
+                return new AlertPair("Selectionnez un client", AlertType.WARNING);
+            if (date.getValue() == null)
+                return new AlertPair("Selectionnez une date", AlertType.WARNING);
+            if (table.getItems().size() == 0)
+                return new AlertPair("Ajoutez au moins un produit", AlertType.WARNING);
             order.setDate(LocalDateTime.of(date.getValue(),
                     LocalTime.of(hours.getValue(), minutes.getValue(), seconds.getValue())));
             try {
-                if (!MainWindowController.factory.getOrderDAO().update(order)) {
-                    Platform.runLater(
-                            () -> new Alert(AlertType.ERROR, "Impossible de modifier une partie de la commande.")
-                                    .showAndWait());
-                    return;
-                }
+                if (!MainWindowController.factory.getOrderDAO().update(order))
+                    return new AlertPair("Impossible de modifier une partie de la commande.", AlertType.ERROR);
                 for (var line : MainWindowController.factory.getOrderLineDAO().getAllFromOrder(order.getId()))
-                    if (!MainWindowController.factory.getOrderLineDAO().delete(line)) {
-                        Platform.runLater(() -> new Alert(AlertType.ERROR,
-                                "Impossible de modifier une partie de la commande. Risque de corruption.")
-                                        .showAndWait());
-                        return;
-                    }
+                    if (!MainWindowController.factory.getOrderLineDAO().delete(line))
+                        return new AlertPair("Impossible de modifier une partie de la commande. Risque de corruption.",
+                                AlertType.ERROR);
                 for (var line : table.getItems())
-                    if (MainWindowController.factory.getOrderLineDAO().create(line) == null) {
-                        Platform.runLater(() -> new Alert(AlertType.ERROR,
-                                "Impossible de modifier une partie de la commande. Risque de corruption.")
-                                        .showAndWait());
-                        return;
-                    }
+                    if (MainWindowController.factory.getOrderLineDAO().create(line) == null)
+                        return new AlertPair("Impossible de modifier une partie de la commande. Risque de corruption.",
+                                AlertType.ERROR);
                 saved = true;
                 reopenDetails = true;
                 tab.getOnClosed().handle(null);
+                return new AlertPair(null, null);
             } catch (DAOException e) {
-                Platform.runLater(() -> new Alert(AlertType.ERROR, e.getMessage()).showAndWait());
+                return new AlertPair(e.getMessage(), AlertType.ERROR);
             }
+        }, (pair) -> {
+            if (pair.getKey() != null)
+                new Alert(pair.getValue(), pair.getKey()).showAndWait();
         });
     }
 }

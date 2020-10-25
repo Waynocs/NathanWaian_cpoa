@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.*;
 
 import dao.DAOException;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -65,25 +64,18 @@ public class NewProductController implements Initializable {
 
     public void refreshCateg() {
         var c = category.getSelectionModel().getSelectedItem();
-        MainWindowController.runAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                var categList = MainWindowController.factory.getCategoryDAO().getAll();
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        categories.clear();
-                        categories.addAll(categList);
-                        int index = categories.indexOf(c);
-                        if (index != -1) {
-                            categLink.setDisable(false);
-                            category.getSelectionModel().select(index);
-                        } else
-                            categLink.setDisable(true);
-                    }
+        MainWindowController.runAsynchronously(() -> MainWindowController.factory.getCategoryDAO().getAll(),
+                (categList) -> {
+                    categories.clear();
+                    categories.addAll(categList);
+                    int index = categories.indexOf(c);
+                    if (index != -1) {
+                        categLink.setDisable(false);
+                        category.getSelectionModel().select(index);
+                    } else
+                        categLink.setDisable(true);
+
                 });
-            }
-        });
     }
 
     public void cancel() {
@@ -99,29 +91,29 @@ public class NewProductController implements Initializable {
 
     public void save() {
         MainWindowController.runAsynchronously(() -> {
-            if (category.getSelectionModel().getSelectedItem() == null) {
-                Platform.runLater(() -> new Alert(AlertType.WARNING, "Selectionnez une catégorie").showAndWait());
-                return;
-            }
+            if (category.getSelectionModel().getSelectedItem() == null)
+                return new AlertPair("Selectionnez une catégorie", AlertType.WARNING);
             if (cost.getText().length() == 0 || Double.parseDouble(cost.getText()) <= 0) {
-                Platform.runLater(
-                        () -> new Alert(AlertType.WARNING, "Selectionnez un prix supérieur à zéero").showAndWait());
-                return;
+                return new AlertPair("Selectionnez un prix supérieur à zéro", AlertType.WARNING);
             }
             if (name.getText().length() == 0) {
-                Platform.runLater(() -> new Alert(AlertType.WARNING, "Entrez un nom").showAndWait());
-                return;
+                return new AlertPair("Entrez un nom", AlertType.WARNING);
             }
             var product = new Product(0, name.getText(), Double.parseDouble(cost.getText()), description.getText(),
                     category.getSelectionModel().getSelectedItem().getId(), image.getText());
             try {
                 if (MainWindowController.factory.getProductDAO().create(product) != null)
-                    Platform.runLater(() -> MainWindowController.getMainTabPane().getTabs().remove(tab));
+                    return new AlertPair();
                 else
-                    Platform.runLater(() -> new Alert(AlertType.ERROR, "Impossible de créer ce produit").showAndWait());
+                    return new AlertPair("Impossible de créer ce produit", AlertType.ERROR);
             } catch (DAOException e) {
-                Platform.runLater(() -> new Alert(AlertType.ERROR, e.getMessage()).showAndWait());
+                return new AlertPair(e.getMessage(), AlertType.ERROR);
             }
+        }, (pair) -> {
+            if (pair.getKey() != null)
+                new Alert(pair.getValue(), pair.getKey()).showAndWait();
+            else
+                MainWindowController.getMainTabPane().getTabs().remove(tab);
         });
     }
 

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -131,14 +130,9 @@ public class CategoriesController implements Initializable {
                         alignmentProperty().set(Pos.BASELINE_CENTER);
                         button.setOnAction((ActionEvent event) -> {
                             var categ = table.getItems().get(getIndex());
-                            MainWindowController.removeCategory(categ, new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    allItems.remove(categ);
-                                    applySearchKey();
-                                }
-
+                            MainWindowController.removeCategory(categ, () -> {
+                                allItems.remove(categ);
+                                applySearchKey();
                             }, null);
                         });
                     }
@@ -163,14 +157,9 @@ public class CategoriesController implements Initializable {
             if (ev.getCode() == KeyCode.DELETE) {
                 var categ = table.getSelectionModel().getSelectedItem();
                 if (categ != null) {
-                    MainWindowController.removeCategory(categ, new Runnable() {
-
-                        @Override
-                        public void run() {
-                            allItems.remove(categ);
-                            applySearchKey();
-                        }
-
+                    MainWindowController.removeCategory(categ, () -> {
+                        allItems.remove(categ);
+                        applySearchKey();
                     }, null);
                 }
             }
@@ -179,21 +168,11 @@ public class CategoriesController implements Initializable {
     }
 
     public void refresh() {
-        MainWindowController.runAsynchronously(new Runnable() {
-
-            @Override
-            public void run() {
-                allItems.clear();
-                for (Category categ : MainWindowController.factory.getCategoryDAO().getAll())
-                    allItems.add(categ);
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        applySearchKey();
-                    }
-                });
-            }
-        });
+        MainWindowController.runAsynchronously(() -> {
+            allItems.clear();
+            for (Category categ : MainWindowController.factory.getCategoryDAO().getAll())
+                allItems.add(categ);
+        }, () -> applySearchKey());
     }
 
     public void search() {

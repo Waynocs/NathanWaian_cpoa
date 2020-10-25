@@ -111,18 +111,13 @@ public class CustomerDetailController implements Initializable {
     }
 
     public void remove() {
-        MainWindowController.removeCustomer(customer, new Runnable() {
-
-            @Override
-            public void run() {
-                EventHandler<Event> handler = tab.getOnClosed();
-                if (null != handler) {
-                    handler.handle(null);
-                } else {
-                    tab.getTabPane().getTabs().remove(tab);
-                }
+        MainWindowController.removeCustomer(customer, () -> {
+            EventHandler<Event> handler = tab.getOnClosed();
+            if (null != handler) {
+                handler.handle(null);
+            } else {
+                tab.getTabPane().getTabs().remove(tab);
             }
-
         }, null);
     }
 

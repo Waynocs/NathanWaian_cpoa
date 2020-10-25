@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -66,27 +65,20 @@ public class ProductDetailController implements Initializable {
     }
 
     public void refresh() {
-        MainWindowController.runAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                product = MainWindowController.factory.getProductDAO().getById(product.getId());
-                var categ = MainWindowController.factory.getCategoryDAO().getById(product.getCategory());
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        tab.setText("Détail:" + product.getName());
-                        category.setText(categ.getName());
-                        category.setOnAction((ActionEvent e) -> {
-                            // TODO open a category detail tab
-                        });
-                        name.setText("Nom : " + product.getName());
-                        id.setText("ID : " + product.getId());
-                        description.setText(product.getDescription());
-                        price.setText("Prix : " + product.getCost() + " €");
-                        image.setText("Visuel : " + product.getImagePath());
-                    }
-                });
-            }
+        MainWindowController.runAsynchronously(() -> {
+            product = MainWindowController.factory.getProductDAO().getById(product.getId());
+            return MainWindowController.factory.getCategoryDAO().getById(product.getCategory());
+        }, (categ) -> {
+            tab.setText("Détail:" + product.getName());
+            category.setText(categ.getName());
+            category.setOnAction((ActionEvent e) -> {
+                // TODO open a category detail tab
+            });
+            name.setText("Nom : " + product.getName());
+            id.setText("ID : " + product.getId());
+            description.setText(product.getDescription());
+            price.setText("Prix : " + product.getCost() + " €");
+            image.setText("Visuel : " + product.getImagePath());
         });
     }
 
@@ -95,18 +87,13 @@ public class ProductDetailController implements Initializable {
     }
 
     public void remove() {
-        MainWindowController.removeProduct(product, new Runnable() {
-
-            @Override
-            public void run() {
-                EventHandler<Event> handler = tab.getOnClosed();
-                if (null != handler) {
-                    handler.handle(null);
-                } else {
-                    tab.getTabPane().getTabs().remove(tab);
-                }
+        MainWindowController.removeProduct(product, () -> {
+            EventHandler<Event> handler = tab.getOnClosed();
+            if (null != handler) {
+                handler.handle(null);
+            } else {
+                tab.getTabPane().getTabs().remove(tab);
             }
-
         }, null);
     }
 }

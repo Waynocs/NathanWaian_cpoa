@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import dao.DAOException;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -75,10 +74,8 @@ public class EditCategoryController implements Initializable {
 
     public void save() {
         MainWindowController.runAsynchronously(() -> {
-            if (title.getText().length() == 0) {
-                Platform.runLater(() -> new Alert(AlertType.WARNING, "Entrez un titre").showAndWait());
-                return;
-            }
+            if (title.getText().length() == 0)
+                return new AlertPair("Entrez un titre", AlertType.WARNING);
             category.setImagePath(image.getText());
             category.setName(title.getText());
             try {
@@ -86,13 +83,16 @@ public class EditCategoryController implements Initializable {
                     saved = true;
                     reopenDetails = true;
                     tab.getOnClosed().handle(null);
+                    return new AlertPair(null, null);
                 } else
-                    Platform.runLater(
-                            () -> new Alert(AlertType.ERROR, "Impossible de modifier cette catégorie").showAndWait());
+                    return new AlertPair("Impossible de modifier cette catégorie", AlertType.ERROR);
 
             } catch (DAOException e) {
-                Platform.runLater(() -> new Alert(AlertType.ERROR, e.getMessage()).showAndWait());
+                return new AlertPair(e.getMessage(), AlertType.ERROR);
             }
+        }, (pair) -> {
+            if (pair.getKey() != null)
+                new Alert(pair.getValue(), pair.getKey()).showAndWait();
         });
     }
 }

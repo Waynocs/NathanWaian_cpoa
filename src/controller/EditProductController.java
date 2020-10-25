@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.*;
 
 import dao.DAOException;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -70,21 +69,12 @@ public class EditProductController implements Initializable {
         description.setText(product.getDescription());
         image.setText(product.getImagePath());
         tab.setText("Editer:" + product.getName());
-        MainWindowController.runAsynchronously(new Runnable() {
-
-            @Override
-            public void run() {
-                initCateg = MainWindowController.factory.getCategoryDAO().getById(product.getCategory());
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        categories.add(initCateg);
-                        category.getSelectionModel().select(initCateg);
-                        refreshCateg();
-                    }
+        MainWindowController.runAsynchronously(
+                () -> initCateg = MainWindowController.factory.getCategoryDAO().getById(product.getCategory()), () -> {
+                    categories.add(initCateg);
+                    category.getSelectionModel().select(initCateg);
+                    refreshCateg();
                 });
-            }
-        });
     }
 
     @Override
@@ -100,25 +90,17 @@ public class EditProductController implements Initializable {
 
     public void refreshCateg() {
         var c = category.getSelectionModel().getSelectedItem();
-        MainWindowController.runAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                var categList = MainWindowController.factory.getCategoryDAO().getAll();
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        categories.clear();
-                        categories.addAll(categList);
-                        int index = categories.indexOf(c);
-                        if (index != -1) {
-                            categLink.setDisable(false);
-                            category.getSelectionModel().select(index);
-                        } else
-                            categLink.setDisable(true);
-                    }
+        MainWindowController.runAsynchronously(() -> MainWindowController.factory.getCategoryDAO().getAll(),
+                (categList) -> {
+                    categories.clear();
+                    categories.addAll(categList);
+                    int index = categories.indexOf(c);
+                    if (index != -1) {
+                        categLink.setDisable(false);
+                        category.getSelectionModel().select(index);
+                    } else
+                        categLink.setDisable(true);
                 });
-            }
-        });
     }
 
     public void reset() {
@@ -149,17 +131,13 @@ public class EditProductController implements Initializable {
     public void save() {
         MainWindowController.runAsynchronously(() -> {
             if (category.getSelectionModel().getSelectedItem() == null) {
-                Platform.runLater(() -> new Alert(AlertType.WARNING, "Selectionnez une catégorie").showAndWait());
-                return;
+                return new AlertPair("Selectionnez une catégorie", AlertType.WARNING);
             }
             if (cost.getText().length() == 0 || Double.parseDouble(cost.getText()) <= 0) {
-                Platform.runLater(
-                        () -> new Alert(AlertType.WARNING, "Selectionnez un prix supérieur à zéro").showAndWait());
-                return;
+                return new AlertPair("Selectionnez un prix supérieur à zéro", AlertType.WARNING);
             }
             if (name.getText().length() == 0) {
-                Platform.runLater(() -> new Alert(AlertType.WARNING, "Enrtez un nom").showAndWait());
-                return;
+                return new AlertPair("Entrez un nom", AlertType.WARNING);
             }
             product.setCategory(category.getSelectionModel().getSelectedItem().getId());
             product.setCost(Double.parseDouble(cost.getText()));
@@ -171,13 +149,17 @@ public class EditProductController implements Initializable {
                     saved = true;
                     reopenDetails = true;
                     tab.getOnClosed().handle(null);
-                } else
-                    Platform.runLater(
-                            () -> new Alert(AlertType.ERROR, "Impossible de modifier ce produit").showAndWait());
+                    return new AlertPair(null, null);
+                } else {
+                    return new AlertPair("Impossible de modifier ce produit", AlertType.ERROR);
+                }
 
             } catch (DAOException e) {
-                Platform.runLater(() -> new Alert(AlertType.ERROR, e.getMessage()).showAndWait());
+                return new AlertPair(e.getMessage(), AlertType.ERROR);
             }
+        }, (pair) -> {
+            if (pair.getKey() != null)
+                new Alert(pair.getValue(), pair.getKey()).showAndWait();
         });
     }
 }

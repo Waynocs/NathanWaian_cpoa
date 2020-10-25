@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import dao.DAOException;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -99,59 +98,50 @@ public class EditCustomerController implements Initializable {
 
     public void save() {
         MainWindowController.runAsynchronously(() -> {
-            MainWindowController.runAsynchronously(() -> {
-                if (surname.getText().length() == 0) {
-                    Platform.runLater(() -> new Alert(AlertType.WARNING, "Renseignez un nom").showAndWait());
-                    return;
-                } else if (name.getText().length() == 0) {
-                    Platform.runLater(() -> new Alert(AlertType.WARNING, "Renseignez un Prénom").showAndWait());
-                    return;
-                } else if (identity.getText().length() == 0) {
-                    Platform.runLater(() -> new Alert(AlertType.WARNING, "Renseignez un identifiant").showAndWait());
-                    return;
-                } else if (password.getText().length() == 0) {
-                    Platform.runLater(() -> new Alert(AlertType.WARNING, "Renseignez un Mot de passe").showAndWait());
-                    return;
-                } else if (number.getText().length() == 0) {
-                    Platform.runLater(
-                            () -> new Alert(AlertType.WARNING, "Renseignez un numéro d'adresse").showAndWait());
-                    return;
-                } else if (street.getText().length() == 0) {
-                    Platform.runLater(
-                            () -> new Alert(AlertType.WARNING, "Renseignez une voie d'adresse").showAndWait());
-                    return;
-                } else if (postalcode.getText().length() == 0) {
-                    Platform.runLater(() -> new Alert(AlertType.WARNING, "Renseignez un code postal").showAndWait());
-                    return;
-                } else if (city.getText().length() == 0) {
-                    Platform.runLater(() -> new Alert(AlertType.WARNING, "Renseignez une ville").showAndWait());
-                    return;
-                } else if (country.getText().length() == 0) {
-                    Platform.runLater(() -> new Alert(AlertType.WARNING, "Renseignez un pays").showAndWait());
-                    return;
-                }
-                customer.setSurname(surname.getText());
-                customer.setName(name.getText());
-                customer.setIdentifier(identity.getText());
-                customer.setPwd(password.getText());
-                customer.setAddressNumber(number.getText());
-                customer.setAddressStreet(street.getText());
-                customer.setAddressPostalCode(postalcode.getText());
-                customer.setAddressCity(city.getText());
-                customer.setAddressCountry(country.getText());
-                try {
-                    if (MainWindowController.factory.getCustomerDAO().update(customer)) {
-                        saved = true;
-                        reopenDetails = true;
-                        tab.getOnClosed().handle(null);
-                    } else
-                        Platform.runLater(
-                                () -> new Alert(AlertType.ERROR, "Impossible de modifier ce client").showAndWait());
+            if (surname.getText().length() == 0)
+                return new AlertPair("Renseignez un nom", AlertType.WARNING);
+            else if (name.getText().length() == 0)
+                return new AlertPair("Renseignez un prénom", AlertType.WARNING);
+            else if (identity.getText().length() == 0)
+                return new AlertPair("Renseignez un identifiant", AlertType.WARNING);
+            else if (password.getText().length() == 0)
+                return new AlertPair("Renseignez un mot de passe", AlertType.WARNING);
+            else if (number.getText().length() == 0)
+                return new AlertPair("Renseignez un numéro d'adresse", AlertType.WARNING);
+            else if (street.getText().length() == 0)
+                return new AlertPair("Renseignez une voie d'adresse", AlertType.WARNING);
+            else if (postalcode.getText().length() == 0)
+                return new AlertPair("Renseignez un code postal", AlertType.WARNING);
+            else if (city.getText().length() == 0)
+                return new AlertPair("Renseignez une ville", AlertType.WARNING);
+            else if (country.getText().length() == 0)
+                return new AlertPair("Renseignez un pays", AlertType.WARNING);
 
-                } catch (DAOException e) {
-                    Platform.runLater(() -> new Alert(AlertType.ERROR, e.getMessage()).showAndWait());
-                }
-            });
+            customer.setSurname(surname.getText());
+            customer.setName(name.getText());
+            customer.setIdentifier(identity.getText());
+            customer.setPwd(password.getText());
+            customer.setAddressNumber(number.getText());
+            customer.setAddressStreet(street.getText());
+            customer.setAddressPostalCode(postalcode.getText());
+            customer.setAddressCity(city.getText());
+            customer.setAddressCountry(country.getText());
+            try {
+                if (MainWindowController.factory.getCustomerDAO().update(customer)) {
+                    saved = true;
+                    reopenDetails = true;
+                    return new AlertPair();
+                } else
+                    return new AlertPair("Impossible de modifier ce client", AlertType.ERROR);
+
+            } catch (DAOException e) {
+                return new AlertPair(e.getMessage(), AlertType.ERROR);
+            }
+        }, (pair) -> {
+            if (pair.getKey() != null)
+                new Alert(pair.getValue(), pair.getKey()).showAndWait();
+            else
+                tab.getOnClosed().handle(null);
         });
     }
 }

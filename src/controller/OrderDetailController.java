@@ -5,7 +5,6 @@ import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -25,6 +24,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.util.Callback;
+import javafx.util.Pair;
 import model.Order;
 import model.OrderLine;
 import model.Product;
@@ -143,39 +143,32 @@ public class OrderDetailController implements Initializable {
     }
 
     public void refresh() {
-        MainWindowController.runAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                order = MainWindowController.factory.getOrderDAO().getById(order.getId());
-                var customerModel = MainWindowController.factory.getCustomerDAO().getById(order.getCustomer());
-                var lines = MainWindowController.factory.getOrderLineDAO().getAllFromOrder(order.getId());
-                allProducts.clear();
+        MainWindowController.runAsynchronously(() -> {
+            order = MainWindowController.factory.getOrderDAO().getById(order.getId());
+            var customerModel = MainWindowController.factory.getCustomerDAO().getById(order.getCustomer());
+            var lines = MainWindowController.factory.getOrderLineDAO().getAllFromOrder(order.getId());
+            allProducts.clear();
 
-                for (Product prod : MainWindowController.factory.getProductDAO().getAll())
-                    allProducts.put(prod.getId(), prod);
-
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        tab.setText("Détail:" + customerModel.getSurname() + " "
-                                + order.getDate().format(DateTimeFormatter.ofPattern("dd/MM")));
-                        id.setText("ID : " + order.getId());
-                        customer.setText(customerModel.getName() + " " + customerModel.getSurname());
-                        customer.setOnAction((e) -> {
-                            MainWindowController.detailCustomer(customerModel);
-                        });
-                        date.setText("Date : " + order.getDate().format(DateTimeFormatter.ofPattern("dd MMMM yyyy")));
-                        time.setText("Heure : " + order.getDate().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-                        double orderCost = 0;
-                        displayedLines.clear();
-                        displayedLines.addAll(lines);
-                        for (OrderLine orderLine : lines) {
-                            orderCost += orderLine.getQuantity() * orderLine.getCost();
-                        }
-                        totalCost.setText("Coût total : " + orderCost + " €");
-                    }
-                });
+            for (Product prod : MainWindowController.factory.getProductDAO().getAll())
+                allProducts.put(prod.getId(), prod);
+            return new Pair<>(customerModel, lines);
+        }, (pair) -> {
+            tab.setText("Détail:" + pair.getKey().getSurname() + " "
+                    + order.getDate().format(DateTimeFormatter.ofPattern("dd/MM")));
+            id.setText("ID : " + order.getId());
+            customer.setText(pair.getKey().getName() + " " + pair.getKey().getSurname());
+            customer.setOnAction((e) -> {
+                MainWindowController.detailCustomer(pair.getKey());
+            });
+            date.setText("Date : " + order.getDate().format(DateTimeFormatter.ofPattern("dd MMMM yyyy")));
+            time.setText("Heure : " + order.getDate().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+            double orderCost = 0;
+            displayedLines.clear();
+            displayedLines.addAll(pair.getValue());
+            for (OrderLine orderLine : pair.getValue()) {
+                orderCost += orderLine.getQuantity() * orderLine.getCost();
             }
+            totalCost.setText("Coût total : " + orderCost + " €");
         });
         id.setText("ID : " + order.getId());
 
@@ -186,17 +179,13 @@ public class OrderDetailController implements Initializable {
     }
 
     public void remove() {
-        MainWindowController.removeOrder(order, new Runnable() {
-            @Override
-            public void run() {
-                EventHandler<Event> handler = tab.getOnClosed();
-                if (null != handler) {
-                    handler.handle(null);
-                } else {
-                    tab.getTabPane().getTabs().remove(tab);
-                }
+        MainWindowController.removeOrder(order, () -> {
+            EventHandler<Event> handler = tab.getOnClosed();
+            if (null != handler) {
+                handler.handle(null);
+            } else {
+                tab.getTabPane().getTabs().remove(tab);
             }
-
         }, null);
     }
 }

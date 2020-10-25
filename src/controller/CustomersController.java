@@ -8,7 +8,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -210,14 +209,9 @@ public class CustomersController implements Initializable {
                         alignmentProperty().set(Pos.BASELINE_CENTER);
                         button.setOnAction((ActionEvent event) -> {
                             var custo = table.getItems().get(getIndex());
-                            MainWindowController.removeCustomer(custo, new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    allItems.remove(custo);
-                                    applySearchKey();
-                                }
-
+                            MainWindowController.removeCustomer(custo, () -> {
+                                allItems.remove(custo);
+                                applySearchKey();
                             }, null);
                         });
                     }
@@ -242,14 +236,9 @@ public class CustomersController implements Initializable {
             if (ev.getCode() == KeyCode.DELETE) {
                 var custo = table.getSelectionModel().getSelectedItem();
                 if (custo != null) {
-                    MainWindowController.removeCustomer(custo, new Runnable() {
-
-                        @Override
-                        public void run() {
-                            allItems.remove(custo);
-                            applySearchKey();
-                        }
-
+                    MainWindowController.removeCustomer(custo, () -> {
+                        allItems.remove(custo);
+                        applySearchKey();
                     }, null);
                 }
             }
@@ -258,21 +247,11 @@ public class CustomersController implements Initializable {
     }
 
     public void refresh() {
-        MainWindowController.runAsynchronously(new Runnable() {
-
-            @Override
-            public void run() {
-                allItems.clear();
-                for (Customer custo : MainWindowController.factory.getCustomerDAO().getAll())
-                    allItems.add(custo);
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        applySearchKey();
-                    }
-                });
-            }
-        });
+        MainWindowController.runAsynchronously(() -> {
+            allItems.clear();
+            for (Customer custo : MainWindowController.factory.getCustomerDAO().getAll())
+                allItems.add(custo);
+        }, () -> applySearchKey());
     }
 
     public void search() {

@@ -3,6 +3,8 @@ package controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import dao.DAOException;
 import dao.DAOFactory;
@@ -133,37 +135,34 @@ public class MainWindowController implements Initializable {
     }
 
     public static void addCategory() {
-        var tab = new Ptr<Tab>();
         runAsynchronously(() -> {
-            tab.value = NewCategoryController.createControl();
-            tab.value.setUserData("Catégories>Nouvelle");
-        }, () -> {
-            tabInstance.getTabs().add(tab.value);
-            tabInstance.getSelectionModel().select(tab.value);
+            var tab = NewCategoryController.createControl();
+            tab.setUserData("Catégories>Nouvelle");
+            return tab;
+        }, (tab) -> {
+            tabInstance.getTabs().add(tab);
+            tabInstance.getSelectionModel().select(tab);
         });
     }
 
     public static void removeCategory(Category categ, Runnable deleted, Runnable notDeleted) {
-        var alertType = new Ptr<AlertType>(AlertType.ERROR);
-        var alertText = new Ptr<String>();
         runAsynchronously(() -> {
             try {
                 var prods = factory.getProductDAO().getAll();
                 for (Product product : prods) {
-                    if (product.getCategory() == categ.getId()) {
-                        alertText.value = "Un produit utilise cette catégorie";
-                        alertType.value = AlertType.WARNING;
-                        return;
-                    }
+                    if (product.getCategory() == categ.getId())
+                        return new AlertPair("Un produit utilise cette catégorie", AlertType.WARNING);
                 }
                 if (!factory.getCategoryDAO().delete(categ))
-                    alertText.value = "Une erreur est survenue";
+                    return new AlertPair("Une erreur est survenue", AlertType.ERROR);
+                else
+                    return new AlertPair();
             } catch (DAOException e) {
-                alertText.value = e.getMessage();
+                return new AlertPair(e.getMessage(), AlertType.ERROR);
             }
-        }, () -> {
-            if (alertText.value != null) {
-                new Alert(alertType.value, alertText.value).showAndWait();
+        }, (pair) -> {
+            if (pair.getKey() != null) {
+                new Alert(pair.getValue(), pair.getKey()).showAndWait();
                 if (notDeleted != null)
                     notDeleted.run();
             } else if (deleted != null)
@@ -173,40 +172,34 @@ public class MainWindowController implements Initializable {
     }
 
     public static void addCustomer() {
-        var tab = new Ptr<Tab>();
         runAsynchronously(() -> {
-            tab.value = NewCustomerController.createControl();
-            tab.value.setUserData("Clients>Nouveau");
-        }, () -> {
-
-            tabInstance.getTabs().add(tab.value);
-            tabInstance.getSelectionModel().select(tab.value);
+            var tab = NewCustomerController.createControl();
+            tab.setUserData("Clients>Nouveau");
+            return tab;
+        }, (tab) -> {
+            tabInstance.getTabs().add(tab);
+            tabInstance.getSelectionModel().select(tab);
         });
 
     }
 
     public static void removeCustomer(Customer custo, Runnable deleted, Runnable notDeleted) {
-        var alertType = new Ptr<AlertType>(AlertType.ERROR);
-        var alertText = new Ptr<String>();
         runAsynchronously(() -> {
             try {
                 var ords = factory.getOrderDAO().getAll();
-                for (Order ord : ords) {
-                    if (ord.getCustomer() == custo.getId()) {
-                        alertText.value = "Une commande est associée à ce client";
-                        alertType.value = AlertType.WARNING;
-                        return;
-                    }
-                }
-
+                for (Order ord : ords)
+                    if (ord.getCustomer() == custo.getId())
+                        return new AlertPair("Une commande est associée à ce client", AlertType.WARNING);
                 if (!factory.getCustomerDAO().delete(custo))
-                    alertText.value = "Une erreur est survenue";
+                    return new AlertPair("Une erreur est survenue", AlertType.ERROR);
+                else
+                    return new AlertPair();
             } catch (DAOException e) {
-                alertText.value = e.getMessage();
+                return new AlertPair(e.getMessage(), AlertType.ERROR);
             }
-        }, () -> {
-            if (alertText.value != null) {
-                new Alert(alertType.value, alertText.value).showAndWait();
+        }, (pair) -> {
+            if (pair.getKey() != null) {
+                new Alert(pair.getValue(), pair.getKey()).showAndWait();
                 if (notDeleted != null)
                     notDeleted.run();
             } else if (deleted != null)
@@ -232,14 +225,14 @@ public class MainWindowController implements Initializable {
     }
 
     public static void addProduct() {
-        var tab = new Ptr<Tab>();
         runAsynchronously(() -> {
-            tab.value = NewProductController.createControl();
-            tab.value.setUserData("Produits>Nouveau");
-        }, () -> {
+            var tab = NewProductController.createControl();
+            tab.setUserData("Produits>Nouveau");
+            return tab;
+        }, (tab) -> {
 
-            tabInstance.getTabs().add(tab.value);
-            tabInstance.getSelectionModel().select(tab.value);
+            tabInstance.getTabs().add(tab);
+            tabInstance.getSelectionModel().select(tab);
         });
     }
 
@@ -252,20 +245,20 @@ public class MainWindowController implements Initializable {
     }
 
     public static void removeOrder(Order ord, Runnable deleted, Runnable notDeleted) {
-        var alertType = new Ptr<AlertType>(AlertType.ERROR);
-        var alertText = new Ptr<String>();
         runAsynchronously(() -> {
             try {
                 if (!factory.getOrderDAO().delete(ord))
-                    alertText.value = "Une erreur est survenue";
+                    return new AlertPair("Une erreur est survenue", AlertType.ERROR);
+                else
+                    return new AlertPair();
             } catch (
 
             DAOException e) {
-                alertText.value = e.getMessage();
+                return new AlertPair(e.getMessage(), AlertType.ERROR);
             }
-        }, () -> {
-            if (alertText.value != null) {
-                new Alert(alertType.value, alertText.value).showAndWait();
+        }, (pair) -> {
+            if (pair.getKey() != null) {
+                new Alert(pair.getValue(), pair.getKey()).showAndWait();
                 if (notDeleted != null)
                     notDeleted.run();
             } else if (deleted != null)
@@ -274,24 +267,20 @@ public class MainWindowController implements Initializable {
     }
 
     public static void removeProduct(Product prod, Runnable deleted, Runnable notDeleted) {
-        var alertType = new Ptr<AlertType>(AlertType.ERROR);
-        var alertText = new Ptr<String>();
         runAsynchronously(() -> {
             try {
-                if (factory.getOrderLineDAO().getAllFromProduct(prod.getId()).length != 0) {
-                    alertText.value = "Une commande possède ce produit";
-                    alertType.value = AlertType.WARNING;
-                    if (notDeleted != null)
-                        notDeleted.run();
-                } else if (!factory.getProductDAO().delete(prod)) {
-                    alertText.value = "Une erreur est survenue";
-                }
+                if (factory.getOrderLineDAO().getAllFromProduct(prod.getId()).length != 0)
+                    return new AlertPair("Une commande possède ce produit", AlertType.WARNING);
+                else if (!factory.getProductDAO().delete(prod))
+                    return new AlertPair("Une erreur est survenue", AlertType.ERROR);
+                else
+                    return new AlertPair();
             } catch (DAOException e) {
-                alertText.value = e.getMessage();
+                return new AlertPair(e.getMessage(), AlertType.ERROR);
             }
-        }, () -> {
-            if (alertText.value != null) {
-                new Alert(alertType.value, alertText.value).showAndWait();
+        }, (pair) -> {
+            if (pair.getKey() != null) {
+                new Alert(pair.getValue(), pair.getKey()).showAndWait();
                 if (notDeleted != null)
                     notDeleted.run();
             } else if (deleted != null)
@@ -304,18 +293,25 @@ public class MainWindowController implements Initializable {
     }
 
     public static void addOrder() {
-        var tab = new Ptr<Tab>();
         runAsynchronously(() -> {
-            tab.value = NewOrderController.createControl();
-            tab.value.setUserData("Commandes>Nouvelle");
-        }, () -> {
-            tabInstance.getTabs().add(tab.value);
-            tabInstance.getSelectionModel().select(tab.value);
+            var tab = NewOrderController.createControl();
+            tab.setUserData("Commandes>Nouvelle");
+            return tab;
+        }, (tab) -> {
+            tabInstance.getTabs().add(tab);
+            tabInstance.getSelectionModel().select(tab);
         });
     }
 
     public static void runAsynchronously(Runnable subthread) {
         runAsynchronously(subthread, null);
+    }
+
+    public static <T> void runAsynchronously(Supplier<? extends T> subthread, Consumer<T> mainthread) {
+        var ptr = new Ptr<T>();
+        runAsynchronously(() -> {
+            ptr.value = subthread.get();
+        }, () -> mainthread.accept(ptr.value));
     }
 
     public static void runAsynchronously(Runnable subthread, Runnable mainthread) {
@@ -351,13 +347,13 @@ public class MainWindowController implements Initializable {
     }
 
     public static void seeCategories() {
-        var tab = new Ptr<Tab>();
         runAsynchronously(() -> {
-            tab.value = CategoriesController.createControl();
-            tab.value.setUserData("Catégories>Tout voir");
-        }, () -> {
-            tabInstance.getTabs().add(tab.value);
-            tabInstance.getSelectionModel().select(tab.value);
+            var tab = CategoriesController.createControl();
+            tab.setUserData("Catégories>Tout voir");
+            return tab;
+        }, (tab) -> {
+            tabInstance.getTabs().add(tab);
+            tabInstance.getSelectionModel().select(tab);
         });
     }
 
@@ -366,13 +362,13 @@ public class MainWindowController implements Initializable {
     }
 
     public static void seeCustomers() {
-        var tab = new Ptr<Tab>();
         runAsynchronously(() -> {
-            tab.value = CustomersController.createControl();
-            tab.value.setUserData("Clients>Tout voir");
-        }, () -> {
-            tabInstance.getTabs().add(tab.value);
-            tabInstance.getSelectionModel().select(tab.value);
+            var tab = CustomersController.createControl();
+            tab.setUserData("Clients>Tout voir");
+            return tab;
+        }, (tab) -> {
+            tabInstance.getTabs().add(tab);
+            tabInstance.getSelectionModel().select(tab);
         });
 
     }
@@ -382,13 +378,13 @@ public class MainWindowController implements Initializable {
     }
 
     public static void seeProducts() {
-        var tab = new Ptr<Tab>();
         runAsynchronously(() -> {
-            tab.value = ProductsController.createControl();
-            tab.value.setUserData("Produits>Tout voir");
-        }, () -> {
-            tabInstance.getTabs().add(tab.value);
-            tabInstance.getSelectionModel().select(tab.value);
+            var tab = ProductsController.createControl();
+            tab.setUserData("Produits>Tout voir");
+            return tab;
+        }, (tab) -> {
+            tabInstance.getTabs().add(tab);
+            tabInstance.getSelectionModel().select(tab);
         });
     }
 
@@ -397,146 +393,144 @@ public class MainWindowController implements Initializable {
     }
 
     public static void seeOrders() {
-        var tab = new Ptr<Tab>();
         runAsynchronously(() -> {
-            tab.value = OrdersController.createControl();
-            tab.value.setUserData("Commandes>Tout voir");
-        }, () -> {
-            tabInstance.getTabs().add(tab.value);
-            tabInstance.getSelectionModel().select(tab.value);
+            var tab = OrdersController.createControl();
+            tab.setUserData("Commandes>Tout voir");
+            return tab;
+        }, (tab) -> {
+            tabInstance.getTabs().add(tab);
+            tabInstance.getSelectionModel().select(tab);
         });
 
     }
 
     public static void detailCategory(Category categ) {
-        var tab = new Ptr<Tab>();
         runAsynchronously(() -> {
-            tab.value = CategoryDetailController.createControl(categ);
-            tab.value.setUserData("Catégories>Détail");
-        }, () -> {
-            tabInstance.getTabs().add(tab.value);
-            tabInstance.getSelectionModel().select(tab.value);
+            var tab = CategoryDetailController.createControl(categ);
+            tab.setUserData("Catégories>Détail");
+            return tab;
+        }, (tab) -> {
+            tabInstance.getTabs().add(tab);
+            tabInstance.getSelectionModel().select(tab);
         });
     }
 
     public static void detailCustomer(Customer custo) {
-        var tab = new Ptr<Tab>();
         runAsynchronously(() -> {
-            tab.value = CustomerDetailController.createControl(custo);
-            tab.value.setUserData("Clients>Détail");
-        }, () -> {
-            tabInstance.getTabs().add(tab.value);
-            tabInstance.getSelectionModel().select(tab.value);
+            var tab = CustomerDetailController.createControl(custo);
+            tab.setUserData("Clients>Détail");
+            return tab;
+        }, (tab) -> {
+            tabInstance.getTabs().add(tab);
+            tabInstance.getSelectionModel().select(tab);
         });
 
     }
 
     public static void detailProduct(Product prod) {
-        var tab = new Ptr<Tab>();
         runAsynchronously(() -> {
-            tab.value = ProductDetailController.createControl(prod);
-            tab.value.setUserData("Produits>Détail");
-        }, () -> {
-            tabInstance.getTabs().add(tab.value);
-            tabInstance.getSelectionModel().select(tab.value);
+            var tab = ProductDetailController.createControl(prod);
+            tab.setUserData("Produits>Détail");
+            return tab;
+        }, (tab) -> {
+            tabInstance.getTabs().add(tab);
+            tabInstance.getSelectionModel().select(tab);
         });
     }
 
     public static void editProduct(Product prod, ProductDetailController controller) {
-        var editor = new Ptr<EditProductController>();
         runAsynchronously(() -> {
-            editor.value = EditProductController.createController(prod, controller);
-            editor.value.tab.setUserData("Produits>Éditer");
-            editor.value.tab.setOnClosed((e1) -> Platform.runLater(() -> {
-                tabInstance.getTabs().remove(editor.value.tab);
-                if (editor.value.reopenDetails) {
+            var editor = EditProductController.createController(prod, controller);
+            editor.tab.setUserData("Produits>Éditer");
+            editor.tab.setOnClosed((e1) -> Platform.runLater(() -> {
+                tabInstance.getTabs().remove(editor.tab);
+                if (editor.reopenDetails) {
                     tabInstance.getTabs().add(controller.tab);
                     tabInstance.getSelectionModel().select(controller.tab);
-                    if (editor.value.saved)
+                    if (editor.saved)
                         controller.refresh();
                 }
             }));
-        }, () -> {
+            return editor;
+        }, (editor) -> {
             tabInstance.getTabs().remove(controller.tab);
-            tabInstance.getTabs().add(editor.value.tab);
-            tabInstance.getSelectionModel().select(editor.value.tab);
+            tabInstance.getTabs().add(editor.tab);
+            tabInstance.getSelectionModel().select(editor.tab);
         });
 
     }
 
     public static void editCategory(Category categ, CategoryDetailController controller) {
-        var editor = new Ptr<EditCategoryController>();
         runAsynchronously(() -> {
-
-            editor.value = EditCategoryController.createController(categ, controller);
-            editor.value.tab.setUserData("Catégories>Éditer");
-            editor.value.tab.setOnClosed((e1) -> Platform.runLater(() -> {
-                tabInstance.getTabs().remove(editor.value.tab);
-                if (editor.value.reopenDetails) {
+            var editor = EditCategoryController.createController(categ, controller);
+            editor.tab.setUserData("Catégories>Éditer");
+            editor.tab.setOnClosed((e1) -> Platform.runLater(() -> {
+                tabInstance.getTabs().remove(editor.tab);
+                if (editor.reopenDetails) {
                     tabInstance.getTabs().add(controller.tab);
                     tabInstance.getSelectionModel().select(controller.tab);
-                    if (editor.value.saved)
+                    if (editor.saved)
                         controller.refresh();
                 }
             }));
-        }, () -> {
-
+            return editor;
+        }, (editor) -> {
             tabInstance.getTabs().remove(controller.tab);
-            tabInstance.getTabs().add(editor.value.tab);
-            tabInstance.getSelectionModel().select(editor.value.tab);
+            tabInstance.getTabs().add(editor.tab);
+            tabInstance.getSelectionModel().select(editor.tab);
         });
     }
 
     public static void editOrder(Order ord, OrderDetailController controller) {
-        var editor = new Ptr<EditOrderController>();
         runAsynchronously(() -> {
-            editor.value = EditOrderController.createController(ord, controller);
-            editor.value.tab.setUserData("Commandes>Éditer");
-            editor.value.tab.setOnClosed((e1) -> Platform.runLater(() -> {
-                tabInstance.getTabs().remove(editor.value.tab);
-                if (editor.value.reopenDetails) {
+            var editor = EditOrderController.createController(ord, controller);
+            editor.tab.setUserData("Commandes>Éditer");
+            editor.tab.setOnClosed((e1) -> Platform.runLater(() -> {
+                tabInstance.getTabs().remove(editor.tab);
+                if (editor.reopenDetails) {
                     tabInstance.getTabs().add(controller.tab);
                     tabInstance.getSelectionModel().select(controller.tab);
-                    if (editor.value.saved)
+                    if (editor.saved)
                         controller.refresh();
                 }
             }));
-        }, () -> {
+            return editor;
+        }, (editor) -> {
             tabInstance.getTabs().remove(controller.tab);
-            tabInstance.getTabs().add(editor.value.tab);
-            tabInstance.getSelectionModel().select(editor.value.tab);
+            tabInstance.getTabs().add(editor.tab);
+            tabInstance.getSelectionModel().select(editor.tab);
         });
     }
 
     public static void editCustomer(Customer custo, CustomerDetailController controller) {
-        var editor = new Ptr<EditCustomerController>();
         runAsynchronously(() -> {
-            editor.value = EditCustomerController.createController(custo, controller);
-            editor.value.tab.setUserData("Clients>Éditer");
-            editor.value.tab.setOnClosed((e1) -> Platform.runLater(() -> {
-                tabInstance.getTabs().remove(editor.value.tab);
-                if (editor.value.reopenDetails) {
+            var editor = EditCustomerController.createController(custo, controller);
+            editor.tab.setUserData("Clients>Éditer");
+            editor.tab.setOnClosed((e1) -> Platform.runLater(() -> {
+                tabInstance.getTabs().remove(editor.tab);
+                if (editor.reopenDetails) {
                     tabInstance.getTabs().add(controller.tab);
                     tabInstance.getSelectionModel().select(controller.tab);
-                    if (editor.value.saved)
+                    if (editor.saved)
                         controller.refresh();
                 }
             }));
-        }, () -> {
+            return editor;
+        }, (editor) -> {
             tabInstance.getTabs().remove(controller.tab);
-            tabInstance.getTabs().add(editor.value.tab);
-            tabInstance.getSelectionModel().select(editor.value.tab);
+            tabInstance.getTabs().add(editor.tab);
+            tabInstance.getSelectionModel().select(editor.tab);
         });
     }
 
     public static void detailOrder(Order ord) {
-        var tab = new Ptr<Tab>();
         runAsynchronously(() -> {
-            tab.value = OrderDetailController.createControl(ord);
-            tab.value.setUserData("Commandes>Détail");
-        }, () -> {
-            tabInstance.getTabs().add(tab.value);
-            tabInstance.getSelectionModel().select(tab.value);
+            var tab = OrderDetailController.createControl(ord);
+            tab.setUserData("Commandes>Détail");
+            return tab;
+        }, (tab) -> {
+            tabInstance.getTabs().add(tab);
+            tabInstance.getSelectionModel().select(tab);
         });
     }
 

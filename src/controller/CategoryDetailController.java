@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -54,28 +53,16 @@ public class CategoryDetailController implements Initializable {
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        // TODOAuto-generated method stub
-
     }
 
     public void refresh() {
-        MainWindowController.runAsynchronously(new Runnable() {
-
-            @Override
-            public void run() {
-                category = MainWindowController.factory.getCategoryDAO().getById(category.getId());
-                Platform.runLater(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        tab.setText("Détail:" + category.getName());
-                        title.setText("Nom : " + category.getName());
-                        id.setText("ID : " + category.getId());
-                        image.setText("Visuel : " + category.getImagePath());
-                    }
+        MainWindowController.runAsynchronously(
+                () -> category = MainWindowController.factory.getCategoryDAO().getById(category.getId()), () -> {
+                    tab.setText("Détail:" + category.getName());
+                    title.setText("Nom : " + category.getName());
+                    id.setText("ID : " + category.getId());
+                    image.setText("Visuel : " + category.getImagePath());
                 });
-            }
-        });
     }
 
     public void edit() {
@@ -83,16 +70,12 @@ public class CategoryDetailController implements Initializable {
     }
 
     public void remove() {
-        MainWindowController.removeCategory(category, new Runnable() {
-
-            @Override
-            public void run() {
-                EventHandler<Event> handler = tab.getOnClosed();
-                if (null != handler) {
-                    handler.handle(null);
-                } else {
-                    tab.getTabPane().getTabs().remove(tab);
-                }
+        MainWindowController.removeCategory(category, () -> {
+            EventHandler<Event> handler = tab.getOnClosed();
+            if (null != handler) {
+                handler.handle(null);
+            } else {
+                tab.getTabPane().getTabs().remove(tab);
             }
 
         }, null);

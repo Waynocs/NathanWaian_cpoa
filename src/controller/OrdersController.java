@@ -5,7 +5,6 @@ import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -159,14 +158,9 @@ public class OrdersController implements Initializable {
                         alignmentProperty().set(Pos.BASELINE_CENTER);
                         button.setOnAction((ActionEvent event) -> {
                             var ord = table.getItems().get(getIndex());
-                            MainWindowController.removeOrder(ord, new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    allItems.remove(ord);
-                                    applySearchKey();
-                                }
-
+                            MainWindowController.removeOrder(ord, () -> {
+                                allItems.remove(ord);
+                                applySearchKey();
                             }, null);
                         });
                     }
@@ -192,14 +186,9 @@ public class OrdersController implements Initializable {
             if (ev.getCode() == KeyCode.DELETE) {
                 var ord = table.getSelectionModel().getSelectedItem();
                 if (ord != null) {
-                    MainWindowController.removeOrder(ord, new Runnable() {
-
-                        @Override
-                        public void run() {
-                            allItems.remove(ord);
-                            applySearchKey();
-                        }
-
+                    MainWindowController.removeOrder(ord, () -> {
+                        allItems.remove(ord);
+                        applySearchKey();
                     }, null);
                 }
             }
@@ -208,24 +197,15 @@ public class OrdersController implements Initializable {
     }
 
     public void refresh() {
-        MainWindowController.runAsynchronously(new Runnable() {
+        MainWindowController.runAsynchronously(() -> {
+            allItems.clear();
+            allCusts.clear();
+            for (Order ord : MainWindowController.factory.getOrderDAO().getAll())
+                allItems.add(ord);
+            for (Customer cust : MainWindowController.factory.getCustomerDAO().getAll())
+                allCusts.put(cust.getId(), cust);
+        }, () -> applySearchKey());
 
-            @Override
-            public void run() {
-                allItems.clear();
-                allCusts.clear();
-                for (Order ord : MainWindowController.factory.getOrderDAO().getAll())
-                    allItems.add(ord);
-                for (Customer cust : MainWindowController.factory.getCustomerDAO().getAll())
-                    allCusts.put(cust.getId(), cust);
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        applySearchKey();
-                    }
-                });
-            }
-        });
     }
 
     public void search() {

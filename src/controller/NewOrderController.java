@@ -113,8 +113,7 @@ public class NewOrderController implements Initializable {
             allProducts.clear();
             for (var product : MainWindowController.factory.getProductDAO().getAll())
                 allProducts.put(product.getId(), product);
-            Platform.runLater(() -> scanAvailableProducts());
-        });
+        }, () -> scanAvailableProducts());
     }
 
     @Override
@@ -308,18 +307,15 @@ public class NewOrderController implements Initializable {
     }
 
     public void refreshCust() {
-        MainWindowController.runAsynchronously(() -> {
-            var list = MainWindowController.factory.getCustomerDAO().getAll();
-            Platform.runLater(() -> {
-                var c = customer.getSelectionModel().getSelectedItem();
-                customers.clear();
-                customers.addAll(list);
-                if (c != null) {
-                    customer.getSelectionModel().select(c);
-                    customerLink.setDisable(false);
-                } else
-                    customerLink.setDisable(true);
-            });
+        MainWindowController.runAsynchronously(() -> MainWindowController.factory.getCustomerDAO().getAll(), (list) -> {
+            var c = customer.getSelectionModel().getSelectedItem();
+            customers.clear();
+            customers.addAll(list);
+            if (c != null) {
+                customer.getSelectionModel().select(c);
+                customerLink.setDisable(false);
+            } else
+                customerLink.setDisable(true);
         });
     }
 
@@ -338,38 +334,35 @@ public class NewOrderController implements Initializable {
         MainWindowController.runAsynchronously(() -> {
             if (customer.getSelectionModel().getSelectedItem() == null) {
                 Platform.runLater(() -> new Alert(AlertType.WARNING, "Selectionnez un client").showAndWait());
-                return;
+                return new AlertPair("Selectionnez un client", AlertType.WARNING);
             }
             if (date.getValue() == null) {
-                Platform.runLater(() -> new Alert(AlertType.WARNING, "Selectionnez une date").showAndWait());
-                return;
+                return new AlertPair("Selectionnez une date", AlertType.WARNING);
             }
             if (table.getItems().size() == 0) {
-                Platform.runLater(() -> new Alert(AlertType.WARNING, "Ajoutez au moins un produit").showAndWait());
-                return;
+                return new AlertPair("Ajoutez au moins un produit", AlertType.WARNING);
             }
             var order = new Order(0,
                     LocalDateTime.of(date.getValue(),
                             LocalTime.of(hours.getValue(), minutes.getValue(), seconds.getValue())),
                     customer.getSelectionModel().getSelectedItem().getId());
             try {
-                if ((order = MainWindowController.factory.getOrderDAO().create(order)) == null) {
-                    Platform.runLater(
-                            () -> new Alert(AlertType.ERROR, "Impossible de créer la commande.").showAndWait());
-                    return;
-                }
+                if ((order = MainWindowController.factory.getOrderDAO().create(order)) == null)
+                    return new AlertPair("Impossible de créer la commande.", AlertType.ERROR);
                 for (var line : table.getItems())
                     if (MainWindowController.factory.getOrderLineDAO().create(new OrderLine(order.getId(),
-                            line.getProduct(), line.getCost(), line.getQuantity())) == null) {
-                        Platform.runLater(() -> new Alert(AlertType.ERROR,
-                                "Impossible de créer une partie de la commande. Risque de corruption.").showAndWait());
-                        return;
-                    }
-                Platform.runLater(() -> MainWindowController.getMainTabPane().getTabs().remove(tab));
-
+                            line.getProduct(), line.getCost(), line.getQuantity())) == null)
+                        return new AlertPair("Impossible de créer une partie de la commande. Risque de corruption.",
+                                AlertType.ERROR);
+                return new AlertPair(null, null);
             } catch (DAOException e) {
-                Platform.runLater(() -> new Alert(AlertType.ERROR, e.getMessage()).showAndWait());
+                return new AlertPair(e.getMessage(), AlertType.ERROR);
             }
+        }, (pair) -> {
+            if (pair.getKey() != null)
+                new Alert(pair.getValue(), pair.getKey()).showAndWait();
+            else
+                MainWindowController.getMainTabPane().getTabs().remove(tab);
         });
     }
 }
