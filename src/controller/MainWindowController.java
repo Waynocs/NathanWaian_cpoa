@@ -223,21 +223,15 @@ public class MainWindowController implements Initializable {
     }
 
     public static void addProduct() {
-        runAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                var tab = NewProductController.createControl();
-                tab.setUserData("Produits>Nouveau");
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        tabInstance.getTabs().add(tab);
-                        tabInstance.getSelectionModel().select(tab);
-                    }
-                });
-            }
-        });
+        var tab = new Ptr<Tab>();
+        runAsynchronously(() -> {
+            tab.value = NewProductController.createControl();
+            tab.value.setUserData("Produits>Nouveau");
+        }, () -> {
 
+            tabInstance.getTabs().add(tab.value);
+            tabInstance.getSelectionModel().select(tab.value);
+        });
     }
 
     public void addCust() {
@@ -301,19 +295,13 @@ public class MainWindowController implements Initializable {
     }
 
     public static void addOrder() {
-        runAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                var tab = NewOrderController.createControl();
-                tab.setUserData("Commandes>Nouvelle");
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        tabInstance.getTabs().add(tab);
-                        tabInstance.getSelectionModel().select(tab);
-                    }
-                });
-            }
+        var tab = new Ptr<Tab>();
+        runAsynchronously(() -> {
+            tab.value = NewOrderController.createControl();
+            tab.value.setUserData("Commandes>Nouvelle");
+        }, () -> {
+            tabInstance.getTabs().add(tab.value);
+            tabInstance.getSelectionModel().select(tab.value);
         });
     }
 
@@ -354,19 +342,13 @@ public class MainWindowController implements Initializable {
     }
 
     public static void seeCategories() {
-        runAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                var tab = CategoriesController.createControl();
-                tab.setUserData("Catégories>Tout voir");
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        tabInstance.getTabs().add(tab);
-                        tabInstance.getSelectionModel().select(tab);
-                    }
-                });
-            }
+        var tab = new Ptr<Tab>();
+        runAsynchronously(() -> {
+            tab.value = CategoriesController.createControl();
+            tab.value.setUserData("Catégories>Tout voir");
+        }, () -> {
+            tabInstance.getTabs().add(tab.value);
+            tabInstance.getSelectionModel().select(tab.value);
         });
     }
 
@@ -375,19 +357,13 @@ public class MainWindowController implements Initializable {
     }
 
     public static void seeCustomers() {
-        runAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                var tab = CustomersController.createControl();
-                tab.setUserData("Clients>Tout voir");
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        tabInstance.getTabs().add(tab);
-                        tabInstance.getSelectionModel().select(tab);
-                    }
-                });
-            }
+        var tab = new Ptr<Tab>();
+        runAsynchronously(() -> {
+            tab.value = CustomersController.createControl();
+            tab.value.setUserData("Clients>Tout voir");
+        }, () -> {
+            tabInstance.getTabs().add(tab.value);
+            tabInstance.getSelectionModel().select(tab.value);
         });
 
     }
@@ -397,19 +373,13 @@ public class MainWindowController implements Initializable {
     }
 
     public static void seeProducts() {
-        runAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                var tab = ProductsController.createControl();
-                tab.setUserData("Produits>Tout voir");
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        tabInstance.getTabs().add(tab);
-                        tabInstance.getSelectionModel().select(tab);
-                    }
-                });
-            }
+        var tab = new Ptr<Tab>();
+        runAsynchronously(() -> {
+            tab.value = ProductsController.createControl();
+            tab.value.setUserData("Produits>Tout voir");
+        }, () -> {
+            tabInstance.getTabs().add(tab.value);
+            tabInstance.getSelectionModel().select(tab.value);
         });
     }
 
@@ -418,36 +388,25 @@ public class MainWindowController implements Initializable {
     }
 
     public static void seeOrders() {
-        runAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                var tab = OrdersController.createControl();
-                tab.setUserData("Commandes>Tout voir");
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        tabInstance.getTabs().add(tab);
-                        tabInstance.getSelectionModel().select(tab);
-                    }
-                });
-            }
+        var tab = new Ptr<Tab>();
+        runAsynchronously(() -> {
+            tab.value = OrdersController.createControl();
+            tab.value.setUserData("Commandes>Tout voir");
+        }, () -> {
+            tabInstance.getTabs().add(tab.value);
+            tabInstance.getSelectionModel().select(tab.value);
         });
+
     }
 
     public static void detailCategory(Category categ) {
-        runAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                var tab = CategoryDetailController.createControl(categ);
-                tab.setUserData("Catégories>Détail");
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        tabInstance.getTabs().add(tab);
-                        tabInstance.getSelectionModel().select(tab);
-                    }
-                });
-            }
+        var tab = new Ptr<Tab>();
+        runAsynchronously(() -> {
+            tab.value = CategoryDetailController.createControl(categ);
+            tab.value.setUserData("Catégories>Détail");
+        }, () -> {
+            tabInstance.getTabs().add(tab.value);
+            tabInstance.getSelectionModel().select(tab.value);
         });
     }
 
@@ -456,119 +415,90 @@ public class MainWindowController implements Initializable {
     }
 
     public static void detailProduct(Product prod) {
-        runAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                var tab = ProductDetailController.createControl(prod);
-                tab.setUserData("Produits>Détail");
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        tabInstance.getTabs().add(tab);
-                        tabInstance.getSelectionModel().select(tab);
-                    }
-                });
-            }
+        var tab = new Ptr<Tab>();
+        runAsynchronously(() -> {
+            tab.value = ProductDetailController.createControl(prod);
+            tab.value.setUserData("Produits>Détail");
+        }, () -> {
+            tabInstance.getTabs().add(tab.value);
+            tabInstance.getSelectionModel().select(tab.value);
         });
     }
 
     public static void editProduct(Product prod, ProductDetailController controller) {
-        runAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                var editor = EditProductController.createController(prod, controller);
-                editor.tab.setUserData("Produits>Éditer");
-                editor.tab.setOnClosed((e1) -> Platform.runLater(() -> {
-                    tabInstance.getTabs().remove(editor.tab);
-                    if (editor.reopenDetails) {
-                        tabInstance.getTabs().add(controller.tab);
-                        tabInstance.getSelectionModel().select(controller.tab);
-                        if (editor.saved)
-                            controller.refresh();
-                    }
-                }));
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        tabInstance.getTabs().remove(controller.tab);
-                        tabInstance.getTabs().add(editor.tab);
-                        tabInstance.getSelectionModel().select(editor.tab);
-                    }
-                });
-            }
+        var editor = new Ptr<EditProductController>();
+        runAsynchronously(() -> {
+            editor.value = EditProductController.createController(prod, controller);
+            editor.value.tab.setUserData("Produits>Éditer");
+            editor.value.tab.setOnClosed((e1) -> Platform.runLater(() -> {
+                tabInstance.getTabs().remove(editor.value.tab);
+                if (editor.value.reopenDetails) {
+                    tabInstance.getTabs().add(controller.tab);
+                    tabInstance.getSelectionModel().select(controller.tab);
+                    if (editor.value.saved)
+                        controller.refresh();
+                }
+            }));
+        }, () -> {
+            tabInstance.getTabs().remove(controller.tab);
+            tabInstance.getTabs().add(editor.value.tab);
+            tabInstance.getSelectionModel().select(editor.value.tab);
         });
+
     }
 
     public static void editCategory(Category categ, CategoryDetailController controller) {
-        runAsynchronously(new Runnable() {
+        var editor = new Ptr<EditCategoryController>();
+        runAsynchronously(() -> {
 
-            @Override
-            public void run() {
-                var editor = EditCategoryController.createController(categ, controller);
-                editor.tab.setUserData("Catégories>Éditer");
-                editor.tab.setOnClosed((e1) -> Platform.runLater(() -> {
-                    tabInstance.getTabs().remove(editor.tab);
-                    if (editor.reopenDetails) {
-                        tabInstance.getTabs().add(controller.tab);
-                        tabInstance.getSelectionModel().select(controller.tab);
-                        if (editor.saved)
-                            controller.refresh();
-                    }
-                }));
-                Platform.runLater(new Runnable() {
+            editor.value = EditCategoryController.createController(categ, controller);
+            editor.value.tab.setUserData("Catégories>Éditer");
+            editor.value.tab.setOnClosed((e1) -> Platform.runLater(() -> {
+                tabInstance.getTabs().remove(editor.value.tab);
+                if (editor.value.reopenDetails) {
+                    tabInstance.getTabs().add(controller.tab);
+                    tabInstance.getSelectionModel().select(controller.tab);
+                    if (editor.value.saved)
+                        controller.refresh();
+                }
+            }));
+        }, () -> {
 
-                    @Override
-                    public void run() {
-                        tabInstance.getTabs().remove(controller.tab);
-                        tabInstance.getTabs().add(editor.tab);
-                        tabInstance.getSelectionModel().select(editor.tab);
-                    }
-                });
-            }
+            tabInstance.getTabs().remove(controller.tab);
+            tabInstance.getTabs().add(editor.value.tab);
+            tabInstance.getSelectionModel().select(editor.value.tab);
         });
     }
 
     public static void editOrder(Order ord, OrderDetailController controller) {
-        runAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                var editor = EditOrderController.createController(ord, controller);
-                editor.tab.setUserData("Commandes>Éditer");
-                editor.tab.setOnClosed((e1) -> Platform.runLater(() -> {
-                    tabInstance.getTabs().remove(editor.tab);
-                    if (editor.reopenDetails) {
-                        tabInstance.getTabs().add(controller.tab);
-                        tabInstance.getSelectionModel().select(controller.tab);
-                        if (editor.saved)
-                            controller.refresh();
-                    }
-                }));
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        tabInstance.getTabs().remove(controller.tab);
-                        tabInstance.getTabs().add(editor.tab);
-                        tabInstance.getSelectionModel().select(editor.tab);
-                    }
-                });
-            }
+        var editor = new Ptr<EditOrderController>();
+        runAsynchronously(() -> {
+            editor.value = EditOrderController.createController(ord, controller);
+            editor.value.tab.setUserData("Commandes>Éditer");
+            editor.value.tab.setOnClosed((e1) -> Platform.runLater(() -> {
+                tabInstance.getTabs().remove(editor.value.tab);
+                if (editor.value.reopenDetails) {
+                    tabInstance.getTabs().add(controller.tab);
+                    tabInstance.getSelectionModel().select(controller.tab);
+                    if (editor.value.saved)
+                        controller.refresh();
+                }
+            }));
+        }, () -> {
+            tabInstance.getTabs().remove(controller.tab);
+            tabInstance.getTabs().add(editor.value.tab);
+            tabInstance.getSelectionModel().select(editor.value.tab);
         });
     }
 
     public static void detailOrder(Order ord) {
-        runAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                var tab = OrderDetailController.createControl(ord);
-                tab.setUserData("Commandes>Détail");
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        tabInstance.getTabs().add(tab);
-                        tabInstance.getSelectionModel().select(tab);
-                    }
-                });
-            }
+        var tab = new Ptr<Tab>();
+        runAsynchronously(() -> {
+            tab.value = OrderDetailController.createControl(ord);
+            tab.value.setUserData("Commandes>Détail");
+        }, () -> {
+            tabInstance.getTabs().add(tab.value);
+            tabInstance.getSelectionModel().select(tab.value);
         });
     }
 
