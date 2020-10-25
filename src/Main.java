@@ -25,6 +25,7 @@ public class Main extends Application {
                 primaryStage.setTitle("Business Pro Euro Simulator Deluxe Edition");
                 primaryStage.setWidth(1000);
                 primaryStage.setHeight(700);
+                primaryStage.setMaximized(true);
                 primaryStage.getIcons().add(new Image("assets/icons/icon.png"));
                 primaryStage.setMinHeight(300);
                 primaryStage.setMinWidth(650);
