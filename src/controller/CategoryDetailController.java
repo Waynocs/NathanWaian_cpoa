@@ -59,7 +59,7 @@ public class CategoryDetailController implements Initializable {
         MainWindowController.runAsynchronously(
                 () -> category = MainWindowController.factory.getCategoryDAO().getById(category.getId()), () -> {
                     tab.setText("Détail:" + category.getName());
-                    title.setText("Nom : " + category.getName());
+                    title.setText("Titre : " + category.getName());
                     id.setText("ID : " + category.getId());
                     image.setText("Visuel : " + category.getImagePath());
                 });

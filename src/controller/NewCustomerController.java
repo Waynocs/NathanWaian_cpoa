@@ -80,7 +80,7 @@ public class NewCustomerController implements Initializable {
                 return new AlertPair("Renseignez un pays", AlertType.WARNING);
 
             var customer = new Customer(0, name.getText(), surname.getText(), identity.getText(), password.getText(),
-                    number.getText(), street.getText(), postalcode.getText(), city.getText(), country.getText());
+                    street.getText(), number.getText(), postalcode.getText(), city.getText(), country.getText());
 
             try {
                 if (MainWindowController.factory.getCustomerDAO().create(customer) != null)
