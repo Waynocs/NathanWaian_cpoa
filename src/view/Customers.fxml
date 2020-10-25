@@ -68,7 +68,7 @@
                     <columns>
                       <TableColumn fx:id="id" prefWidth="46.0" text="Id" />
                       <TableColumn fx:id="surname" prefWidth="69.60003662109375" text="Nom" />
-                        <TableColumn fx:id="name" prefWidth="84.0" text="Prenom" />
+                        <TableColumn fx:id="name" prefWidth="84.0" text="Prénom" />
                         <TableColumn fx:id="identity" prefWidth="100.0" text="Identifiant" />
                         <TableColumn fx:id="password" prefWidth="91.199951171875" text="Mot de passe" />
                         <TableColumn fx:id="number" prefWidth="95.99993896484375" text="adr_numero" />

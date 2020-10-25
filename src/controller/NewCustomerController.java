@@ -90,7 +90,7 @@ public class NewCustomerController implements Initializable {
                 return;
             }
 
-            var customer = new Customer(0, surname.getText(), name.getText(), identity.getText(), password.getText(),
+            var customer = new Customer(0, name.getText(), surname.getText(), identity.getText(), password.getText(),
                     number.getText(), street.getText(), postalcode.getText(), city.getText(), country.getText());
 
             try {
