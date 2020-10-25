@@ -66,7 +66,7 @@ public class CustomerDetailController implements Initializable {
         identity.setText("Identifiant : " + customer.getIdentifier());
         password.setText("Mot de passe : " + customer.getPwd());
         number.setText("Numéro d'adresse : " + customer.getAddressNumber());
-        street.setText("Voie d'adressee : " + customer.getAddressStreet());
+        street.setText("Voie d'adresse : " + customer.getAddressStreet());
         postalcode.setText("Code postal : " + customer.getAddressPostalCode());
         city.setText("Ville : " + customer.getAddressCity());
         country.setText("Pays : " + customer.getAddressCountry());
@@ -94,7 +94,7 @@ public class CustomerDetailController implements Initializable {
                         identity.setText("Identifiant : " + customer.getIdentifier());
                         password.setText("Mot de passe : " + customer.getPwd());
                         number.setText("Numéro d'adresse : " + customer.getAddressNumber());
-                        number.setText("Voie d'adresse : " + customer.getAddressStreet());
+                        street.setText("Voie d'adresse : " + customer.getAddressStreet());
                         postalcode.setText("Code postal : " + customer.getAddressPostalCode());
                         city.setText("Ville : " + customer.getAddressCity());
                         country.setText("Pays : " + customer.getAddressCountry());
