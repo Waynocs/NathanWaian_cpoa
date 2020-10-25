@@ -75,9 +75,8 @@ public class ProductsController implements Initializable {
                     {
 
                         {
-                            link.setOnAction((ActionEvent event) -> {
-                                // TODO open a category detail tab
-                            });
+                            link.setOnAction((ActionEvent event) -> MainWindowController
+                                    .detailCategory(allCategs.get(table.getItems().get(getIndex()).getId())));
                         }
                     }
 

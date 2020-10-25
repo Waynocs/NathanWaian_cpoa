@@ -55,9 +55,8 @@ public class NewProductController implements Initializable {
     public void initialize(URL arg0, ResourceBundle arg1) {
         categories = FXCollections.observableList(new ArrayList<Category>());
         category.setItems(categories);
-        categLink.setOnAction((ActionEvent) -> {
-            // TODO open category detail tab
-        });
+        categLink.setOnAction(
+                (e) -> MainWindowController.detailCategory(category.getSelectionModel().getSelectedItem()));
         cost.setTextFormatter(new TextFormatter<>(new NumberStringConverter(Locale.ENGLISH)));
         refreshCateg();
     }

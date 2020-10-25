@@ -69,11 +69,8 @@ public class OrdersController implements Initializable {
 
                     {
 
-                        {
-                            link.setOnAction((ActionEvent event) -> {
-                                // TODO open a customer detail tab
-                            });
-                        }
+                        link.setOnAction((ActionEvent event) -> MainWindowController
+                                .detailCustomer(allCusts.get(table.getItems().get(getIndex()).getCustomer())));
                     }
 
                     @Override

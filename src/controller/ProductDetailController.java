@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -15,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
+import model.Category;
 import model.Product;
 
 public class ProductDetailController implements Initializable {
@@ -33,6 +33,7 @@ public class ProductDetailController implements Initializable {
     @FXML
     public Tab tab;
     public Product product;
+    public Category categ;
 
     public static Tab createControl(Product prod) {
         try {
@@ -51,13 +52,7 @@ public class ProductDetailController implements Initializable {
 
     public void setupFields(Product prod) {
         product = prod;
-        tab.setText("Détail:" + product.getName());
-        category.setText(MainWindowController.factory.getCategoryDAO().getById(product.getCategory()).getName());
-        name.setText("Nom : " + product.getName());
-        id.setText("ID : " + product.getId());
-        description.setText(product.getDescription());
-        price.setText("Prix : " + product.getCost() + " €");
-        image.setText("Visuel : " + product.getImagePath());
+        refresh();
     }
 
     @Override
@@ -67,13 +62,11 @@ public class ProductDetailController implements Initializable {
     public void refresh() {
         MainWindowController.runAsynchronously(() -> {
             product = MainWindowController.factory.getProductDAO().getById(product.getId());
-            return MainWindowController.factory.getCategoryDAO().getById(product.getCategory());
-        }, (categ) -> {
+            categ = MainWindowController.factory.getCategoryDAO().getById(product.getCategory());
+        }, () -> {
             tab.setText("Détail:" + product.getName());
             category.setText(categ.getName());
-            category.setOnAction((ActionEvent e) -> {
-                // TODO open a category detail tab
-            });
+            category.setOnAction((e) -> MainWindowController.detailCategory(categ));
             name.setText("Nom : " + product.getName());
             id.setText("ID : " + product.getId());
             description.setText(product.getDescription());
