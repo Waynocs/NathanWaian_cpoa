@@ -41,9 +41,6 @@ public class ProductsController implements Initializable {
     public TableColumn<Product, Void> detail;
     @FXML
     public TableColumn<Product, Void> remove;
-    @FXML
-    public TextField searchbar;
-    private String searchKey;
     private List<Product> allItems;
     private Map<Integer, Category> allCategs;
     private ObservableList<Product> displayedItems;
@@ -208,7 +205,6 @@ public class ProductsController implements Initializable {
         allItems = new LinkedList<Product>();
         allCategs = new HashMap<Integer, Category>();
         table.setItems(displayedItems);
-        searchKey = "";
         table.setOnKeyPressed((KeyEvent ev) -> {
             if (ev.getCode() == KeyCode.DELETE) {
                 var prod = table.getSelectionModel().getSelectedItem();
@@ -235,7 +231,7 @@ public class ProductsController implements Initializable {
     }
 
     public void search() {
-        searchKey = searchbar.getText();
+        // set filters
         applySearchKey();
     }
 
@@ -243,17 +239,8 @@ public class ProductsController implements Initializable {
         displayedItems.clear();
         for (Product prod : allItems) {
             boolean toAdd = false;
-            if (Utilities.compareStrings(searchKey, prod.getName()))
-                toAdd = true;
-            else if (Utilities.compareStrings(searchKey, prod.getImagePath()))
-                toAdd = true;
-            else if (Utilities.compareStrings(searchKey, prod.getDescription()))
-                toAdd = true;
-            else if (Utilities.compareStrings(searchKey, allCategs.get(prod.getCategory()).getName()))
-                toAdd = true;
-            if (toAdd)
+            if (toAdd || true) // tmp
                 displayedItems.add(prod);
         }
     }
-
 }
