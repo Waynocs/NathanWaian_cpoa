@@ -76,6 +76,11 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </VBox.margin>
                         </Label>
+                        <Label fx:id="ordered" text="Commandés : &lt;quantity&gt;">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </VBox.margin>
+                        </Label>
                         <HBox alignment="CENTER_RIGHT">
                            <children>
                               <Button alignment="TOP_LEFT" mnemonicParsing="false" onAction="#edit" text="Éditer">

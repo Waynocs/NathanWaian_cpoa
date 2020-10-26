@@ -15,6 +15,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import model.Category;
+import model.OrderLine;
 import model.Product;
 
 public class ProductDetailController implements Initializable {
@@ -30,6 +31,8 @@ public class ProductDetailController implements Initializable {
     public Label price;
     @FXML
     public Label image;
+    @FXML
+    public Label ordered;
     @FXML
     public Tab tab;
     public Product product;
@@ -63,7 +66,8 @@ public class ProductDetailController implements Initializable {
         MainWindowController.runAsynchronously(() -> {
             product = MainWindowController.factory.getProductDAO().getById(product.getId());
             categ = MainWindowController.factory.getCategoryDAO().getById(product.getCategory());
-        }, () -> {
+            return MainWindowController.factory.getOrderLineDAO().getAllFromProduct(product.getId());
+        }, (orders) -> {
             tab.setText("Détail:" + product.getName());
             category.setText(categ.getName());
             category.setOnAction((e) -> MainWindowController.detailCategory(categ));
@@ -72,6 +76,10 @@ public class ProductDetailController implements Initializable {
             description.setText(product.getDescription());
             price.setText("Prix : " + product.getCost() + " €");
             image.setText("Visuel : " + product.getImagePath());
+            int count = 0;
+            for (var orderLine : orders)
+                count += orderLine.getQuantity();
+            ordered.setText("Commandés : " + count);
         });
     }
 
