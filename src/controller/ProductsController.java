@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -25,6 +26,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.util.Callback;
 import model.Category;
 import model.Product;
@@ -221,6 +224,32 @@ public class ProductsController implements Initializable {
                             var prod = table.getItems().get(getIndex());
                             MainWindowController.removeProduct(prod, () -> {
                                 allItems.remove(prod);
+                                {
+                                    double min = allItems.get(0).getCost();
+                                    double max = allItems.get(0).getCost();
+                                    for (Product product : allItems) {
+                                        if (min > product.getCost())
+                                            min = product.getCost();
+                                        if (max < product.getCost())
+                                            max = product.getCost();
+                                    }
+                                    for (Node node : priceVBox.getChildren()) {
+                                        var sliderMin = (Slider) ((VBox) node).getChildren().get(0);
+                                        var sliderMax = (Slider) ((VBox) node).getChildren().get(1);
+                                        if (sliderMin.getValue() < min)
+                                            sliderMin.setValue(min);
+                                        if (sliderMin.getValue() > max)
+                                            sliderMin.setValue(max);
+                                        if (sliderMax.getValue() < min)
+                                            sliderMax.setValue(min);
+                                        if (sliderMax.getValue() > max)
+                                            sliderMax.setValue(max);
+                                        sliderMin.setMin(min);
+                                        sliderMin.setMax(max);
+                                        sliderMax.setMin(min);
+                                        sliderMax.setMax(max);
+                                    }
+                                }
                                 applyFilters();
                             }, null);
                         });
@@ -248,6 +277,32 @@ public class ProductsController implements Initializable {
                 if (prod != null) {
                     MainWindowController.removeProduct(prod, () -> {
                         allItems.remove(prod);
+                        {
+                            double min = allItems.get(0).getCost();
+                            double max = allItems.get(0).getCost();
+                            for (Product product : allItems) {
+                                if (min > product.getCost())
+                                    min = product.getCost();
+                                if (max < product.getCost())
+                                    max = product.getCost();
+                            }
+                            for (Node node : priceVBox.getChildren()) {
+                                var sliderMin = (Slider) ((VBox) node).getChildren().get(0);
+                                var sliderMax = (Slider) ((VBox) node).getChildren().get(1);
+                                if (sliderMin.getValue() < min)
+                                    sliderMin.setValue(min);
+                                if (sliderMin.getValue() > max)
+                                    sliderMin.setValue(max);
+                                if (sliderMax.getValue() < min)
+                                    sliderMax.setValue(min);
+                                if (sliderMax.getValue() > max)
+                                    sliderMax.setValue(max);
+                                sliderMin.setMin(min);
+                                sliderMin.setMax(max);
+                                sliderMax.setMin(min);
+                                sliderMax.setMax(max);
+                            }
+                        }
                         applyFilters();
                     }, null);
                 }
@@ -270,6 +325,32 @@ public class ProductsController implements Initializable {
             for (Node node : categoryVBox.getChildren()) {
                 var box = (ComboBox<Category>) ((HBox) node).getChildren().get(0);
                 box.getSelectionModel().select((Category) box.getUserData());
+            }
+            {
+                double min = allItems.get(0).getCost();
+                double max = allItems.get(0).getCost();
+                for (Product product : allItems) {
+                    if (min > product.getCost())
+                        min = product.getCost();
+                    if (max < product.getCost())
+                        max = product.getCost();
+                }
+                for (Node node : priceVBox.getChildren()) {
+                    var sliderMin = (Slider) ((VBox) node).getChildren().get(0);
+                    var sliderMax = (Slider) ((VBox) node).getChildren().get(1);
+                    if (sliderMin.getValue() < min)
+                        sliderMin.setValue(min);
+                    if (sliderMin.getValue() > max)
+                        sliderMin.setValue(max);
+                    if (sliderMax.getValue() < min)
+                        sliderMax.setValue(min);
+                    if (sliderMax.getValue() > max)
+                        sliderMax.setValue(max);
+                    sliderMin.setMin(min);
+                    sliderMin.setMax(max);
+                    sliderMax.setMin(min);
+                    sliderMax.setMax(max);
+                }
             }
             applyFilters();
         });
@@ -296,6 +377,12 @@ public class ProductsController implements Initializable {
             var field = (TextArea) ((HBox) filter).getChildren().get(0);
             var key = field.getText();
             nameFilters.add((prod) -> Utilities.compareStrings(key, prod.getDescription()));
+        }
+        for (Node node : priceVBox.getChildren()) {
+            var sliderMin = (Slider) ((VBox) node).getChildren().get(0);
+            var sliderMax = (Slider) ((VBox) node).getChildren().get(1);
+            priceFilters
+                    .add((prod) -> prod.getCost() >= sliderMin.getValue() && prod.getCost() <= sliderMax.getValue());
         }
         applyFilters();
     }
@@ -376,7 +463,63 @@ public class ProductsController implements Initializable {
     }
 
     public void addPriceFilter() {
-
+        var value = new Label();
+        var deleteButton = new Button();
+        var img = new ImageView(MainWindowController.removeImage);
+        img.setPreserveRatio(false);
+        img.setSmooth(false);
+        img.setFitHeight(24);
+        img.setFitWidth(24);
+        deleteButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        deleteButton.setGraphic(img);
+        double min = allItems.get(0).getCost();
+        double max = allItems.get(0).getCost();
+        for (Product product : allItems) {
+            if (min > product.getCost())
+                min = product.getCost();
+            if (max < product.getCost())
+                max = product.getCost();
+        }
+        var box = new VBox();
+        var sliderMin = new Slider();
+        box.getChildren().add(sliderMin);
+        sliderMin.setShowTickLabels(true);
+        sliderMin.setShowTickMarks(true);
+        sliderMin.setBlockIncrement(.01);
+        sliderMin.setMin(min);
+        sliderMin.setMax(max);
+        sliderMin.setValue(min);
+        VBox.setMargin(sliderMin, new Insets(5));
+        var sliderMax = new Slider();
+        box.getChildren().add(sliderMax);
+        sliderMax.setShowTickLabels(true);
+        sliderMax.setShowTickMarks(true);
+        sliderMax.setBlockIncrement(.01);
+        sliderMax.setMin(min);
+        sliderMax.setMax(max);
+        sliderMax.setValue(max);
+        VBox.setMargin(sliderMax, new Insets(5));
+        deleteButton.setOnAction((e) -> priceVBox.getChildren().remove(box));
+        {
+            var detailBox = new HBox();
+            box.getChildren().add(detailBox);
+            HBox.setMargin(value, new Insets(5));
+            HBox.setMargin(deleteButton, new Insets(5));
+            detailBox.getChildren().addAll(value, deleteButton);
+        }
+        box.getChildren().add(new Separator(Orientation.HORIZONTAL));
+        Runnable update = () -> {
+            value.setText(String.format("%.2f", sliderMin.getValue()) + " € - "
+                    + String.format("%.2f", sliderMax.getValue()) + " €");
+            if (sliderMin.getValue() > sliderMax.getValue())
+                value.setTextFill(Color.RED);
+            else
+                value.setTextFill(Color.BLACK);
+        };
+        update.run();
+        sliderMin.valueProperty().addListener((arg0, arg1, arg2) -> update.run());
+        sliderMax.valueProperty().addListener((arg0, arg1, arg2) -> update.run());
+        priceVBox.getChildren().add(box);
     }
 
     public void addImageFilter() {
