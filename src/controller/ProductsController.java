@@ -292,6 +292,11 @@ public class ProductsController implements Initializable {
             var key = field.getText();
             nameFilters.add((prod) -> Utilities.compareStrings(key, prod.getName()));
         }
+        for (Node filter : descriptionVBox.getChildren()) {
+            var field = (TextArea) ((HBox) filter).getChildren().get(0);
+            var key = field.getText();
+            nameFilters.add((prod) -> Utilities.compareStrings(key, prod.getDescription()));
+        }
         applyFilters();
     }
 
@@ -351,7 +356,23 @@ public class ProductsController implements Initializable {
     }
 
     public void addDescriptionFilter() {
-
+        var key = new TextArea();
+        key.setPrefSize(150, 60);
+        var deleteButton = new Button();
+        var img = new ImageView(MainWindowController.removeImage);
+        img.setPreserveRatio(false);
+        img.setSmooth(false);
+        img.setFitHeight(24);
+        img.setFitWidth(24);
+        deleteButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        deleteButton.setGraphic(img);
+        var box = new HBox();
+        deleteButton.setOnAction((e) -> descriptionVBox.getChildren().remove(box));
+        box.setAlignment(Pos.CENTER_LEFT);
+        box.getChildren().addAll(key, deleteButton);
+        HBox.setMargin(key, new Insets(5));
+        HBox.setMargin(deleteButton, new Insets(5));
+        descriptionVBox.getChildren().add(box);
     }
 
     public void addPriceFilter() {

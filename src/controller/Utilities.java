@@ -8,8 +8,8 @@ public class Utilities {
     }
 
     public static String normalize(String str) {
-        return Normalizer.normalize(str.toLowerCase().replace(" ", ""), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]",
-                "");
+        return Normalizer.normalize(str.toLowerCase().replaceAll("[ \t\n]", ""), Normalizer.Form.NFD)
+                .replaceAll("[^\\p{ASCII}]", "");
     }
 
     public static boolean compareStrings(String key, String value) {
