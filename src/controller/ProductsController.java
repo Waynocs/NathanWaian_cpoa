@@ -6,7 +6,6 @@ import java.util.*;
 import java.util.function.Predicate;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,7 +26,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.util.Callback;
 import model.Category;
 import model.Product;
@@ -309,6 +307,11 @@ public class ProductsController implements Initializable {
             }
         });
         refresh();
+        addCategFilter();
+        addDescriptionFilter();
+        addImageFilter();
+        addNameFilter();
+        addPriceFilter();
     }
 
     public void refresh() {
