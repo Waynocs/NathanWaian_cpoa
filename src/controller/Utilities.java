@@ -13,7 +13,6 @@ public class Utilities {
     }
 
     public static boolean compareStrings(String key, String value) {
-        System.out.println(key + ":" + value);
         key = normalize(key);
         if (key.length() == 0)
             return true;
