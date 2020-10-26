@@ -108,8 +108,8 @@ public class MemoryCustomerDAO implements dao.CustomerDAO {
         var list = new LinkedList<Customer>();
         for (var entry : memory.entrySet())
             list.add(new Customer(entry.getKey(), entry.getValue().name, entry.getValue().surname,
-                    entry.getValue().identifier, entry.getValue().pwd, entry.getValue().addressStreet,
-                    entry.getValue().addressNumber, entry.getValue().addressPostalCode, entry.getValue().addressCity,
+                    entry.getValue().identifier, entry.getValue().pwd, entry.getValue().addressNumber,
+                    entry.getValue().addressStreet, entry.getValue().addressPostalCode, entry.getValue().addressCity,
                     entry.getValue().addressCountry));
         return list.toArray(new Customer[0]);
     }
