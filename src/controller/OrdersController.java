@@ -199,14 +199,7 @@ public class OrdersController implements Initializable {
                         button.setGraphic(iv);
                         alignmentProperty().set(Pos.BASELINE_CENTER);
                         button.setOnAction((ActionEvent event) -> {
-                            TableLine element;
-                            {
-                                var cell = table.getEditingCell();
-                                if (cell != null)
-                                    element = cell.getTreeItem().getValue();
-                                else
-                                    return;
-                            }
+                            TableLine element = table.getTreeItem(getIndex()).getValue();
                             MainWindowController.removeOrder(element.order, () -> {
                                 allItems.remove(element.order);
                                 applySearchKey();
