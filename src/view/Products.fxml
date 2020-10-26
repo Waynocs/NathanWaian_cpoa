@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -11,18 +12,18 @@
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="785.0" stylesheets="@style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProductsController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="496.0" prefWidth="937.0" stylesheets="@style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProductsController">
    <tabs>
       <Tab text="Produits">
         <content>
-            <BorderPane>
+            <BorderPane fx:id="mainPane">
                <center>
                   <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <top>
@@ -87,25 +88,174 @@
                   </BorderPane>
                </center>
                <right>
-                  <Accordion BorderPane.alignment="CENTER">
-                    <panes>
-                      <TitledPane animated="false" text="untitled 1">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                        </content>
-                      </TitledPane>
-                      <TitledPane animated="false" text="untitled 2">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                        </content>
-                      </TitledPane>
-                      <TitledPane animated="false" text="untitled 3">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                        </content>
-                      </TitledPane>
-                    </panes>
-                  </Accordion>
+                  <VBox fx:id="filterPanel" BorderPane.alignment="CENTER">
+                     <children>
+                        <BorderPane>
+                           <center>
+                              <Accordion>
+                                <panes>
+                                  <TitledPane animated="false" text="Catégorie">
+                                    <content>
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER">
+                                             <content>
+                                                <VBox>
+                                                   <children>
+                                                      <VBox fx:id="categoryVBox" />
+                                                      <HBox alignment="CENTER_RIGHT">
+                                                         <children>
+                                                            <Button mnemonicParsing="false" onAction="#addCategFilter" text="Nouveau filtre">
+                                                               <HBox.margin>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                               </HBox.margin>
+                                                               <graphic>
+                                                                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
+                                                                     <image>
+                                                                        <Image url="@../assets/icons/add.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </graphic>
+                                                            </Button>
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
+                                             </content>
+                                          </ScrollPane>
+                                    </content>
+                                  </TitledPane>
+                                  <TitledPane animated="false" text="Nom">
+                                    <content>
+                                          <ScrollPane fitToHeight="true" fitToWidth="true">
+                                            <content>
+                                                <VBox>
+                                                   <children>
+                                                      <VBox fx:id="nameVBox" />
+                                                      <HBox alignment="CENTER_RIGHT">
+                                                         <children>
+                                                            <Button mnemonicParsing="false" onAction="#addNameFilter" text="Nouveau filtre">
+                                                               <graphic>
+                                                                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
+                                                                     <image>
+                                                                        <Image url="@../assets/icons/add.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </graphic>
+                                                               <HBox.margin>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                               </HBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
+                                            </content>
+                                          </ScrollPane>
+                                    </content>
+                                  </TitledPane>
+                                  <TitledPane animated="false" text="Description">
+                                    <content>
+                                          <ScrollPane fitToHeight="true" fitToWidth="true">
+                                            <content>
+                                                <VBox>
+                                                   <children>
+                                                      <VBox fx:id="descriptionVBox" />
+                                                      <HBox alignment="CENTER_RIGHT">
+                                                         <children>
+                                                            <Button mnemonicParsing="false" onAction="#addDescriptionFilter" text="Nouveau filtre">
+                                                               <HBox.margin>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                               </HBox.margin>
+                                                               <graphic>
+                                                                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
+                                                                     <image>
+                                                                        <Image url="@../assets/icons/add.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </graphic>
+                                                            </Button>
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
+                                            </content>
+                                          </ScrollPane>
+                                    </content>
+                                  </TitledPane>
+                                    <TitledPane animated="false" text="Prix">
+                                      <content>
+                                          <ScrollPane fitToHeight="true" fitToWidth="true">
+                                            <content>
+                                                <VBox>
+                                                   <children>
+                                                      <VBox fx:id="priceVBox" />
+                                                      <HBox alignment="CENTER_RIGHT">
+                                                         <children>
+                                                            <Button mnemonicParsing="false" text="Nouveau filtre">
+                                                               <HBox.margin>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                               </HBox.margin>
+                                                               <graphic>
+                                                                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
+                                                                     <image>
+                                                                        <Image url="@../assets/icons/add.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </graphic>
+                                                            </Button>
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
+                                            </content>
+                                          </ScrollPane>
+                                      </content>
+                                    </TitledPane>
+                                    <TitledPane animated="false" text="Visuel">
+                                      <content>
+                                          <ScrollPane fitToHeight="true" fitToWidth="true">
+                                            <content>
+                                                <VBox>
+                                                   <children>
+                                                      <VBox fx:id="imageVBox" />
+                                                      <HBox alignment="CENTER_RIGHT">
+                                                         <children>
+                                                            <Button mnemonicParsing="false" onAction="#addImageFilter" text="Nouveau filtre">
+                                                               <HBox.margin>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                               </HBox.margin>
+                                                               <graphic>
+                                                                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" smooth="false">
+                                                                     <image>
+                                                                        <Image url="@../assets/icons/add.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </graphic>
+                                                            </Button>
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
+                                            </content>
+                                          </ScrollPane>
+                                      </content>
+                                    </TitledPane>
+                                </panes>
+                              </Accordion>
+                           </center>
+                           <bottom>
+                              <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#filter" prefHeight="30.0" prefWidth="100.0" text="Filtrer">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                           </bottom>
+                        </BorderPane>
+                     </children>
+                  </VBox>
                </right>
             </BorderPane>
         </content>

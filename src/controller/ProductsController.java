@@ -3,8 +3,10 @@ package controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.function.Predicate;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,12 +14,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import model.Category;
 import model.Product;
@@ -41,9 +48,32 @@ public class ProductsController implements Initializable {
     public TableColumn<Product, Void> detail;
     @FXML
     public TableColumn<Product, Void> remove;
+    @FXML
+    public ToggleButton filtersButton;
+    @FXML
+    public VBox filterPanel;
+    @FXML
+    public BorderPane mainPane;
+    @FXML
+    public VBox categoryVBox;
+    @FXML
+    public VBox nameVBox;
+    @FXML
+    public VBox descriptionVBox;
+    @FXML
+    public VBox priceVBox;
+    @FXML
+    public VBox imageVBox;
+
     private List<Product> allItems;
     private Map<Integer, Category> allCategs;
     private ObservableList<Product> displayedItems;
+    private ObservableList<Category> categFilterList;
+    private List<Predicate<Product>> categoryFilters;
+    private List<Predicate<Product>> nameFilters;
+    private List<Predicate<Product>> descriptionFilters;
+    private List<Predicate<Product>> priceFilters;
+    private List<Predicate<Product>> imageFilters;
 
     public static Tab createControl() {
         try {
@@ -61,7 +91,14 @@ public class ProductsController implements Initializable {
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-
+        filtersButton.setOnAction((e) -> mainPane.setRight(filtersButton.isSelected() ? filterPanel : null));
+        mainPane.setRight(null);
+        categoryFilters = new LinkedList<Predicate<Product>>();
+        nameFilters = new LinkedList<Predicate<Product>>();
+        descriptionFilters = new LinkedList<Predicate<Product>>();
+        priceFilters = new LinkedList<Predicate<Product>>();
+        imageFilters = new LinkedList<Predicate<Product>>();
+        categFilterList = FXCollections.observableList(new LinkedList<Category>());
         category.setCellFactory(new Callback<TableColumn<Product, String>, TableCell<Product, String>>() {
             @Override
             public TableCell<Product, String> call(TableColumn<Product, String> arg0) {
@@ -184,7 +221,7 @@ public class ProductsController implements Initializable {
                             var prod = table.getItems().get(getIndex());
                             MainWindowController.removeProduct(prod, () -> {
                                 allItems.remove(prod);
-                                applySearchKey();
+                                applyFilters();
                             }, null);
                         });
                     }
@@ -211,7 +248,7 @@ public class ProductsController implements Initializable {
                 if (prod != null) {
                     MainWindowController.removeProduct(prod, () -> {
                         allItems.remove(prod);
-                        applySearchKey();
+                        applyFilters();
                     }, null);
                 }
             }
@@ -227,20 +264,101 @@ public class ProductsController implements Initializable {
                 allCategs.put(categ.getId(), categ);
             for (Product prod : MainWindowController.factory.getProductDAO().getAll())
                 allItems.add(prod);
-        }, () -> applySearchKey());
+        }, () -> {
+            categFilterList.clear();
+            categFilterList.addAll(allCategs.values());
+            for (Node node : categoryVBox.getChildren()) {
+                var box = (ComboBox<Category>) ((HBox) node).getChildren().get(0);
+                box.getSelectionModel().select((Category) box.getUserData());
+            }
+            applyFilters();
+        });
     }
 
-    public void search() {
-        // set filters
-        applySearchKey();
+    public void filter() {
+        categoryFilters.clear();
+        nameFilters.clear();
+        descriptionFilters.clear();
+        priceFilters.clear();
+        imageFilters.clear();
+        for (Node filter : categoryVBox.getChildren()) {
+            var box = (ComboBox<Category>) ((HBox) filter).getChildren().get(0);
+            var categ = box.getSelectionModel().getSelectedItem();
+            if (categ != null)
+                categoryFilters.add((prod) -> prod.getCategory() == categ.getId());
+        }
+        for (Node filter : nameVBox.getChildren()) {
+            var field = (TextField) ((HBox) filter).getChildren().get(0);
+            var key = field.getText();
+            nameFilters.add((prod) -> Utilities.compareStrings(key, prod.getName()));
+        }
+        applyFilters();
     }
 
-    public void applySearchKey() {
+    public void applyFilters() {
         displayedItems.clear();
         for (Product prod : allItems) {
-            boolean toAdd = false;
-            if (toAdd || true) // tmp
+            if (Utilities.testAny(categoryFilters, (p) -> p.test(prod), true)
+                    && Utilities.testAny(nameFilters, (p) -> p.test(prod), true)
+                    && Utilities.testAny(descriptionFilters, (p) -> p.test(prod), true)
+                    && Utilities.testAny(priceFilters, (p) -> p.test(prod), true)
+                    && Utilities.testAny(imageFilters, (p) -> p.test(prod), true))
                 displayedItems.add(prod);
         }
+    }
+
+    public void addCategFilter() {
+        var categs = new ComboBox<Category>();
+        categs.setItems(categFilterList);
+        categs.setOnAction((e) -> {
+            if (categs.getSelectionModel().getSelectedIndex() != -1)
+                categs.setUserData(categs.getSelectionModel().getSelectedItem());
+        });
+        var deleteButton = new Button();
+        var img = new ImageView(MainWindowController.removeImage);
+        img.setPreserveRatio(false);
+        img.setSmooth(false);
+        img.setFitHeight(24);
+        img.setFitWidth(24);
+        deleteButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        deleteButton.setGraphic(img);
+        var box = new HBox();
+        deleteButton.setOnAction((e) -> categoryVBox.getChildren().remove(box));
+        box.setAlignment(Pos.CENTER_LEFT);
+        box.getChildren().addAll(categs, deleteButton);
+        HBox.setMargin(categs, new Insets(5));
+        HBox.setMargin(deleteButton, new Insets(5));
+        categoryVBox.getChildren().add(box);
+    }
+
+    public void addNameFilter() {
+        var key = new TextField();
+        var deleteButton = new Button();
+        var img = new ImageView(MainWindowController.removeImage);
+        img.setPreserveRatio(false);
+        img.setSmooth(false);
+        img.setFitHeight(24);
+        img.setFitWidth(24);
+        deleteButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        deleteButton.setGraphic(img);
+        var box = new HBox();
+        deleteButton.setOnAction((e) -> nameVBox.getChildren().remove(box));
+        box.setAlignment(Pos.CENTER_LEFT);
+        box.getChildren().addAll(key, deleteButton);
+        HBox.setMargin(key, new Insets(5));
+        HBox.setMargin(deleteButton, new Insets(5));
+        nameVBox.getChildren().add(box);
+    }
+
+    public void addDescriptionFilter() {
+
+    }
+
+    public void addPriceFilter() {
+
+    }
+
+    public void addImageFilter() {
+
     }
 }
