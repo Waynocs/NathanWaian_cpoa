@@ -68,7 +68,7 @@ public class EditCustomerController implements Initializable {
         postalcode.setText(customer.getAddressPostalCode());
         city.setText(customer.getAddressCity());
         country.setText(customer.getAddressCountry());
-
+        tab.setText("Editer:" + customer.getName() + " " + customer.getSurname());
     }
 
     @Override

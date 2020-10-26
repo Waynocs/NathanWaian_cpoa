@@ -58,7 +58,7 @@ public class CustomerDetailController implements Initializable {
 
     public void setupFields(Customer custo) {
         customer = custo;
-        tab.setText("Détail:" + customer.getName() + customer.getSurname());
+        tab.setText("Détail:" + customer.getName() + " " + customer.getSurname());
 
         id.setText("ID : " + customer.getId());
         surname.setText("Nom : " + customer.getSurname());
