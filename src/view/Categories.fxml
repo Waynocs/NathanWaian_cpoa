@@ -70,7 +70,7 @@
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </HBox.margin>
                                        <graphic>
-                                          <ImageView fx:id="filtersButton" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../assets/icons/filter.png" />
                                              </image>
@@ -87,18 +87,18 @@
                <right>
                   <VBox fx:id="filterPanel" BorderPane.alignment="CENTER">
                      <children>
-                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                        <BorderPane>
                            <center>
                               <Accordion>
                                 <panes>
                                   <TitledPane animated="false" text="Titre">
                                     <content>
-                                          <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0">
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER">
                                              <content>
                                                 <VBox>
                                                    <children>
-                                                      <VBox fx:id="titleVBox" prefHeight="200.0" prefWidth="100.0" />
-                                                      <HBox>
+                                                      <VBox fx:id="titleVBox" />
+                                                      <HBox alignment="CENTER_RIGHT">
                                                          <children>
                                                             <Button alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#addTitleFilter" text="Nouveau filtre">
                                                                <graphic>
@@ -122,12 +122,12 @@
                                   </TitledPane>
                                   <TitledPane animated="false" text="Visuel">
                                     <content>
-                                          <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0">
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER">
                                             <content>
-                                                <VBox prefHeight="200.0" prefWidth="100.0">
+                                                <VBox>
                                                    <children>
-                                                      <VBox fx:id="imageVBox" prefHeight="200.0" prefWidth="100.0" />
-                                                      <HBox prefHeight="100.0" prefWidth="200.0">
+                                                      <VBox fx:id="imageVBox" />
+                                                      <HBox alignment="CENTER_RIGHT">
                                                          <children>
                                                             <Button mnemonicParsing="false" onAction="#addImageFilter" text="Nouveau filtre">
                                                                <graphic>
@@ -150,7 +150,7 @@
                               </Accordion>
                            </center>
                            <bottom>
-                              <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                              <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
                                  <children>
                                     <Button alignment="CENTER" mnemonicParsing="false" onAction="#filter" prefHeight="30.0" prefWidth="100.0" text="Filtrer">
                                        <HBox.margin>
