@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 import dao.DAOException;
@@ -322,6 +323,20 @@ public class EditOrderController implements Initializable {
                 };
             };
         });
+        date.getEditor().focusedProperty().addListener((a1, a2, value) -> {
+            if (!value) {
+                if (date.getEditor().getText().length() == 0)
+                    date.setValue(null);
+                else {
+                    try {
+                        date.setValue(date.getConverter().fromString(date.getEditor().getText()));
+                    } catch (DateTimeParseException e) {
+                    }
+                }
+            }
+        });
+        date.getEditor().textProperty().addListener((a1, a2, value) -> date
+                .setStyle(Utilities.validDateFormat(value, date.getConverter()) ? null : "-fx-border-color: red;"));
         availableProducts.setOnAction((e) -> {
             addProduct.setDisable(availableProducts.getSelectionModel().getSelectedIndex() == -1);
         });
