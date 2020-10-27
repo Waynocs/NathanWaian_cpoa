@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.function.Predicate;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
@@ -12,8 +13,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableCell;
@@ -21,9 +25,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import model.Category;
 
@@ -44,7 +52,20 @@ public class CategoriesController implements Initializable {
     @FXML
     public TableColumn<Category, Void> remove;
     @FXML
-    public TextField searchbar;
+    public ToggleButton filtersButton;
+    @FXML
+    public BorderPane mainPane;
+    @FXML
+    public VBox filterPanel;
+    @FXML
+    public VBox imageVBox;
+    @FXML
+    public VBox titleVBox;
+
+    private List<Predicate<Category>> imageFilters;
+    private List<Predicate<Category>> titleFilters;
+    private List<Category> allItems;
+    private ObservableList<Category> displayedItems;
 
     public static Tab createControl() {
         try {
@@ -54,11 +75,19 @@ public class CategoriesController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
+
+        filtersButton.setOnAction((e) -> mainPane.setRight(filtersButton.isSelected() ? filterPanel : null));
+        mainPane.setRight(null);
+        titleFilters = new LinkedList<Predicate<Category>>();
+        imageFilters = new LinkedList<Predicate<Category>>();
 
         title.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Category, String>, ObservableValue<String>>() {
@@ -98,13 +127,13 @@ public class CategoriesController implements Initializable {
                         iv.setImage(MainWindowController.detailImage);
                         button.setGraphic(iv);
                         alignmentProperty().set(Pos.BASELINE_CENTER);
-                        button.setOnAction((ActionEvent event) -> {
-                            MainWindowController.detailCategory(table.getItems().get(getIndex()));
-                        });
                     }
 
                     @Override
                     public void updateItem(Void item, boolean empty) {
+                        button.setOnAction((ActionEvent event) -> {
+                            MainWindowController.detailCategory(table.getItems().get(getIndex()));
+                        });
                         super.updateItem(item, empty);
                         if (empty) {
                             setGraphic(null);
@@ -132,7 +161,7 @@ public class CategoriesController implements Initializable {
                             var categ = table.getItems().get(getIndex());
                             MainWindowController.removeCategory(categ, () -> {
                                 allItems.remove(categ);
-                                applySearchKey();
+                                applyFilters();
                             }, null);
                         });
                     }
@@ -152,18 +181,19 @@ public class CategoriesController implements Initializable {
         displayedItems = FXCollections.observableList(new ArrayList<Category>());
         allItems = new LinkedList<Category>();
         table.setItems(displayedItems);
-        searchKey = "";
         table.setOnKeyPressed((KeyEvent ev) -> {
             if (ev.getCode() == KeyCode.DELETE) {
                 var categ = table.getSelectionModel().getSelectedItem();
                 if (categ != null) {
                     MainWindowController.removeCategory(categ, () -> {
                         allItems.remove(categ);
-                        applySearchKey();
+                        applyFilters();
                     }, null);
                 }
             }
         });
+        addTitleFilter();
+        addImageFilter();
         refresh();
     }
 
@@ -172,28 +202,71 @@ public class CategoriesController implements Initializable {
             allItems.clear();
             for (Category categ : MainWindowController.factory.getCategoryDAO().getAll())
                 allItems.add(categ);
-        }, () -> applySearchKey());
+        }, () -> applyFilters());
     }
 
-    public void search() {
-        searchKey = searchbar.getText();
-        applySearchKey();
+    public void filter() {
+        titleFilters.clear();
+        imageFilters.clear();
+
+        for (Node filter : titleVBox.getChildren()) {
+            var field = (TextField) ((HBox) filter).getChildren().get(0);
+            var key = field.getText();
+            titleFilters.add((categ) -> Utilities.compareStrings(key, categ.getName()));
+        }
+        for (Node filter : imageVBox.getChildren()) {
+            var field = (TextField) ((HBox) filter).getChildren().get(0);
+            var key = field.getText();
+            imageFilters.add((categ) -> Utilities.compareStrings(key, categ.getImagePath()));
+        }
+        applyFilters();
     }
 
-    public void applySearchKey() {
+    public void applyFilters() {
         displayedItems.clear();
         for (Category categ : allItems) {
-            boolean toAdd = false;
-            if (Utilities.compareStrings(searchKey, categ.getName()))
-                toAdd = true;
-            else if (Utilities.compareStrings(searchKey, categ.getImagePath()))
-                toAdd = true;
-            if (toAdd)
+            if (Utilities.testAny(titleFilters, (c) -> c.test(categ), true)
+                    && Utilities.testAny(imageFilters, (c) -> c.test(categ), true))
                 displayedItems.add(categ);
         }
     }
 
-    private String searchKey;
-    private List<Category> allItems;
-    private ObservableList<Category> displayedItems;
+    public void addTitleFilter() {
+        var key = new TextField();
+        var deleteButton = new Button();
+        var img = new ImageView(MainWindowController.removeImage);
+        img.setPreserveRatio(false);
+        img.setSmooth(false);
+        img.setFitHeight(24);
+        img.setFitWidth(24);
+        deleteButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        deleteButton.setGraphic(img);
+        var box = new HBox();
+        deleteButton.setOnAction((e) -> titleVBox.getChildren().remove(box));
+        box.setAlignment(Pos.CENTER_LEFT);
+        box.getChildren().addAll(key, deleteButton);
+        HBox.setMargin(key, new Insets(5));
+        HBox.setMargin(deleteButton, new Insets(5));
+        titleVBox.getChildren().add(box);
+    }
+
+    public void addImageFilter() {
+        var key = new TextField();
+        var deleteButton = new Button();
+        var img = new ImageView(MainWindowController.removeImage);
+        img.setPreserveRatio(false);
+        img.setSmooth(false);
+        img.setFitHeight(24);
+        img.setFitWidth(24);
+        deleteButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        deleteButton.setGraphic(img);
+        var box = new HBox();
+        deleteButton.setOnAction((e) -> imageVBox.getChildren().remove(box));
+        box.setAlignment(Pos.CENTER_LEFT);
+        box.getChildren().addAll(key, deleteButton);
+        HBox.setMargin(key, new Insets(5));
+        HBox.setMargin(deleteButton, new Insets(5));
+        imageVBox.getChildren().add(box);
+    }
+
 }
