@@ -222,7 +222,7 @@ public class ProductsController implements Initializable {
                             var prod = table.getItems().get(getIndex());
                             MainWindowController.removeProduct(prod, () -> {
                                 allItems.remove(prod);
-                                {
+                                if (allItems.size() > 0) {
                                     double min = allItems.get(0).getCost();
                                     double max = allItems.get(0).getCost();
                                     for (Product product : allItems) {
@@ -247,7 +247,19 @@ public class ProductsController implements Initializable {
                                         sliderMax.setMin(min);
                                         sliderMax.setMax(max);
                                     }
-                                }
+                                } else
+                                    for (Node node : priceVBox.getChildren()) {
+                                        var sliderMin = (Slider) ((VBox) node).getChildren().get(0);
+                                        var sliderMax = (Slider) ((VBox) node).getChildren().get(1);
+                                        sliderMin.setValue(0);
+                                        sliderMin.setValue(0);
+                                        sliderMax.setValue(0);
+                                        sliderMax.setValue(0);
+                                        sliderMin.setMin(0);
+                                        sliderMin.setMax(0);
+                                        sliderMax.setMin(0);
+                                        sliderMax.setMax(0);
+                                    }
                                 applyFilters();
                             }, null);
                         });
@@ -275,7 +287,7 @@ public class ProductsController implements Initializable {
                 if (prod != null) {
                     MainWindowController.removeProduct(prod, () -> {
                         allItems.remove(prod);
-                        {
+                        if (allItems.size() > 0) {
                             double min = allItems.get(0).getCost();
                             double max = allItems.get(0).getCost();
                             for (Product product : allItems) {
@@ -300,18 +312,30 @@ public class ProductsController implements Initializable {
                                 sliderMax.setMin(min);
                                 sliderMax.setMax(max);
                             }
-                        }
+                        } else
+                            for (Node node : priceVBox.getChildren()) {
+                                var sliderMin = (Slider) ((VBox) node).getChildren().get(0);
+                                var sliderMax = (Slider) ((VBox) node).getChildren().get(1);
+                                sliderMin.setValue(0);
+                                sliderMin.setValue(0);
+                                sliderMax.setValue(0);
+                                sliderMax.setValue(0);
+                                sliderMin.setMin(0);
+                                sliderMin.setMax(0);
+                                sliderMax.setMin(0);
+                                sliderMax.setMax(0);
+                            }
                         applyFilters();
                     }, null);
                 }
             }
         });
-        refresh();
         addCategFilter();
         addDescriptionFilter();
         addImageFilter();
         addNameFilter();
         addPriceFilter();
+        refresh();
     }
 
     public void refresh() {
@@ -329,7 +353,7 @@ public class ProductsController implements Initializable {
                 var box = (ComboBox<Category>) ((HBox) node).getChildren().get(0);
                 box.getSelectionModel().select((Category) box.getUserData());
             }
-            {
+            if (allItems.size() > 0) {
                 double min = allItems.get(0).getCost();
                 double max = allItems.get(0).getCost();
                 for (Product product : allItems) {
@@ -354,7 +378,19 @@ public class ProductsController implements Initializable {
                     sliderMax.setMin(min);
                     sliderMax.setMax(max);
                 }
-            }
+            } else
+                for (Node node : priceVBox.getChildren()) {
+                    var sliderMin = (Slider) ((VBox) node).getChildren().get(0);
+                    var sliderMax = (Slider) ((VBox) node).getChildren().get(1);
+                    sliderMin.setValue(0);
+                    sliderMin.setValue(0);
+                    sliderMax.setValue(0);
+                    sliderMax.setValue(0);
+                    sliderMin.setMin(0);
+                    sliderMin.setMax(0);
+                    sliderMax.setMin(0);
+                    sliderMax.setMax(0);
+                }
             applyFilters();
         });
     }
@@ -480,8 +516,8 @@ public class ProductsController implements Initializable {
         img.setFitWidth(24);
         deleteButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         deleteButton.setGraphic(img);
-        double min = allItems.get(0).getCost();
-        double max = allItems.get(0).getCost();
+        double min = allItems.size() > 0 ? allItems.get(0).getCost() : 0;
+        double max = allItems.size() > 0 ? allItems.get(0).getCost() : 0;
         for (Product product : allItems) {
             if (min > product.getCost())
                 min = product.getCost();
@@ -517,6 +553,10 @@ public class ProductsController implements Initializable {
         }
         box.getChildren().add(new Separator(Orientation.HORIZONTAL));
         Runnable update = () -> {
+            if (Double.valueOf(sliderMin.getValue()).equals(Double.NaN))
+                sliderMin.setValue(sliderMin.getMin());
+            if (Double.valueOf(sliderMax.getValue()).equals(Double.NaN))
+                sliderMax.setValue(sliderMax.getMax());
             value.setText(String.format("%.2f", sliderMin.getValue()) + " € - "
                     + String.format("%.2f", sliderMax.getValue()) + " €");
             if (sliderMin.getValue() > sliderMax.getValue())
