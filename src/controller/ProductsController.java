@@ -30,6 +30,7 @@ import javafx.util.Callback;
 import model.Category;
 import model.Product;
 
+@SuppressWarnings("unchecked")
 public class ProductsController implements Initializable {
     @FXML
     public TableView<Product> table;

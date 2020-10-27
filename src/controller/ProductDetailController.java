@@ -15,7 +15,6 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import model.Category;
-import model.OrderLine;
 import model.Product;
 
 public class ProductDetailController implements Initializable {

@@ -2,7 +2,6 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
@@ -36,6 +35,7 @@ import model.Order;
 import model.OrderLine;
 import model.Product;
 
+@SuppressWarnings("unchecked")
 public class OrdersController implements Initializable {
     private class TableLine {
         public Order order;
