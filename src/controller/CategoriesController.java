@@ -192,9 +192,9 @@ public class CategoriesController implements Initializable {
                 }
             }
         });
-        refresh();
         addTitleFilter();
         addImageFilter();
+        refresh();
     }
 
     public void refresh() {
