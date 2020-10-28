@@ -73,6 +73,8 @@ public class OrdersController implements Initializable {
     @FXML
     public TreeTableColumn<TableLine, String> totals;
     @FXML
+    public Label displayCount;
+    @FXML
     public BorderPane mainPane;
     @FXML
     public ToggleButton filtersButton;
@@ -532,6 +534,8 @@ public class OrdersController implements Initializable {
                     item.getChildren().add(new TreeItem<TableLine>(new TableLine(line)));
             }
         }
+        displayCount.setText(displayedItems.size() + " / " + allItems.size() + " affiché"
+                + (displayedItems.size() != 1 ? "s " : " "));
     }
 
     public double getOrderCost(Order ord) {

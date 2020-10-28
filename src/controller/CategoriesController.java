@@ -18,6 +18,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableCell;
@@ -51,6 +52,8 @@ public class CategoriesController implements Initializable {
     public TableColumn<Category, Void> detail;
     @FXML
     public TableColumn<Category, Void> remove;
+    @FXML
+    public Label displayCount;
     @FXML
     public ToggleButton filtersButton;
     @FXML
@@ -229,6 +232,8 @@ public class CategoriesController implements Initializable {
                     && Utilities.testAny(imageFilters, (c) -> c.test(categ), true))
                 displayedItems.add(categ);
         }
+        displayCount.setText(displayedItems.size() + " / " + allItems.size() + " affiché"
+                + (displayedItems.size() != 1 ? "s " : " "));
     }
 
     public void addTitleFilter() {
