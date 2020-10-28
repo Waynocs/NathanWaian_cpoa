@@ -51,6 +51,8 @@ public class ProductsController implements Initializable {
     @FXML
     public TableColumn<Product, Void> remove;
     @FXML
+    public Label displayCount;
+    @FXML
     public ToggleButton filtersButton;
     @FXML
     public VBox filterPanel;
@@ -366,6 +368,7 @@ public class ProductsController implements Initializable {
                 for (Node node : priceVBox.getChildren()) {
                     var sliderMin = (Slider) ((VBox) node).getChildren().get(0);
                     var sliderMax = (Slider) ((VBox) node).getChildren().get(1);
+                    boolean resetMax = sliderMax.getValue() < .01;
                     if (sliderMin.getValue() < min)
                         sliderMin.setValue(min);
                     if (sliderMin.getValue() > max)
@@ -378,6 +381,8 @@ public class ProductsController implements Initializable {
                     sliderMin.setMax(max);
                     sliderMax.setMin(min);
                     sliderMax.setMax(max);
+                    if (resetMax)
+                        sliderMax.setValue(max);
                 }
             } else
                 for (Node node : priceVBox.getChildren()) {
@@ -442,6 +447,8 @@ public class ProductsController implements Initializable {
                     && Utilities.testAny(imageFilters, (p) -> p.test(prod), true))
                 displayedItems.add(prod);
         }
+        displayCount.setText(displayedItems.size() + " / " + allItems.size() + " affiché"
+                + (displayedItems.size() != 1 ? "s " : " "));
     }
 
     public void addCategFilter() {
