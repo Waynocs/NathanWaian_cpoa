@@ -421,7 +421,7 @@ public class ProductsController implements Initializable {
         for (Node filter : descriptionVBox.getChildren()) {
             var field = (TextArea) ((HBox) filter).getChildren().get(0);
             var key = field.getText();
-            nameFilters.add((prod) -> Utilities.compareStrings(key, prod.getDescription()));
+            descriptionFilters.add((prod) -> Utilities.compareStrings(key, prod.getDescription()));
         }
         for (Node node : priceVBox.getChildren()) {
             var sliderMin = (Slider) ((VBox) node).getChildren().get(0);
