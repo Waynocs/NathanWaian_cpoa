@@ -290,7 +290,7 @@ public class CustomersController implements Initializable {
         });
         addSurnameFilter();
         addNameFilter();
-        // addIdentityFilter();
+        addIdentityFilter();
         addPostalcodeFilter();
         addCityFilter();
         addCountryFilter();
