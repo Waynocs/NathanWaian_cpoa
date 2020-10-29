@@ -1,85 +1,302 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1100.0" stylesheets="@style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomersController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1100.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="controller.CustomersController">
   <tabs>
     <Tab text="Clients">
-      <content>
-            <BorderPane prefHeight="200.0" prefWidth="200.0">
-               <top>
-                  <FlowPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER_LEFT">
-                     <children>
-                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#refresh" text="Actualiser">
-                           <graphic>
-                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../assets/icons/refresh.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <FlowPane.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </FlowPane.margin>
-                        </Button>
-                        <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#search" styleClass="search-bar" text="Rechercher">
-                           <FlowPane.margin>
-                              <Insets left="5.0" />
-                           </FlowPane.margin>
-                           <graphic>
-                              <HBox alignment="CENTER">
+         <content>
+            <BorderPane fx:id="mainPane" prefHeight="200.0" prefWidth="200.0">
+               <center>
+                  <BorderPane BorderPane.alignment="CENTER">
+                     <top>
+                        <GridPane BorderPane.alignment="CENTER">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <HBox alignment="CENTER_LEFT">
                                  <children>
-                                    <TextField fx:id="searchBar" prefColumnCount="15" promptText="Rechercher...">
+                                    <Button mnemonicParsing="false" onAction="#refresh" text="Actualiser">
+                                       <graphic>
+                                          <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../assets/icons/refresh.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
                                        <HBox.margin>
-                                          <Insets right="5.0" />
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </HBox.margin>
-                                       <padding>
-                                          <Insets bottom="10.0" left="5.0" right="5.0" top="8.0" />
-                                       </padding>
-                                    </TextField>
-                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../assets/icons/detail.png" />
-                                       </image>
-                                    </ImageView>
+                                    </Button>
+                                    <Label fx:id="displayCount" />
                                  </children>
                               </HBox>
-                           </graphic>
-                        </Button>
-                     </children>
-                  </FlowPane>
-               </top>
-               <center>
-                  <TableView fx:id="table" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                    <columns>
-                      <TableColumn fx:id="id" prefWidth="46.0" text="Id" />
-                      <TableColumn fx:id="surname" prefWidth="69.60003662109375" text="Nom" />
-                        <TableColumn fx:id="name" prefWidth="84.0" text="Prénom" />
-                        <TableColumn fx:id="identity" prefWidth="100.0" text="Identifiant" />
-                        <TableColumn fx:id="password" prefWidth="91.199951171875" text="Mot de passe" />
-                        <TableColumn fx:id="number" prefWidth="95.99993896484375" text="adr_numero" />
-                        <TableColumn fx:id="street" prefWidth="78.40008544921875" text="adr_voie" />
-                        <TableColumn fx:id="postalcode" prefWidth="104.79998779296875" text="adr_code_postal" />
-                        <TableColumn fx:id="city" minWidth="0.0" prefWidth="112.800048828125" text="adr_ville" />
-                        <TableColumn fx:id="country" prefWidth="85.5999755859375" text="adr_pays" />
-                        <TableColumn fx:id="detail" prefWidth="85.5999755859375" text="Détail" />
-                        <TableColumn fx:id="remove" prefWidth="85.5999755859375" text="Supprimer" />
-                    </columns>
-                  </TableView>
+                              <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1">
+                                 <children>
+                                    <ToggleButton fx:id="filtersButton" mnemonicParsing="false" text="Filtres">
+                                       <graphic>
+                                          <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../assets/icons/filter.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </ToggleButton>
+                                 </children>
+                              </HBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" top="10.0" />
+                           </padding>
+                        </GridPane>
+                     </top>
+                     <center>
+                        <TableView fx:id="table" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                          <columns>
+                            <TableColumn fx:id="id" prefWidth="75.0" text="Id" />
+                            <TableColumn fx:id="surname" prefWidth="75.0" text="Nom" />
+                              <TableColumn fx:id="name" prefWidth="75.0" text="Prénom" />
+                              <TableColumn fx:id="identity" prefWidth="75.0" text="Identifiant" />
+                              <TableColumn fx:id="password" prefWidth="75.0" text="Mot de passe" />
+                              <TableColumn fx:id="number" prefWidth="75.0" text="adr_numéro" />
+                              <TableColumn fx:id="street" prefWidth="75.0" text="adr_voie" />
+                              <TableColumn fx:id="postalcode" prefWidth="75.0" text="adr_code_postal" />
+                              <TableColumn fx:id="city" prefWidth="75.0" text="adr_ville" />
+                              <TableColumn fx:id="country" prefWidth="75.0" text="adr_pays" />
+                              <TableColumn fx:id="detail" prefWidth="75.0" text="Détail" />
+                              <TableColumn fx:id="remove" prefWidth="75.0" text="Supprimer" />
+                          </columns>
+                        </TableView>
+                     </center>
+                  </BorderPane>
                </center>
+               <right>
+                  <VBox fx:id="filterPanel" BorderPane.alignment="CENTER">
+                     <children>
+                        <BorderPane>
+                           <center>
+                              <Accordion>
+                                <panes>
+                                  <TitledPane animated="false" text="Nom">
+                                       <content>
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER">
+                                             <content>
+                                                <VBox>
+                                                   <children>
+                                                      <VBox fx:id="surnameVBox" />
+                                                      <HBox alignment="BOTTOM_CENTER">
+                                                         <children>
+                                                            <Button alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#addSurnameFilter" text="Nouveau filtre">
+                                                               <graphic>
+                                                                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                                                     <image>
+                                                                        <Image url="@../assets/icons/add.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </graphic>
+                                                               <HBox.margin>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                               </HBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
+                                             </content>
+                                          </ScrollPane>
+                                       </content>
+                                  </TitledPane>
+                                  <TitledPane animated="false" text="Prénom">
+                                       <content>
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER">
+                                             <content>
+                                                <VBox>
+                                                   <children>
+                                                      <VBox fx:id="nameVBox" />
+                                                      <HBox alignment="BOTTOM_CENTER">
+                                                         <children>
+                                                            <Button alignment="BOTTOM_CENTER" mnemonicParsing="false" onAction="#addNameFilter" text="Nouveau flitre">
+                                                               <HBox.margin>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                               </HBox.margin>
+                                                               <graphic>
+                                                                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                                                     <image>
+                                                                        <Image url="@../assets/icons/add.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </graphic>
+                                                            </Button>
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
+                                             </content>
+                                          </ScrollPane>
+                                       </content>
+                                  </TitledPane>
+                                  <TitledPane animated="false" text="Identifiant">
+                                    <content>
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER">
+                                            <content>
+                                                <VBox>
+                                                   <children>
+                                                      <VBox fx:id="identityVBox" />
+                                                      <HBox alignment="BOTTOM_CENTER">
+                                                         <children>
+                                                            <Button alignment="BOTTOM_CENTER" mnemonicParsing="false" onAction="#addIdentityFilter" text="Nouveau filtre">
+                                                               <HBox.margin>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                               </HBox.margin>
+                                                               <graphic>
+                                                                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                                                     <image>
+                                                                        <Image url="@../assets/icons/add.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </graphic>
+                                                            </Button>
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
+                                            </content>
+                                          </ScrollPane>
+                                    </content>
+                                  </TitledPane>
+                                    <TitledPane animated="false" layoutX="10.0" layoutY="61.0" text="Code Postal">
+                                       <content>
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER">
+                                            <content>
+                                                <VBox>
+                                                   <children>
+                                                      <VBox fx:id="postalcodeVBox" />
+                                                      <HBox alignment="BOTTOM_CENTER">
+                                                         <children>
+                                                            <Button mnemonicParsing="false" onAction="#addCodepostalFilter" text="Nouveau filtre">
+                                                               <graphic>
+                                                                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                                                     <image>
+                                                                        <Image url="@../assets/icons/add.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </graphic>
+                                                               <HBox.margin>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                               </HBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
+                                            </content>
+                                          </ScrollPane>
+                                       </content>
+                                    </TitledPane>
+                                    <TitledPane animated="false" layoutX="10.0" layoutY="87.0" text="Ville">
+                                       <content>
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER">
+                                            <content>
+                                                <VBox>
+                                                   <children>
+                                                      <VBox fx:id="cityVBox" />
+                                                      <HBox alignment="BOTTOM_CENTER">
+                                                         <children>
+                                                            <Button mnemonicParsing="false" onAction="#addCityFilter" text="Nouveau filtre">
+                                                               <graphic>
+                                                                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                                                     <image>
+                                                                        <Image url="@../assets/icons/add.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </graphic>
+                                                               <HBox.margin>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                               </HBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
+                                            </content>
+                                          </ScrollPane>
+                                       </content>
+                                    </TitledPane>
+                                    <TitledPane animated="false" layoutX="10.0" layoutY="295.0" text="Pays">
+                                       <content>
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER">
+                                            <content>
+                                                <VBox>
+                                                   <children>
+                                                      <VBox fx:id="countryVBox" />
+                                                      <HBox alignment="BOTTOM_CENTER">
+                                                         <children>
+                                                            <Button mnemonicParsing="false" onAction="#addCountryFilter" text="Nouveau filtre">
+                                                               <HBox.margin>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                               </HBox.margin>
+                                                               <graphic>
+                                                                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                                                     <image>
+                                                                        <Image url="@../assets/icons/add.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </graphic>
+                                                            </Button>
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
+                                            </content>
+                                          </ScrollPane>
+                                       </content>
+                                    </TitledPane>
+                                </panes>
+                              </Accordion>
+                           </center>
+                           <bottom>
+                              <HBox alignment="BOTTOM_CENTER" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#filter" prefHeight="30.0" prefWidth="100.0" text="Filtrer">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                           </bottom>
+                        </BorderPane>
+                     </children>
+                  </VBox>
+               </right>
             </BorderPane>
-      </content>
+         </content>
     </Tab>
   </tabs>
 </TabPane>
