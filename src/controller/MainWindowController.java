@@ -221,6 +221,16 @@ public class MainWindowController implements Initializable {
     }
 
     public void about() {
+        try {
+            URL fxmlURL = CategoriesController.class.getResource("../view/About.fxml");
+            FXMLLoader fxmlLoader = new FXMLLoader(fxmlURL);
+            var tab = fxmlLoader.<TabPane>load().getTabs().get(0);
+            tab.setUserData("Aide>A propos");
+            tabInstance.getTabs().add(tab);
+            tabInstance.getSelectionModel().select(tab);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 

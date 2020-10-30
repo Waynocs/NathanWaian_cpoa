@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="650.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1">
+   <tabs>
+      <Tab text="A propos">
+         <content>
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/icons/icon.png" />
+                     </image>
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </VBox.margin>
+                  </ImageView>
+                  <VBox prefHeight="144.0" prefWidth="650.0">
+                     <children>
+                        <TextArea prefHeight="200.0" prefWidth="200.0" text="Business Pro Euro Simulator Deluxe Edition est une application de vente de produits vestimentaires répartis dans plusieurs catégories. Nos produits sont de taille unique. Business Pro Euro Simulator Deluxe Edition permet donc de saisir/modifier/supprimer/visualiser les données pour l'ensemble des produits vendus, des catégories, des clients et des commandes. Un système de filtrage a également été mis en place pour faciliter la recherche sur notre application. Passez également du mode &quot;liste mémoire&quot; au mode &quot;base de donnée&quot; simplement en changeant de mode grâce à notre barre située en bas de la page. Sachez également partout où vous vous trouvez grâce à notre fil d'Ariane, se situant également sur cette même barre en bas de page." wrapText="true" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <TextField alignment="TOP_CENTER" text="Origine de Business Pro Euro Simulator Deluxe Edition :" />
+                        <TextArea editable="false" prefHeight="200.0" prefWidth="200.0" text="Cette application est née grâce à un projet scolaire,&#10;&#10;Actuellement en deuxième année de DUT Informatique, nous devions réaliser un projet en java pouvant reprendre les contraintes expliquées juste au-dessus, dans un temps bien défini (environ 3 semaines).&#10;&#10;Pour ce projet, nous étions par binôme. Notre groupe se compose de :&#10;-&#9;Nathan HANEN&#10;-&#9;Waïan SERANO&#10;Retrouvez ici le lien vers notre répertoire Github : https://github.com/Waynocs/NathanWaian_cpoa&#10;&#10;Profil Github Nathan HANEN : https://github.com/WildGoat07&#10;Profil Github Waïan SERANO :  https://github.com/Waynocs&#10;&#10;&#10;" wrapText="true" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <TextField alignment="CENTER" text="Copyright (c) 2020 Waïan SERANO, Nathan HANEN" />
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </content>
+      </Tab>
+   </tabs>
+</TabPane>
