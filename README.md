@@ -86,7 +86,21 @@ Contributeur|Nombre de tâches|Pourcentage
 
 ### Investissement global
 
+Basé sur la quantité de travail et sur l'implication et la motivation de chaque contributeur
+
 Contributeur|Pourcentage
 :-|-:
 [Nathan HANEN](https://github.com/WildGoat07)|50%
 [Waïan SERANO](https://github.com/Waynocs)|50%
+
+### Éléments bonus
+
+Bonus|État
+:-|:-:
+Toutes les demandes DAO sont asynchrones|✅
+Filtres avancés|✅
+Nombre d'élements dans les listes affiché|✅
+Fil d'ariane|✅
+Barre de chargement pour les tâches asynchrones|✅
+License, A propos, liens vers repo+contributeurs|✅
+Icône et nom d'application incroyablement jolis|😍
