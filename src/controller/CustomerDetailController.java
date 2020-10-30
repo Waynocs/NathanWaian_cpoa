@@ -119,4 +119,7 @@ public class CustomerDetailController implements Initializable {
         }, null);
     }
 
+    public void seeOrders() {
+        MainWindowController.seeOrders(customer);
+    }
 }

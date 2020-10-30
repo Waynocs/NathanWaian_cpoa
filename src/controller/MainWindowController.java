@@ -414,6 +414,18 @@ public class MainWindowController implements Initializable {
 
     }
 
+    public static void seeOrders(Customer cust) {
+        runAsynchronously(() -> {
+            var tab = OrdersController.createControl(cust);
+            tab.setUserData("Commandes>Tout voir");
+            return tab;
+        }, (tab) -> {
+            tabInstance.getTabs().add(tab);
+            tabInstance.getSelectionModel().select(tab);
+        });
+
+    }
+
     public static void detailCategory(Category categ) {
         runAsynchronously(() -> {
             var tab = CategoryDetailController.createControl(categ);

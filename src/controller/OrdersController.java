@@ -115,6 +115,25 @@ public class OrdersController implements Initializable {
         }
     }
 
+    public static Tab createControl(Customer customerToDisplay) {
+        try {
+            URL fxmlURL = ProductsController.class.getResource("../view/Orders.fxml");
+            FXMLLoader fxmlLoader = new FXMLLoader(fxmlURL);
+            var tab = fxmlLoader.<TabPane>load();
+            var controller = fxmlLoader.<OrdersController>getController();
+            var combo = (ComboBox<Customer>) ((HBox) controller.customerVBox.getChildren().get(0)).getChildren().get(0);
+            combo.getSelectionModel().select(customerToDisplay);
+            controller.filter();
+            return tab.getTabs().get(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         filtersButton.setOnAction((e) -> mainPane.setRight(filtersButton.isSelected() ? filterPanel : null));
