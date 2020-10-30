@@ -9,7 +9,6 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 
 import dao.DAOException;
-import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
