@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -52,11 +53,23 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </VBox.margin>
                         </Label>
-                        <Label fx:id="password" text="Mot de passe : &lt;password&gt;">
+                        <HBox alignment="CENTER_LEFT">
                            <VBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                              <Insets />
                            </VBox.margin>
-                        </Label>
+                           <children>
+                              <Label fx:id="password" text="Mot de passe : &lt;password&gt;">
+                                 <HBox.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <CheckBox fx:id="seePass" mnemonicParsing="false" text="Voir">
+                                 <HBox.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </HBox.margin>
+                              </CheckBox>
+                           </children>
+                        </HBox>
                         <Label fx:id="number" text="Numéro d'adresse : &lt;number&gt;">
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

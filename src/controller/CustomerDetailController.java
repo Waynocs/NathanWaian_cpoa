@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -37,6 +37,8 @@ public class CustomerDetailController implements Initializable {
     public Label city;
     @FXML
     public Label country;
+    @FXML
+    public CheckBox seePass;
 
     public Tab tab;
     public Customer customer;
@@ -64,7 +66,7 @@ public class CustomerDetailController implements Initializable {
         surname.setText("Nom : " + customer.getSurname());
         name.setText("Prénom : " + customer.getName());
         identity.setText("Identifiant : " + customer.getIdentifier());
-        password.setText("Mot de passe : " + customer.getPwd());
+        password.setText("Mot de passe : " + Utilities.getHiddenString(customer.getPwd()));
         number.setText("Numéro d'adresse : " + customer.getAddressNumber());
         street.setText("Voie d'adresse : " + customer.getAddressStreet());
         postalcode.setText("Code postal : " + customer.getAddressPostalCode());
@@ -75,33 +77,27 @@ public class CustomerDetailController implements Initializable {
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
+        seePass.setOnAction((e) -> password.setText("Mot de passe : "
+                + (seePass.isSelected() ? customer.getPwd() : Utilities.getHiddenString(customer.getPwd()))));
     }
 
     public void refresh() {
-        MainWindowController.runAsynchronously(new Runnable() {
-
-            @Override
-            public void run() {
-                customer = MainWindowController.factory.getCustomerDAO().getById(customer.getId());
-                Platform.runLater(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        tab.setText("Détail:" + customer.getName());
-                        id.setText("ID : " + customer.getId());
-                        surname.setText("Nom : " + customer.getSurname());
-                        name.setText("Prénom : " + customer.getName());
-                        identity.setText("Identifiant : " + customer.getIdentifier());
-                        password.setText("Mot de passe : " + customer.getPwd());
-                        number.setText("Numéro d'adresse : " + customer.getAddressNumber());
-                        street.setText("Voie d'adresse : " + customer.getAddressStreet());
-                        postalcode.setText("Code postal : " + customer.getAddressPostalCode());
-                        city.setText("Ville : " + customer.getAddressCity());
-                        country.setText("Pays : " + customer.getAddressCountry());
-                    }
+        MainWindowController.runAsynchronously(
+                () -> customer = MainWindowController.factory.getCustomerDAO().getById(customer.getId()), () -> {
+                    tab.setText("Détail:" + customer.getName());
+                    id.setText("ID : " + customer.getId());
+                    surname.setText("Nom : " + customer.getSurname());
+                    name.setText("Prénom : " + customer.getName());
+                    identity.setText("Identifiant : " + customer.getIdentifier());
+                    password.setText("Mot de passe : " + (seePass.isSelected() ? customer.getPwd()
+                            : Utilities.getHiddenString(customer.getPwd())));
+                    number.setText("Numéro d'adresse : " + customer.getAddressNumber());
+                    street.setText("Voie d'adresse : " + customer.getAddressStreet());
+                    postalcode.setText("Code postal : " + customer.getAddressPostalCode());
+                    city.setText("Ville : " + customer.getAddressCity());
+                    country.setText("Pays : " + customer.getAddressCountry());
                 });
-            }
-        });
+
     }
 
     public void edit() {

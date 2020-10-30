@@ -79,4 +79,11 @@ public class Utilities {
             return false;
         }
     }
+
+    public static String getHiddenString(String original) {
+        var res = "";
+        for (int i = 0; i < original.length(); ++i)
+            res += '•';
+        return res;
+    }
 }

@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Alert;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
@@ -24,7 +25,7 @@ public class EditCustomerController implements Initializable {
     @FXML
     public TextField identity;
     @FXML
-    public TextField password;
+    public PasswordField password;
     @FXML
     public TextField number;
     @FXML

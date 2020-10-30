@@ -17,6 +17,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
@@ -84,6 +85,8 @@ public class CustomersController implements Initializable {
     public VBox cityVBox;
     @FXML
     public VBox countryVBox;
+    @FXML
+    public CheckBox seePass;
 
     private List<Predicate<Customer>> surnameFilters;
     private List<Predicate<Customer>> nameFilters;
@@ -119,7 +122,7 @@ public class CustomersController implements Initializable {
         postalcodeFilters = new LinkedList<Predicate<Customer>>();
         cityFilters = new LinkedList<Predicate<Customer>>();
         countryFilters = new LinkedList<Predicate<Customer>>();
-
+        seePass.setOnAction((e) -> table.refresh());
         id.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Customer, String>, ObservableValue<String>>() {
 
             @Override
@@ -160,7 +163,8 @@ public class CustomersController implements Initializable {
 
                     @Override
                     public ObservableValue<String> call(CellDataFeatures<Customer, String> arg0) {
-                        return new ReadOnlyStringWrapper(arg0.getValue().getPwd());
+                        return new ReadOnlyStringWrapper(seePass.isSelected() ? arg0.getValue().getPwd()
+                                : Utilities.getHiddenString(arg0.getValue().getPwd()));
                     }
                 });
 
