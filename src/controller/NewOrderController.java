@@ -347,16 +347,12 @@ public class NewOrderController implements Initializable {
 
     public void save() {
         MainWindowController.runAsynchronously(() -> {
-            if (customer.getSelectionModel().getSelectedItem() == null) {
-                Platform.runLater(() -> new Alert(AlertType.WARNING, "Selectionnez un client").showAndWait());
+            if (customer.getSelectionModel().getSelectedItem() == null)
                 return new AlertPair("Selectionnez un client", AlertType.WARNING);
-            }
-            if (date.getValue() == null) {
+            if (date.getValue() == null)
                 return new AlertPair("Selectionnez une date", AlertType.WARNING);
-            }
-            if (table.getItems().size() == 0) {
+            if (table.getItems().size() == 0)
                 return new AlertPair("Ajoutez au moins un produit", AlertType.WARNING);
-            }
             var order = new Order(0,
                     LocalDateTime.of(date.getValue(),
                             LocalTime.of(hours.getValue(), minutes.getValue(), seconds.getValue())),
