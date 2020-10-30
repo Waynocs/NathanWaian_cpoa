@@ -7,7 +7,7 @@ Pour se connecter à une base de données, créer un fichier `ConnectionInfo.ini
 [Connection]
 uri="jdbc:mysql://localhost/table?serverTimezone=UTC"
 login=root
-pwd=password
+pass=password
 ```
 
 ---
