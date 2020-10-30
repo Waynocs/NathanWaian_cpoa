@@ -4,6 +4,8 @@
 
 (Il suffit de mettre les dossiers `bin` et `lib` de javaFX dans `lib/javafx`).
 
+Voir les [Release](https://github.com/Waynocs/NathanWaian_cpoa/releases/latest) pour obtenir la dernière version du logiciel.
+
 # Business PRO Euro Simulator Deluxe Edition
 
 Pour se connecter à une base de données, créer un fichier `ConnectionInfo.ini` à la racine du projet, et le remplir avec ces informations (à changer selon votre configuration) :
