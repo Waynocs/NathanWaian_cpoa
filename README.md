@@ -86,7 +86,7 @@ Contributeur|Nombre de tâches|Pourcentage
 
 ### Investissement global
 
-Basé sur la quantité de travail et sur l'implication et la motivation de chaque contributeur
+Basé sur la quantité de travail, sur l'implication et la motivation de chaque contributeur
 
 Contributeur|Pourcentage
 :-|-:
