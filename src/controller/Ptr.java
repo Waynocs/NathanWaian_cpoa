@@ -1,7 +1,7 @@
 package controller;
 
 /**
- * Class mostly used to store a variable used inside multiple lamda methods
+ * Class mostly used to store a variable used inside multiple lambda methods
  */
 public class Ptr<T> {
     public T value;
