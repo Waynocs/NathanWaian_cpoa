@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1100.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="controller.CustomersController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1100.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomersController">
   <tabs>
     <Tab text="Clients">
          <content>
@@ -199,7 +199,7 @@
                                                       <VBox fx:id="postalcodeVBox" />
                                                       <HBox alignment="BOTTOM_CENTER">
                                                          <children>
-                                                            <Button mnemonicParsing="false" onAction="#addCodepostalFilter" text="Nouveau filtre">
+                                                            <Button mnemonicParsing="false" onAction="#addPostalcodeFilter" text="Nouveau filtre">
                                                                <graphic>
                                                                   <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                                                      <image>
