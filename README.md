@@ -1,5 +1,9 @@
 ![](https://github.com/Waynocs/NathanWaian_cpoa/blob/master/src/assets/icons/icon.png)
 
+# Nécessite la [version 15 de java](https://jdk.java.net/15/) ainsi que la [version 15 de javaFX](https://gluonhq.com/products/javafx/)
+
+(Il suffit de mettre les dossiers `bin` et `lib` de javaFX dans `lib/javafx`).
+
 # Business PRO Euro Simulator Deluxe Edition
 
 Pour se connecter à une base de données, créer un fichier `ConnectionInfo.ini` à la racine du projet, et le remplir avec ces informations (à changer selon votre configuration) :
