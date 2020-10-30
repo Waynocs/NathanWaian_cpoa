@@ -38,7 +38,7 @@ public class Connection {
         System.out.println("Connecting to " + connectionInfo.get("uri"));
         try {
             connection = DriverManager.getConnection(connectionInfo.get("uri"), connectionInfo.get("login"),
-                    connectionInfo.get("pwd"));
+                    connectionInfo.get("pass"));
         } catch (SQLException sqle) {
             System.out.println("Connexion error" + sqle.getMessage());
         }
